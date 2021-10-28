@@ -1,0 +1,132 @@
+body {
+    background-color:#f2f2f2;
+    font-family:sans-serif;
+
+}
+
+form {
+    box-sizing: border-box;
+    border-radius: 5px;
+    background-color: white;
+    padding: 25px;
+    max-width: 450px;
+    margin: auto;
+    box-shadow: 5px 5px 25px grey;
+    position: relative;     
+    margin-top: 20px;
+    margin-bottom: 40px;
+}
+form label {
+    font-weight:700;
+    font-size:1.4rem;
+}
+
+.form-header {
+    width:100%;
+    margin: 10px 0px 20px 0px;
+}
+
+.form-header h3 {
+    font-weight: 500;
+    letter-spacing: 0.05em;
+}
+
+.form-header p {
+    margin-top: 10px;
+    opacity: 0.7;
+}
+.input-container-100 {
+    position: relative;
+}
+
+.input-container-50 {
+    display: flex;
+    justify-content: space-between;
+}
+.input-icon {
+    position:absolute;
+    bottom:14px;
+    left:10px;
+    font-size: 22px;
+    pointer-events: none;
+    color: #8e8e8e;
+}
+
+.form-item {
+    width: 100%;
+    padding: 15px 40px;
+    margin: 10px 0;
+    display:block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    font-size: 1.4rem;
+    background-color: #f1f2f1f2;
+}
+
+.form-item-50 {
+    width:48%;
+    display:inline;
+    padding: 15px 40px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    font-size: 1.4rem;
+    background-color: #f1f2f1f2
+}
+
+::placeholder {
+    text-transform: uppercase;
+    font-size: 1.4rem;
+    color: #8e8e8e;
+    font-family: var(--font-monospace)
+}
+::-webkit-datetime-edit-text { color: #8e8e8e; }
+::-webkit-datetime-edit-month-field { color: #8e8e8e; text-transform: uppercase; font-size: 1.2rem; }
+::-webkit-datetime-edit-day-field { color: #8e8e8e; text-transform: uppercase; font-size: 1.2rem; }
+::-webkit-datetime-edit-year-field { color: #8e8e8e; text-transform: uppercase; font-size: 1.2rem; }
+
+#emailfb, #dobfb, #usernamefb, #userpassfb {
+    width:100%;
+    margin: 10px 0;
+    display:block;
+    box-sizing: border-box;
+    color:#b41919;
+}
+.password-indicator {
+    border-radius: 12px;
+}
+
+.form-link {
+    margin: 15px 0px 15px 0px;
+}
+.form-link a {
+    text-decoration: none;
+    color: var(--bg-secondary)
+}
+.form-link a:hover {
+    color:var(--bg-secondary-light);
+    text-decoration: underline;
+}
+button[type=submit] {
+    background-color: var(--bg-secondary);
+    color: white;
+    padding: 14px 20px;
+    margin: 10px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 100%;
+}
+  
+button[type=submit]:hover {
+    background-color: var(--bg-secondary-light);
+}
+
+@media screen and (max-width: 768px) {
+  form {
+      max-width: 100%;
+      margin-left: 2.5%;
+      margin-right: 2.5%;
+  }
+}

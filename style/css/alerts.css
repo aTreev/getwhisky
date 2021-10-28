@@ -1,0 +1,70 @@
+/* General alert stylings */
+.alert {
+    display: flex;
+    position: absolute;
+    top: 0;
+    right: 0;
+    line-height: 60px;
+    padding: 0px 0px 0px 10px;
+    text-align: center;
+    max-width: 1200px;
+    background-color: lightgreen;
+    opacity: 0.8;
+    transform: translateX(100%);
+    transition: 400ms transform ease-in-out;
+    border-left: 4px solid darkgreen;
+    gap: 10px;
+    border-radius: 4px;
+}
+.alert-message-container {
+    display:flex; 
+    align-items: center;
+    gap: 10px;
+}
+.close-alert-container {
+    cursor: pointer;
+    width: 40px;
+    height: 100%;
+    overflow: hidden;
+}
+.close-alert-container i {
+    font-size: 1.6rem;
+}
+
+/* Success states */
+.success {
+    background-color: lightgreen;
+    border-left: 8px solid darkgreen;
+}
+.success .message-icon {
+    font-size: 24px;
+    color: darkgreen;
+}
+.success .alert-message-container p {
+    color: darkgreen;
+}
+.success .close-alert-container {
+    background-color: rgb(104, 231, 104);
+}
+.success .close-alert-container i {
+    color: darkgreen;
+}
+
+/* Error states */
+.error {
+    background-color: rgb(255, 110, 110);
+    border-left: 4px solid darkred;
+}
+.error .message-icon {
+    font-size: 24px;
+    color: darkred;
+}
+.error .alert-message-container p {
+    color: darkred;
+}
+.error .close-alert-container {
+    background-color: rgb(252, 134, 134);
+}
+.error .close-alert-container i {
+    color: darkred;
+}
