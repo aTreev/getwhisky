@@ -14,6 +14,7 @@
         <?php echo $page->displayHeader(); ?>
     </header>
     <main>
+        <p>Homepage</p>
     </main>
 </body>
 </html>
