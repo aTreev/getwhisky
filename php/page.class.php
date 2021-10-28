@@ -13,8 +13,9 @@ class Page {
 		$this->user = new User();
 		$this->setStatus(false);
         $this->checkUser();
-        $this->menu = new Menu($this->getUser() ->getUsertype()); // sends usertype to the menu class to create a menu depending on
+        $this->menuObj = new Menu($this->getUser()->getUsertype()); // sends usertype to the menu class to create a menu depending on
                                                                   // the user type
+		$this->menu = $this->menuObj->getMenuItems();
 	}
 	
 	public function getPagetype() { return $this->pagetype;}
@@ -162,12 +163,13 @@ class Page {
 	public function displayHeader() {
 		$html="";
 		$html.="<div class='header-content'>";
-			$html.="<div class='header-logo-container'>";
-				$html.="<a href='/index.php'><img class='header-logo' src='assets/getwhisky-logo-small.png' alt=''></a>";
-			$html.="</div>";
-			$html.="<nav>";
+			$html.="<a href='/index.php'><img class='header-logo' src='assets/getwhisky-logo-small.png' alt=''></a>";
+			$html.="<nav class='header-menu'>";
 				$html.="<ul>";
-					$html.= $this->getMenu();
+					$html.="<li><a href='/cart.php'><i class='header-nav-icon fas fa-shopping-basket'><span class='cart-count'>0</span></a></i><a class='header-nav-link' href='/cart.php'>basket</a></li>";
+					foreach ($this->getMenu() as $menuItem) {
+						$html.="<li><a class='header-nav-link' href='".$menuItem['url']."'>".$menuItem['pagename']."</a></li>";
+					}
 				$html.="</ul>";
 			$html.="</nav>";
 		$html.="</div>";
