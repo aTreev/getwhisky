@@ -6,7 +6,7 @@
 	require_once("php/util.class.php");
 	$page = new Page(3);
 	try {
-		if(util::valInt($_POST['userid'])) {$userid=$_POST['userid'];}
+		if(util::valStr($_POST['userid'])) {$userid=$_POST['userid'];}
 		else { $page->logout();}
 		
 		$usertype=(util::posted($_POST['usertype'])?$_POST['usertype']:"");

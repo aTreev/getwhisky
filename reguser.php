@@ -41,7 +41,6 @@
 			$headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
 			mail($emailTo, $subject, $message, $headers);
 
-			$page->setMenu();
 			?>
 			<!-- menu display -->
 			<header>

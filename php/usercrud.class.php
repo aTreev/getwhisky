@@ -91,9 +91,9 @@ class UserCRUD {
 			default: $order="username";
 						break;
 		}
-		$this->sql="SELECT userid, username, firstname, surname FROM usertable ORDER BY $order;";
+		$this->sql="SELECT userid, username, firstname, surname FROM usertable ORDER BY ?;";
 		$this->stmt= self::$db->prepare($this->sql);
-		$this->stmt->bind_param("s", $orderby);
+		$this->stmt->bind_param("s", $order);
 		$this->stmt->execute();
 		$result=$this->stmt->get_result();
 		$resultset=$result->fetch_all($style);

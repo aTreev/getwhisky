@@ -13,19 +13,13 @@ class Page {
 		$this->user = new User();
 		$this->setStatus(false);
         $this->checkUser();
-        $this->menuObj = new Menu($this->getUser()->getUsertype()); // sends usertype to the menu class to create a menu depending on
-                                                                  // the user type
-		$this->menu = $this->menuObj->getMenuItems();
 	}
 	
 	public function getPagetype() { return $this->pagetype;}
 	public function getStatus() { return $this->isauthenticated;}
-	public function getUser() {return $this->user;}
-    public function getMenu() {return $this->menu; }
-    
+	public function getUser() {return $this->user;}    
 	private function setPagetype($pagetype) {$this->pagetype=(int)$pagetype;}
 	private function setStatus($status) {$this->isauthenticated=(bool)$status;}
-	public function setMenu() { $this->menu = new Menu($this->getUser()->getUsertype()); }
 	
 	// Checks for a user in the $_SESSION
 	// if session is found set status is set to true and
@@ -39,6 +33,7 @@ class Page {
 		}
 
 		if(isset($_SESSION['userid']) && $_SESSION['userid']!="") {
+			
 			// Guest logged in
 			if (isset($_SESSION['guest']) && $_SESSION['guest'] == true) {
 				$this->getUser()->setGuestUserid($_SESSION['userid']);
@@ -138,6 +133,14 @@ class Page {
 		}
 	}
 
+
+
+	/******************************
+	 * GENERAL PAGE DISPLAY METHODS
+	 ***************************/
+
+
+	 // returns the site-wide shared <head> content
     public function displayHead() {
 		$html= "
 				<meta charset='UTF-8'>
@@ -160,18 +163,37 @@ class Page {
 		return $html;
 	}
 
+	// Builds the markup for the main nav menu
+	public function buildHeaderMenu() {
+		$html = "";
+		$html.="<nav class='header-menu'>";
+			$html.="<ul>";					
+				$html.="<li><a href='/cart.php'><i class='header-nav-icon fas fa-shopping-basket'><span class='cart-count'>0</span></i></a><a class='header-nav-link' href='/cart.php'>basket</a></li>";
+				if ($this->getUser()->getUsertype() == 0) {
+					$html.="<li><a class='header-nav-link' href='/login.php'>Sign in</a></li>";
+				}
+				if ($this->getUser()->getUsertype() == 3) {
+					$html.="<li><a class='header-nav-link' href='/admin.php'>Admin</a></li>";
+				}
+				if ($this->getUser()->getUsertype() >= 2) {
+					$html.="<li><a href='/user.php'><i class='header-nav-icon fas fa-user'></i></a><a class='header-nav-link' href='/user.php'>Account</a></li>";
+					$html.="<li><a class='header-nav-link' href='/logout.php'>Logout</a></li>";
+				}
+				if ($this->getUser()->getUsertype() == 1) {
+					$html.="<li><a class='header-nav-link' href='/suspended.php'>Account</a></li>";
+					$html.="<li><a class='header-nav-link' href='/logout.php'>Logout</a></li>";
+				}
+			$html.="</ul>";
+		$html.="</nav>";
+		return $html;
+	}
+
+	// Returns the site-wide <header> section
 	public function displayHeader() {
 		$html="";
 		$html.="<div class='header-content'>";
-			$html.="<a href='/index.php'><img class='header-logo' src='assets/getwhisky-logo-small.png' alt=''></a>";
-			$html.="<nav class='header-menu'>";
-				$html.="<ul>";
-					$html.="<li><a href='/cart.php'><i class='header-nav-icon fas fa-shopping-basket'><span class='cart-count'>0</span></a></i><a class='header-nav-link' href='/cart.php'>basket</a></li>";
-					foreach ($this->getMenu() as $menuItem) {
-						$html.="<li><a class='header-nav-link' href='".$menuItem['url']."'>".$menuItem['pagename']."</a></li>";
-					}
-				$html.="</ul>";
-			$html.="</nav>";
+			$html.="<a href='/index.php'><img class='header-logo' src='assets/getwhisky-logo-lowercase.png' alt=''></a>";
+			$html.=$this->buildHeaderMenu();
 		$html.="</div>";
 	
 	return $html;

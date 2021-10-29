@@ -38,7 +38,7 @@ header {
   justify-content: space-between;
 }
 .header-logo {
-  width: 400px;
+  max-width: 300px;
 }
 .header-menu {
   height: 40px;
@@ -48,7 +48,7 @@ header {
 
 .header-menu ul {
   display: flex;
-  gap: 10px;
+  gap: 15px;
   align-items: center;
 
 }
@@ -82,12 +82,13 @@ header {
   font-weight: 400;
   background-color: red;
   border-radius: 128px;
-  width: 24px;
-  height: 24px;
+  width: 20px;
+  height: 20px;
   text-align: center;
-  line-height: 2.4rem;
+  line-height: 2.0rem;
   right: -5px;
   top: -10px;
+  font-size: 1.2rem;
 }
 main {
   position: relative;
