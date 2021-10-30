@@ -17,7 +17,7 @@
 		?>
 	</header>
 	<h1>Admin Page</h1>
-	
+	<main>
 
 	<!-- prints the userlist to a form using the editother.php page -->
 	<form method="post" action="editother.php">
@@ -27,6 +27,6 @@
 		?>
 		<button type="submit">Edit User</button>
 	</form>
-
+	</main>
 </body>
 </html>

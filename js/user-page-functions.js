@@ -24,8 +24,5 @@ function resendValidationEmail(xmlHttp) {
 
 function sendConfirmationNotification(isSuccessful, emailAddress) {
     let message = "A verification email has been sent to "+emailAddress+"!";
-    let alertObj = new Alert(isSuccessful, message);
-    let alert = alertObj.returnAlert();
-    document.querySelector("main").insertAdjacentElement("afterbegin", alert);
-    alertObj.initializeAlert(alert);
+    new Alert(isSuccessful, message);
 }

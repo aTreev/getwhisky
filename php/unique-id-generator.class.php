@@ -44,6 +44,11 @@
                     $this->column = "vkey";
                     $this->retrieveVerificationKeys();
                 break;
+
+                case "passwordResetKey":
+                    $this->colum = "password_reset_key";
+                    $this->retrievePasswordResetKeys();
+                break;
             }
             $this->generateNewUniqueId();
         }
@@ -91,5 +96,10 @@
         private function retrieveVerificationKeys() {
             $source = new UserCRUD();
             $this->retrievedIds = $source->getExistingVerificationKeys();
+        }
+
+        private function retrievePasswordResetKeys() {
+            $source = new UserCRUD();
+            $this->retrievedIds = $source->getExistingPasswordResetKeys();
         }
     }

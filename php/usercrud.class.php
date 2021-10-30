@@ -19,6 +19,16 @@ class UserCRUD {
 		return $resultset;
 	}
 
+	public function getUserByEmail($email, $style=MYSQLI_ASSOC) {
+		$this->sql="SELECT * FROM usertable WHERE email = ?";
+		$this->stmt = self::$db->prepare($this->sql);
+		$this->stmt->bind_param("s",$email);
+		$this->stmt->execute();
+		$result = $this->stmt->get_result();
+		$resultset=$result->fetch_all($style);
+		return $resultset;
+	}
+
 	public function getUserById($userid, $style=MYSQLI_ASSOC) {
 		$this->sql="SELECT * FROM usertable WHERE userid = ?";
 		$this->stmt = self::$db->prepare($this->sql);
@@ -142,6 +152,27 @@ class UserCRUD {
 		$result = $this->stmt->get_result();
 		$resultset=$result->fetch_all($style);
 		return $resultset;
+	}
+
+	public function getExistingPasswordResetKeys($style=MYSQLI_ASSOC) {
+		$this->sql="SELECT password_reset_key FROM usertable";
+		$this->stmt=self::$db->prepare($this->sql);
+		$this->stmt->execute();
+		$result = $this->stmt->get_result();
+		$resultset=$result->fetch_all($style);
+		return $resultset;
+	}
+
+	public function setResetKeyByEmail($resetKey, $email) {
+		$this->sql="UPDATE usertable SET password_reset_key = ? WHERE email = ?";
+		$this->stmt = self::$db->prepare($this->sql);
+		$this->stmt->bind_param("ss",$resetKey, $email);		
+		$this->stmt->execute();
+		if($this->stmt->affected_rows!=1) {
+			return 0;
+		} else {
+			return $this->stmt->affected_rows;
+		}
 	}
 }
 ?>

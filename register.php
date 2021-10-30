@@ -20,7 +20,7 @@
                 echo "page userid: ".$page->getUser()->getUserid();
             ?>
     <main>
-        <form method="post" action="reguser.php" class="register_form" id="regform">
+        <form method="post" action="reguser.php" class="form-main" id="regform">
             <div class="form-header">
                 <h3>
                     getwhisky sign up
@@ -29,9 +29,6 @@
                     sign up for an account to unlock features like order history!
                 </p>
             </div>
-
-            
-
             <div class="input-container-100">
                 <i class="input-icon far fa-user"></i>
                 <input class="form-item" type="text" id="username" name="username" placeholder="username" required />

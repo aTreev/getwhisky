@@ -139,7 +139,6 @@ class Page {
 	 * GENERAL PAGE DISPLAY METHODS
 	 ***************************/
 
-
 	 // returns the site-wide shared <head> content
     public function displayHead() {
 		$html= "
@@ -191,11 +190,11 @@ class Page {
 	// Returns the site-wide <header> section
 	public function displayHeader() {
 		$html="";
+		$html.="<div class='page-overlay'></div>";
 		$html.="<div class='header-content'>";
 			$html.="<a href='/index.php'><img class='header-logo' src='assets/getwhisky-logo-lowercase.png' alt=''></a>";
 			$html.=$this->buildHeaderMenu();
 		$html.="</div>";
-	
 	return $html;
 	}
 }

@@ -14,11 +14,13 @@ class Alert {
         this.successState = successState;
         this.messageText = message;
         this.alert = this.createAlert();
+        this.initializeAlert();
     }
     
     createAlert() {
         let alertContainer = document.createElement("div");
         alertContainer.classList.add("alert");
+        alertContainer.classList.add("ignore-overlay");
 
         let alertIcon = document.createElement("i");
 
@@ -57,37 +59,43 @@ class Alert {
         return this.alert;
     }
 
-    initializeAlert(fromPageAlert) {
-        //passing the object back in like this instead of using an ID has the advantage
-        //of methods always having a reference to that particular object.
-        //this prevents the need for additional code to check if an alert is already on the page.
+    initializeAlert() {
+        if ($(".alert")) {
+            $(".alert").remove();
+        }
+        let theAlert = this.alert;
+        document.querySelector("main").insertAdjacentElement("afterbegin", theAlert);
         setTimeout(() => {
-            fromPageAlert.style.transform = "translateX(0%)";
-        }, 1000)
+            theAlert.style.transform = "translateX(0%)";
+            theAlert.style.marginRight = "10px";
+
+        }, 50)
 
         let outTimeout = setTimeout(() => {
-            fromPageAlert.style.transform = "translateX(100%)";
+            theAlert.style.transform = "translateX(100%)";
+            theAlert.style.marginRight = "0px";
             setTimeout(() =>{
-                fromPageAlert.remove();
+                theAlert.remove();
             }, 4000)
         }, 5000);
 
-        fromPageAlert.addEventListener("mouseover", function() {
+        theAlert.addEventListener("mouseover", function() {
             clearTimeout(outTimeout);
             
         });
 
-        fromPageAlert.addEventListener("mouseleave", function() {
+        theAlert.addEventListener("mouseleave", function() {
             setTimeout(() => {
-                fromPageAlert.style.transform = "translateX(100%)";
+                theAlert.style.transform = "translateX(100%)";
+                theAlert.style.marginRight = "0px";
                 setTimeout(() =>{
-                    fromPageAlert.remove();
+                    theAlert.remove();
                 }, 4000);
             }, 5000);
         });
         
-        fromPageAlert.children[1].addEventListener("click", function() {
-            fromPageAlert.remove();
+        theAlert.children[1].addEventListener("click", function() {
+            theAlert.remove();
         })
     }
 }
