@@ -1,5 +1,6 @@
 <?php
-    require_once("page.class.php");
+try {
+    require_once("../page.class.php");
     $page = new Page(0);
     // send verification email
     $emailTo = $page->getUser()->getEmail();
@@ -12,3 +13,7 @@
     $result['sent'] = mail($emailTo, $subject, $message, $headers);
     $result['address'] = $emailTo;
     echo json_encode($result);
+} catch(Exception $e) {
+    echo json_encode($e);
+}
+    

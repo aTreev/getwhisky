@@ -163,10 +163,57 @@ class UserCRUD {
 		return $resultset;
 	}
 
+	public function checkPasswordResetKey($resetKey, $style=MYSQLI_ASSOC) {
+		$this->sql="SELECT * FROM usertable WHERE password_reset_key = ?";
+		$this->stmt=self::$db->prepare($this->sql);
+		$this->stmt->bind_param("s",$resetKey);		
+		$this->stmt->execute();
+		$result = $this->stmt->get_result();
+		$resultset=$result->fetch_all($style);
+		return $resultset;
+	}
+
+	public function updateUserPassword($userHash, $resetKey) {
+		$this->sql="UPDATE usertable SET userpass = ? WHERE password_reset_key = ?";
+		$this->stmt = self::$db->prepare($this->sql);
+		$this->stmt->bind_param("ss",$userHash, $resetKey);		
+		$this->stmt->execute();
+		if($this->stmt->affected_rows!=1) {
+			return 0;
+		} else {
+			return $this->stmt->affected_rows;
+		}
+	}
+
+
 	public function setResetKeyByEmail($resetKey, $email) {
 		$this->sql="UPDATE usertable SET password_reset_key = ? WHERE email = ?";
 		$this->stmt = self::$db->prepare($this->sql);
 		$this->stmt->bind_param("ss",$resetKey, $email);		
+		$this->stmt->execute();
+		if($this->stmt->affected_rows!=1) {
+			return 0;
+		} else {
+			return $this->stmt->affected_rows;
+		}
+	}
+
+	public function wipeResetKeyWithNewPass($userHash) {
+		$this->sql='UPDATE usertable SET password_reset_key = "" WHERE userpass = ?';
+		$this->stmt = self::$db->prepare($this->sql);
+		$this->stmt->bind_param("s",$userHash);		
+		$this->stmt->execute();
+		if($this->stmt->affected_rows!=1) {
+			return 0;
+		} else {
+			return $this->stmt->affected_rows;
+		}
+	}
+
+	public function wipeResetKey($resetKey) {
+		$this->sql='UPDATE usertable SET password_reset_key = "" WHERE password_reset_key = ?';
+		$this->stmt = self::$db->prepare($this->sql);
+		$this->stmt->bind_param("s",$resetKey);		
 		$this->stmt->execute();
 		if($this->stmt->affected_rows!=1) {
 			return 0;

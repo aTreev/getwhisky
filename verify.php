@@ -25,7 +25,7 @@
             if ($result == 1) {
                 ?>
                     <div class="verify-container">
-                        <h1>Thank you</h1>
+                        <h3>Thank you</h3>
                         <p>Your account has been verified</p>
                         <p>You are now being redirected</p>
                         <img src="/assets/loader.gif">
@@ -40,7 +40,7 @@
             } else {
                 ?>
                     <div class="verify-container">
-                        <h1>Oops!</h1>
+                        <h3>Oops!</h3>
                         <p>Something went wrong</p>
                         <p>This account has already been verified or is invalid</p>
                         <p>You are now being redirected</p>

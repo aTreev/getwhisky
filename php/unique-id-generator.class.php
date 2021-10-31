@@ -30,13 +30,13 @@
                     $this->retrieveUserIds();       
                 break;
 
-                case "productid":   
-                    $this->column = "productid";    
+                case "product_id":   
+                    $this->column = "product_id";    
                     //$this->retrieveProductIds();
                 break;
 
-                case "cartid":      
-                    $this->column = "cartid";       
+                case "cart_id":      
+                    $this->column = "cart_id";       
                     //$this->retrieveCartIds();
                 break;
 

@@ -41,14 +41,20 @@ function validateResetEmail(email) {
     }
 }
 
-function clearEmailInput() {
-    $("#password-reset-email-input").val("");
-}
-
+/***********
+ * Attempts to send a password reset email
+ * backend validates email to ensure an email
+ * is being sent to an existing address
+ ***********************************/
 function sendResetEmail(email) {
+    // add a loading indicator to the submit button because mail() load takes a while
+    $(document).ajaxStart(function () {
+        $('#submit-password-reset').html("<img style='width: 32px;'src='/assets/loader-button.gif'>");
+    })
+
     $.ajax({
         // Ajax parameters
-        url: "../php/ajax-handlers/password-reset.php",
+        url: "../php/ajax-handlers/password-reset-handler.php",
         method: "POST",
         data: "email="+email,
 
@@ -58,7 +64,8 @@ function sendResetEmail(email) {
             // Success email sent to address
             new Alert(true, "A password reset email has been sent to "+email);
             hideModal("password-reset-modal");
-            clearEmailInput();
+            $("#password-reset-email-input").val("");
+            $('#submit-password-reset').html("submit");
         } else {
             // Email not found on server
             new Alert(false, "We were unable to find that email address, please try again");

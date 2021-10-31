@@ -3,6 +3,7 @@
 //to carry out the update action and if so passes the data to a temporary instance of the User class.
 require_once("user.class.php");
 require_once("menu.class.php");
+require_once("unique-id-generator.class.php");
 
 class Page {
 	private $user, $pagetype, $isauthenticated, $menu;
@@ -133,7 +134,46 @@ class Page {
 		}
 	}
 
+	public function sendPasswordResetEmail($email) {
+		$userCRUD = new UserCRUD();
+		$found = $userCRUD->getUserByEmail($email);
 
+    	if ($found) {
+			$uniqueIdGenerator = new UniqueIdGenerator("passwordResetKey");
+        	$resetKey = $uniqueIdGenerator->getUniqueId();
+			$userCRUD->setResetKeyByEmail($resetKey, $email);
+			// send email with reset key
+			$subject = "getwhisky password reset";
+			$message = "<p>A password reset has been requested to this email address, please follow the following link to reset your password.</p><a href='http://ecommercev2/password-reset.php?resetKey=$resetKey'>reset password</a>";
+			$message.= "<p>If you did not request this change <a href='http://ecommercev2/password-reset.php?resetKey=$resetKey&cancel=1'>click here</a> to cancel";
+			$headers = "From: neilunidev@yahoo.com\r\n";
+			$headers .= "MIME-Version: 1.0\r\n";
+			$headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
+			mail($email, $subject, $message, $headers);
+			return 1;
+		} else {
+			return 0;
+		}
+	}
+
+	/*****************
+	 * Resets a user's password where the user's reset token matches
+	 * the passed in reset token. Once the password has been reset
+	 * the reset token is wiped.
+	 *******************************************************/
+	public function resetUserPassword($resetKey, $plaintext) {
+		$userHash = new UserHash();
+		$userCRUD = new UserCRUD();
+		$userHash->newHash($plaintext);
+		$hashedPassword = $userHash->getHash();
+		$result = $userCRUD->updateUserPassword($hashedPassword, $resetKey);
+		if ($result) {
+			// Remove the password reset token
+			$result = $userCRUD->wipeResetKeyWithNewPass($hashedPassword);
+			return $result;
+		}
+		
+	}
 
 	/******************************
 	 * GENERAL PAGE DISPLAY METHODS
