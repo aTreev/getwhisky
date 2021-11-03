@@ -24,7 +24,6 @@ class Page {
 		$this->getProductsFromDatabase();
 	}
 	
-	public function getCategoryFilters() { return $this->productCategoryFilters; }
 	public function getProducts() { return $this->products; }
 	public function getProductMenu() { return $this->productMenu;}
 	public function getPagetype() { return $this->pagetype;}
@@ -273,6 +272,7 @@ class Page {
 								$html.="<li><a class='header-nav-link' href='/suspended.php'>Account</a></li>";
 								$html.="<li><a class='header-nav-link' href='/logout.php'>Logout</a></li>";
 							}
+							$html.="<li><i class='fas fa-bars product-menu-button' id='product-menu-button'></i></li>";
 						$html.="</ul>";
 				$html.="</nav>";
 			$html.="</div>";
@@ -282,7 +282,7 @@ class Page {
 
 	public function displayProductMenu() {
 		$html = "";
-		$html.="<nav class='product-menu-container'>";
+		$html.="<nav id='product-menu-container' class='product-menu-container'>";
 		$html.= $this->getProductMenu();
 		$html.="</nav>";
 		return $html;
@@ -300,8 +300,20 @@ class Page {
 		} 
 	}
 
-	public function getCategoryFiltersFromDatabase($categoryId=1) {
+	public function getCategoryFilters($categoryId) { 
 		$this->productCategoryFilters = new ProductFilter($categoryId);
+		return $this->productCategoryFilters; 
+	}
+
+	public function displayCategoryDetails($categoryId) {
+		$source = new MenuCRUD();
+		$details = $source->getCategoryDetails($categoryId);
+		$html = "";
+		foreach($details as $detail) {
+			$html.="<h2>".$detail['name']."</h2>";
+			$html.="<p>".$detail['description']."</p>";
+		}
+		return $html;
 	}
 }
 ?>

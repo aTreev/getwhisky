@@ -10,7 +10,7 @@ if ($discounted) {
     echo "Discount ended";
 }
 
-$other_end_date = "2021-10-25 06:00";
+$other_end_date = "2021-11-04 13:00";
 $time_remaining = strtotime($other_end_date) - time();
 if ($time_remaining < 86400) {
     echo "<br>";

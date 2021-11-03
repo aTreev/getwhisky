@@ -23,7 +23,7 @@ class ProductMenu {
 	}
 
 	public function __toString() {
-		$html = "<ul class='product-menu-list' id='product-menu-list'>";
+		$html = "<ul id='product-menu' class='product-menu-list' id='product-menu-list'>";
 		foreach ($this->categories as $menuItem) {
 			$html.="<li><a href='/products.php?catid=".$menuItem['id']."'>".$menuItem['name']."</a></li>";
 		}

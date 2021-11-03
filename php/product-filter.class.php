@@ -45,8 +45,8 @@ class ProductFilter {
             // display filter option headings
             $html.="<div class='filter-item'>";
                 $html.="<div class='filter-item-header'>";
-                    $html.="<h3>".$filter['title']."</h3>";
-                    $html.="<i class='fas fa-times'></i>";
+                    $html.="<h4>".$filter['title']."</h4>";
+                    $html.="<i style='font-size:1.8rem;' class='fas fa-plus'></i>";
                 $html.="</div>";
                 // display filter options if they contain any products
                 $html.="<div class='filter-item-options'>";

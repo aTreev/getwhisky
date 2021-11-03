@@ -15,38 +15,46 @@
         echo $page->displayProductMenu();
     ?>
     <main>
-        <div id="products-container">
+        
             <?php
                 if (isset($_GET['catid']) && util::valInt($_GET['catid'])) {
                     $categoryId = util::sanInt($_GET['catid']);
                     ?>
-                    <input type="hidden" id="category_id" value="<?php echo $categoryId;?>">
-                    <div id="filter-root">
-                        <div class="filter-header">
-                            <h3>Filters</h3>
-                        </div>
-                        <div class="filter-items">
-                            <?php 
-                                $page->getCategoryFiltersFromDatabase($categoryId); 
-                                echo $page->getCategoryFilters();
-                            ?>
-                        </div>
+                    <div id='category-details'>
+                        <?php
+                            echo $page->displayCategoryDetails($categoryId);
+                        ?>
                     </div>
-                    <div id="product-root"></div>
+                    <div id="products-container">
+                        <input type="hidden" id="category_id" value="<?php echo $categoryId;?>">
+                        <div id="filter-root">
+                            <div class="filter-header">
+                                <h3>Filters</h3>
+                            </div>
+                            <div class="filter-items">
+                                <?php 
+                                    echo $page->getCategoryFilters($categoryId); 
+                                ?>
+                            </div>
+                        </div>
+                        <div id="product-root"></div>
+                    </div>
                     <?php
                 } else {
                     // Invalid category provided
                     echo "<div class='no-products-found'><h2>We couldn't find any products!</h2><p>Please try using one of the links in the product menu</p></div>";
                 }
             ?>
-        </div>
+        
         
     </main>
 </body>
+<script src="js/functions.js"></script>
 <script src="js/products.js"></script>
 <script>
     document.onreadystatechange = function() {
         if(document.readyState==="complete") {
+            prepareMenu();
             prepareProductsPage();
         }
     }

@@ -3,6 +3,21 @@ function prepareProductsPage() {
     getProducts(categoryId);
     // add more values as filter options are selected
     prepareProductFilters();
+    makeFilterSectionInteractive();
+}
+
+/****************
+ * Adds a click listener that toggles whether the filter options are visible
+ * Hides all by default
+ */
+function makeFilterSectionInteractive() {
+    $(".filter-item-header").next().hide();
+    $(".filter-item-header").on("click",function(){
+        $(this).next().toggle();
+        $(this).children().last().toggleClass("fas fa-plus");
+        $(this).children().last().toggleClass("fas fa-minus");
+
+    });
 }
 
 /****************
@@ -44,6 +59,7 @@ function prepareProductFilters() {
 function getProducts(categoryId, attributeValues) {
     $(document).ajaxStart(function(){
         $("#product-root").html("<img style='display:block;margin:auto;' src='/assets/loader.gif'>");
+        $("#product-root").css("display", "block"); // set display to block, centers loader and content
     });
     $.ajax({
         // Ajax parameters
@@ -55,7 +71,11 @@ function getProducts(categoryId, attributeValues) {
         // Ajax complete
     }).done(function(result){
         if (result) {
-            $("#product-root").html(result);
+            setTimeout(() => {
+                $("#product-root").css("display", "grid"); // set style to grid, displays products in grid
+                $("#product-root").html(result);
+            
+            }, 200);
         } else {
             $("#product-root").html("<div class='no-products-found'><h2>We couldn't find any products!</h2><p>Try reducing the number of filters</p></div>");
         }

@@ -1,11 +1,77 @@
 function prepareMenu() {
-    window.addEventListener("resize", ()=>{
-        if ($(window).width() > 639) {
-            
+    /**********
+     * Initial check for mobile or desktop
+     */
+    if ($(window).width() < 639) {
+        setMobileMenu();
+    } else {
+        setDesktopMenu();
+        $("#product-menu-container").show();
+    }
+    
+    /***************
+     * Check whether the screen is small enough to switch menu after resize
+     */
+    $(window).resize(function(){
+        // remove any menu specific properties
+        $(".page-overlay").hide();
+        $("body").removeClass("prevent-scrolling");
+
+        if ($(window).width() < 639) {
+            $("#product-menu-container").css("transform", "translateX(-100%)");
+            $("#product-menu-container").css("display","none");
+            setMobileMenu();
+        } else {
+            setDesktopMenu();
+            $("#product-menu-container").css("transform", "translateX(0%)");
+            $("#product-menu-container").css("display","block");
+
         }
     });
+
+    /******************
+     * Add an event listener to the body to allow menu to open when the menu-button is clicked
+     * and closed when anywhere else on the body is clicked
+     */
+    $(document).on("click", function(e){
+        if (e.target.classList.contains("product-menu-button")) {
+            // Menu button clicked show menus and prevent scrolling
+            $("#product-menu-container").css({"transform":"translateX(0%)"});
+            $(".page-overlay").show();
+            $("body").addClass("prevent-scrolling");
+        } else {
+            // Body clicked, hide menus and re-allow scrolling
+            $("#product-menu-container").css("transform", "translateX(-100%)");
+            $(".page-overlay").hide();
+            $("body").removeClass("prevent-scrolling");
+        }
+    })
 }
 
+function setMobileMenu() {
+    let menuButton = $("#product-menu-button");
+    let menu = $("#product-menu");
+    let menuContainer = $("#product-menu-container");
+    menuButton.show();
+    menuContainer.hide();
+    menuContainer.removeClass("product-menu-container");
+    menuContainer.addClass("product-menu-container-mobile");
+    menu.removeClass("product-menu-list");
+    menu.addClass("product-menu-list-mobile");
+    menuContainer.show();
+
+}
+
+function setDesktopMenu() {
+    let menuButton = $("#product-menu-button");
+    let menu = $("#product-menu");
+    let menuContainer = $("#product-menu-container");
+    menuButton.hide();
+    menuContainer.addClass("product-menu-container");
+    menuContainer.removeClass("product-menu-container-mobile");
+    menu.addClass("product-menu-list");
+    menu.removeClass("product-menu-list-mobile");
+}
 
 function showModal(id, showOverlay=false) {
     $("#"+id).show();

@@ -20,6 +20,7 @@ class Product {
     private $type;
     private $categoryId;
     private $attributes = [];
+    private $displayed;
 
     public function __construct($product){
         $this->setId($product['id']);
@@ -41,6 +42,9 @@ class Product {
         $this->setCategoryId($product['category_id']);
 
         $this->retrieveAttributeValueIds();
+        if ($this->isDiscounted()) {
+            $this->checkDiscountEnded();
+        }
     }
     
     public function getId(){ return $this->id; }
@@ -49,12 +53,12 @@ class Product {
     public function getDescription(){ return $this->description; }
     public function getImage(){ return $this->image; }
     public function getPrice(){ return $this->price; }
-    public function getDiscounted(){ return $this->discounted; }
+    public function isDiscounted(){ return $this->discounted; }
     public function getDiscountPrice(){ return $this->discountedPrice; }
     public function getDiscountEndDatetime(){ return $this->discountEndDatetime; }
     public function getStock(){ return $this->stock; }
     public function getPurchases(){ return $this->purchases; }
-    public function getActive(){ return $this->active; }
+    public function isActive(){ return $this->active; }
     public function getDateAdded(){ return $this->dateAdded; }
     public function getAlcoholVolume(){ return $this->alcoholVolume; }
     public function getBottleSize(){ return $this->bottleSize; }
@@ -81,6 +85,24 @@ class Product {
     private function setCategoryId($categoryId) { $this->categoryId = $categoryId; }
     private function setAttributes($attributes) { $this->attributes = $attributes; }
 
+    private function checkDiscountEnded() {
+        if (strtotime($this->getDiscountEndDatetime()) <= time()) {
+            $this->setDiscounted(false);
+            $this->setDiscountEndDatetime(null);
+            $this->setDiscountPrice(null);
+
+            $source = new ProductCRUD();
+            $source->endProductDiscount($this->getId());
+        }
+    }
+
+    private function displayDiscountState() {
+        $timeRemaining = strtotime($this->getDiscountEndDatetime()) - time();
+        if (floor($timeRemaining/60/60) < 1) {
+            return "<p style='position:absolute;top:5px;right:5px;font-size:1.4rem;color:red;'>Deal ends soon!</p>";
+        }        
+    }
+
     private function retrieveAttributeValueIds() {
         $source = new ProductCRUD();
         $attributes = $source->getProductAttributeValueIds($this->getId());
@@ -100,7 +122,15 @@ class Product {
                 $html.="<h4 class='product-type'>".$this->getType()."</h4>";
                 $html.="<p class='product-desc-short'>".$this->getAlcoholVolume()." abv / ".$this->getBottleSize()."</p>";
                 $html.="<input type='hidden' name='product_id' value='".$this->getId()."'>";
-                $html.="<p class='product-price'>£".$this->getPrice()."</p>";
+                $html.="<div class='product-price-container'>";
+                if ($this->isDiscounted()) {
+                    $html.=$this->displayDiscountState();
+                    $html.="<p class='product-price-discounted'>£".$this->getPrice()."</p>";
+                    $html.="<p class='product-price'>£".$this->getDiscountPrice()."</p>";
+                } else {
+                    $html.="<p class='product-price'>£".$this->getPrice()."</p>";
+                }
+                $html.="</div>";
                 $html.="<button type='submit'>Add to cart</button>";
                 $html.="<a class='product-wrapper-link' href='/productpage.php?pid=".$this->getId()."'><span></span></a>";
             $html.="</div>";

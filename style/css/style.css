@@ -13,7 +13,7 @@ p, li, a, span, time, label { font-size:var(--font-size-regtext) }
  --font-default: 'roboto', 'sans-serif';
  --font-monospace: 'Courier New', Courier, monospace;
  --font-size-huge: 5rem;
- --font-size-heading: 3rem;
+ --font-size-heading: 3.5rem;
  --font-size-subheading: 2.2rem;
  --font-size-subheading-small: 1.8rem;
  --font-size-regtext: 1.6rem;
@@ -65,6 +65,11 @@ main {
 .ignore-overlay {
   position: relative;
   z-index: 90;
+}
+
+.prevent-scrolling {
+  height:100%;
+  overflow: hidden;
 }
 
 /**********************************************************************************
@@ -143,10 +148,33 @@ header {
 /**********************************************************************************
 * PRODUCT MENU CSS
 **********************************************************************************/
+.product-menu-button {
+  color: white;
+  font-size: 3rem;
+}
 .product-menu-container {
+  display: none;
   width: 100%;
   background-color: white;
   border-bottom: 1px solid lightgrey;
+}
+
+.product-menu-container-mobile {
+  transition: transform ease-in-out 350ms;
+  transform: translateX(-100%);
+  margin-top: 0.5px;
+  background-color: white;
+  position: absolute;
+  width: 90%;
+  height: 100vh;
+  z-index: 99;
+  border-right: 1px solid lightgrey;
+  text-align: left;
+}
+
+.product-menu-list-mobile {
+  display: block;
+  width: 100%;
 }
 
 .product-menu-list {
@@ -158,9 +186,16 @@ header {
 .product-menu-list li {
   text-align: center;
 }
+.product-menu-list-mobile li {
+  text-align: left;
+  text-indent: 20px;
+  margin-top:-1px;
+  border-top:1px solid lightgrey;
+  border-bottom:1px solid lightgrey;
+}
 
 
-.product-menu-list a {
+.product-menu-list a, .product-menu-list-mobile a {
   display: block;
   padding: 20px;
   text-decoration: none;
@@ -168,7 +203,7 @@ header {
   font-weight: 600;
   font-size: 1.4rem;
 }
-.product-menu-list a:hover {
+.product-menu-list a:hover, .product-menu-list-mobile a:hover {
   background-color: rgb(226, 226, 226);
   text-decoration: underline;
 }

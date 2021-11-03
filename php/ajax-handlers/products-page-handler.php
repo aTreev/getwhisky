@@ -41,20 +41,16 @@ function getFilteredProducts() {
             
             // Iterate through all products
             foreach ($allProducts as $product) {
-                // if multiple filters passed
-                if (count($attributeValues) > 1) {
-                    // Ensure total filter equality
-                    $arraysAreEqual = ($product->getAttributes() == $attributeValues);
-                    if ($arraysAreEqual) {
-                        array_push($filteredProducts, $product);
+                // Check if all selected filters apply to the product
+                $attributeNotInProduct = 0;
+                foreach ($attributeValues as $attributeValue) {
+                    if (!in_array($attributeValue, $product->getAttributes())) {
+                        $attributeNotInProduct++;
                     }
-                } else {
-                    // Only one filter passed, loop through and check each index
-                    foreach($attributeValues as $attributeValue) {
-                        if (in_array($attributeValue, $product->getAttributes())) {
-                            array_push($filteredProducts, $product);
-                        }
-                    }
+                }
+                // If all filters match add the product to 
+                if ($attributeNotInProduct == 0) {
+                    array_push($filteredProducts, $product);
                 }
             }
         }
