@@ -111,6 +111,7 @@ function Form(formtohandle) {
 				this.username.doFeedback(useravailable,"Could not process request");
 			}
 			if(useravailable) {
+				$('#submitbutton').html("<img style='width:28px;' src='/assets/loader-button.gif'>");
 				this.theform.submit()
 			}
 			this.theform.submitbutton.disabled=false;

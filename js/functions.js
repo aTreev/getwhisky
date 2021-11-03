@@ -1,3 +1,12 @@
+function prepareMenu() {
+    window.addEventListener("resize", ()=>{
+        if ($(window).width() > 639) {
+            
+        }
+    });
+}
+
+
 function showModal(id, showOverlay=false) {
     $("#"+id).show();
     if (showOverlay) $(".page-overlay").show();

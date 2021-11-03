@@ -1,0 +1,133 @@
+#products-container {
+    max-width: 1200px;
+    margin-top: 40px;
+    display:flex;
+    gap: 10px;
+    margin-bottom: 40px;
+}
+
+#product-root {
+    width: 900px;
+    display:flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.product span {
+    position:absolute; 
+    width:100%;
+    height:100%;
+    top:0;
+    left: 0;
+  
+    z-index: 12;
+  
+    /* fixes overlap error in IE7/8, 
+       make sure you have an empty gif */
+    background-image: url('empty.gif');
+  } 
+
+.product {
+    flex: 1 1 10%;
+    min-width: 220px;
+    background-color: white;
+    text-align:center;
+    padding: 20px;
+    border: 1px solid lightgrey;
+    position: relative;
+}
+
+.product img {
+    height: 200px;
+    display: block;
+    margin: auto;
+    margin-bottom: 20px;
+}
+
+.product-name {
+    height: 40px;
+}
+
+.product-type {
+    text-transform: uppercase;
+    opacity: 0.85;
+    margin-bottom: 15px;
+    color: rgb(122, 122, 122);
+    font-family: 'Merriweather', serif;
+
+}
+
+.product-desc-short {
+    margin-bottom: 15px;
+}
+.product-price {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+
+.product button[type=submit] {
+    position: relative;
+    width: 100%;
+    margin: auto;
+    z-index: 15;
+}
+
+.no-products-found {
+    width: 100%;
+    text-align: center;
+}
+.no-products-found h2 {
+    margin-bottom: 20px;
+}
+
+#filter-root {
+    background-color: white;
+    width: 300px;
+}
+
+.filter-header {
+    padding: 20px;
+    text-align: center;
+    background-color: var(--bg-secondary);
+    color: white;
+    font-weight: 400;
+}
+.filter-header h3 {
+    font-weight: 400;
+}
+.filter-items {
+    border: 1px solid lightgrey;
+    padding: 20px;
+}
+
+.filter-item {
+    margin-bottom: 20px;
+}
+.filter-item-header {
+    padding: 10px 0px 10px 0px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.filter-item-header i {
+    font-size: 1.6rem;
+}
+.filter-item-option {
+    padding: 10px 0px 10px 0px;
+}
+
+.filter-item-option label {
+    margin-left: 5px;
+    user-select: none;
+    cursor: pointer;
+}
+.filter-item-option input[type=checkbox] {
+    cursor: pointer;
+}
+
+@media screen and (max-width: 1200px) {
+    .product {
+        width: 400px;
+    }
+}

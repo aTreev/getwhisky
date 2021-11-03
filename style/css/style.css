@@ -1,8 +1,9 @@
 html, * { font-size: 10px; }
 h1 { font-size: var(--font-size-huge); }
 h2 { font-size: var(--font-size-heading); }
-h3, h4 { font-size: var(--font-size-subheading); }
-p, li, a, span, time { font-size:var(--font-size-regtext) }
+h3 { font-size: var(--font-size-subheading); }
+h4 { font-size: var(--font-size-subheading-small); }
+p, li, a, span, time, label { font-size:var(--font-size-regtext) }
 
 :root {
  --bg-secondary:hsl(0, 100%, 20%);
@@ -14,6 +15,7 @@ p, li, a, span, time { font-size:var(--font-size-regtext) }
  --font-size-huge: 5rem;
  --font-size-heading: 3rem;
  --font-size-subheading: 2.2rem;
+ --font-size-subheading-small: 1.8rem;
  --font-size-regtext: 1.6rem;
 }
 i {
@@ -65,7 +67,9 @@ main {
   z-index: 90;
 }
 
-
+/**********************************************************************************
+* PAGE HEADER CSS
+**********************************************************************************/
 header {
   width: 100%;
   height: 150px;
@@ -136,6 +140,38 @@ header {
   font-size: 1.2rem;
 }
 
+/**********************************************************************************
+* PRODUCT MENU CSS
+**********************************************************************************/
+.product-menu-container {
+  width: 100%;
+  background-color: white;
+  border-bottom: 1px solid lightgrey;
+}
+
+.product-menu-list {
+  display: flex;
+  width: 1200px;
+  margin: auto;
+  justify-content: space-between;
+}
+.product-menu-list li {
+  text-align: center;
+}
+
+
+.product-menu-list a {
+  display: block;
+  padding: 20px;
+  text-decoration: none;
+  color:black;
+  font-weight: 600;
+  font-size: 1.4rem;
+}
+.product-menu-list a:hover {
+  background-color: rgb(226, 226, 226);
+  text-decoration: underline;
+}
 
 /*******************************************************************************************************
 *  FORM AND MODAL CSS
@@ -416,6 +452,10 @@ button[type=submit]:hover {
   .header-content {
     width:100%;
     margin: 0px 10px 0px 10px;
+  }
+
+  .product-menu-list {
+    width: 100%;
   }
 }
 @media screen and (max-width: 768px) {

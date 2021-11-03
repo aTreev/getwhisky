@@ -11,7 +11,6 @@ if (util::valStr($_POST['email'])) {
     $page = new Page();
     $result = $page->sendPasswordResetEmail($email);
     echo json_encode($result);
-    
 }
 
 ?>

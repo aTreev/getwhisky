@@ -31,6 +31,8 @@ class UserHash {
 	
 	// authentication occurs by running a plaintext password through the same hashing algorithm
 	// compares the passed password's hash to the user's hash 
+	// password_verify can verify a password without separate storage of the salt due to the way
+	// that the password_hash function works
 	public function testPass($plaintext) {
 		return password_verify($plaintext,$this->getHash());
 	}
@@ -46,16 +48,4 @@ class UserHash {
 	}
 
 }
-/*
-	test for the userHash file
-
-	$newhash = new UserHash();
-	$newhash->newHash('Pa$$w0rd');
-	var_dump($newhash);
-	if($newhash->testPass('Pa$$w0rd')) {
-		echo "<br />Password ok";
-	} else {
-		echo "<br />Password not ok";
-	}
-*/
 ?>

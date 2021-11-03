@@ -1,21 +1,32 @@
 <?php
 //The Page class, responsible for the application state, checks that the user is authorised 
-//to carry out the update action and if so passes the data to a temporary instance of the User class.
 require_once("user.class.php");
-require_once("menu.class.php");
+require_once("product-menu.class.php");
+require_once("product.class.php");
+require_once("product-filter.class.php");
 require_once("unique-id-generator.class.php");
 
 class Page {
-	private $user, $pagetype, $isauthenticated, $menu;
+	private $user;
+	private $pagetype;
+	private $isauthenticated;
+	private $productMenu;
+	private $products = [];
+	private $productCategoryFilters;
 	
 	public function __construct($pagetype=0){
 		session_start();
 		$this->setPagetype($pagetype);
 		$this->user = new User();
+		$this->productMenu = new ProductMenu();
 		$this->setStatus(false);
         $this->checkUser();
+		$this->getProductsFromDatabase();
 	}
 	
+	public function getCategoryFilters() { return $this->productCategoryFilters; }
+	public function getProducts() { return $this->products; }
+	public function getProductMenu() { return $this->productMenu;}
 	public function getPagetype() { return $this->pagetype;}
 	public function getStatus() { return $this->isauthenticated;}
 	public function getUser() {return $this->user;}    
@@ -134,6 +145,41 @@ class Page {
 		}
 	}
 
+	public function registerUser($userid,$username,$userpass,$firstname,$surname,$email,$dob, $vKey) {
+		$reguser=new User();
+		$result=$reguser->registerUser($userid,$username,$userpass,$firstname,$surname,$email,$dob, $vKey);
+		if($result['insert']==1) {
+			$this->loginDiscreet($username, $userpass);
+			// send verification email
+			$emailTo = $email;
+			$subject = "getwhisky email verification";
+			$message = "<h1>Thank you for registering with getwhisky</h1><p>Please click on the link below to verify your account!</p><a href='http://ecommercev2/verify.php?vkey=$vKey'>Verify account</a>";
+			$headers = "From: neilunidev@yahoo.com\r\n";
+			$headers .= "MIME-Version: 1.0\r\n";
+			$headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
+			mail($emailTo, $subject, $message, $headers);
+		}
+		return $result;
+	}
+
+	public function resendValidationEmail() {
+		if ($this->getUser()) {
+			$emailTo = $this->getUser()->getEmail();
+			$vKey = $this->getUser()->getVerificationKey();
+			$subject = "getwhisky email verification";
+			$message = "<h1>Thank you for registering with JA Mackay</h1><p>Please click on the link below to verify your account!</p><a href='http://ecommercev2/verify.php?vkey=$vKey'>Verify account</a>";
+			$headers = "From: neilunidev@yahoo.com\r\n";
+			$headers .= "MIME-Version: 1.0\r\n";
+			$headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
+			$result['sent'] = mail($emailTo, $subject, $message, $headers);
+			$result['address'] = $emailTo;
+		} else {
+			$result = false;
+		}
+		return $result;
+	}
+
+
 	public function sendPasswordResetEmail($email) {
 		$userCRUD = new UserCRUD();
 		$found = $userCRUD->getUserByEmail($email);
@@ -172,8 +218,8 @@ class Page {
 			$result = $userCRUD->wipeResetKeyWithNewPass($hashedPassword);
 			return $result;
 		}
-		
 	}
+	
 
 	/******************************
 	 * GENERAL PAGE DISPLAY METHODS
@@ -194,6 +240,7 @@ class Page {
 				<link rel='preconnect' href='https://fonts.gstatic.com' crossorigin>
 				<link href='https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap' rel='stylesheet'>
 				<link href='https://fonts.googleapis.com/css2?family=Courier+Prime&display=swap' rel='stylesheet'>
+				<link href='https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap' rel='stylesheet'>
 				<!-- CSS -->
 				<link rel='stylesheet' href='style/css/reset.css'>
 				<link rel='stylesheet' href='style/css/style.css'>
@@ -202,40 +249,59 @@ class Page {
 		return $html;
 	}
 
-	// Builds the markup for the main nav menu
-	public function buildHeaderMenu() {
+	// Returns the site-wide <header> section
+	public function displayHeader() {
+		$html="";
+		$html.="<header>";
+			$html.="<div class='page-overlay'></div>";
+			$html.="<div class='header-content'>";
+				$html.="<a href='/index.php'><img class='header-logo' src='assets/getwhisky-logo-lowercase.png' alt=''></a>";
+					$html.="<nav class='header-menu'>";
+						$html.="<ul>";					
+							$html.="<li><a href='/cart.php'><i class='header-nav-icon fas fa-shopping-basket'><span class='cart-count'>0</span></i></a><a class='header-nav-link' href='/cart.php'>basket</a></li>";
+							if ($this->getUser()->getUsertype() == 0) {
+								$html.="<li><a class='header-nav-link' href='/login.php'>Sign in</a></li>";
+							}
+							if ($this->getUser()->getUsertype() == 3) {
+								$html.="<li><a class='header-nav-link' href='/admin.php'>Admin</a></li>";
+							}
+							if ($this->getUser()->getUsertype() >= 2) {
+								$html.="<li><a href='/user.php'><i class='header-nav-icon fas fa-user'></i></a><a class='header-nav-link' href='/user.php'>Account</a></li>";
+								$html.="<li><a class='header-nav-link' href='/logout.php'>Logout</a></li>";
+							}
+							if ($this->getUser()->getUsertype() == 1) {
+								$html.="<li><a class='header-nav-link' href='/suspended.php'>Account</a></li>";
+								$html.="<li><a class='header-nav-link' href='/logout.php'>Logout</a></li>";
+							}
+						$html.="</ul>";
+				$html.="</nav>";
+			$html.="</div>";
+		$html.="</header>";
+		return $html;
+	}
+
+	public function displayProductMenu() {
 		$html = "";
-		$html.="<nav class='header-menu'>";
-			$html.="<ul>";					
-				$html.="<li><a href='/cart.php'><i class='header-nav-icon fas fa-shopping-basket'><span class='cart-count'>0</span></i></a><a class='header-nav-link' href='/cart.php'>basket</a></li>";
-				if ($this->getUser()->getUsertype() == 0) {
-					$html.="<li><a class='header-nav-link' href='/login.php'>Sign in</a></li>";
-				}
-				if ($this->getUser()->getUsertype() == 3) {
-					$html.="<li><a class='header-nav-link' href='/admin.php'>Admin</a></li>";
-				}
-				if ($this->getUser()->getUsertype() >= 2) {
-					$html.="<li><a href='/user.php'><i class='header-nav-icon fas fa-user'></i></a><a class='header-nav-link' href='/user.php'>Account</a></li>";
-					$html.="<li><a class='header-nav-link' href='/logout.php'>Logout</a></li>";
-				}
-				if ($this->getUser()->getUsertype() == 1) {
-					$html.="<li><a class='header-nav-link' href='/suspended.php'>Account</a></li>";
-					$html.="<li><a class='header-nav-link' href='/logout.php'>Logout</a></li>";
-				}
-			$html.="</ul>";
+		$html.="<nav class='product-menu-container'>";
+		$html.= $this->getProductMenu();
 		$html.="</nav>";
 		return $html;
 	}
 
-	// Returns the site-wide <header> section
-	public function displayHeader() {
-		$html="";
-		$html.="<div class='page-overlay'></div>";
-		$html.="<div class='header-content'>";
-			$html.="<a href='/index.php'><img class='header-logo' src='assets/getwhisky-logo-lowercase.png' alt=''></a>";
-			$html.=$this->buildHeaderMenu();
-		$html.="</div>";
-	return $html;
+	public function getProductsFromDatabase() {
+		$source = new ProductCRUD();
+		$products = $source->getProducts();
+		if(count($products)>0) {
+			$haveProducts=count($products);
+			foreach($products as $product) {
+				$newProduct=new Product($product);
+				array_push($this->products, $newProduct);
+			}
+		} 
+	}
+
+	public function getCategoryFiltersFromDatabase($categoryId=1) {
+		$this->productCategoryFilters = new ProductFilter($categoryId);
 	}
 }
 ?>

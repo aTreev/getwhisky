@@ -1,23 +1,17 @@
 function prepareUserPage() {
-    const xmlHttp = new XMLHttpRequest();
     if ($("#resend-validation")) {
         $("#resend-validation").click(function() {
-            resendValidationEmail(xmlHttp);
+            resendValidationEmail();
         }); 
     }
     
 }
 
 
-function resendValidationEmail(xmlHttp) {
-    $(document)
-    .ajaxStart(function () {
+function resendValidationEmail() {
+    $(document).ajaxStart(function () {
         $('#resend-validation').html("<img style='width: 32px;'src='/assets/loader-button.gif'>");
     })
-    .ajaxStop(function () {
-        $('#resend-validation').html("resend validation email");
-    });
-
     $.ajax({
         url: "../php/ajax-handlers/resend-validation-email.php",
         method: "POST",
@@ -30,7 +24,7 @@ function resendValidationEmail(xmlHttp) {
         // parse to allow property access
         result = JSON.parse(result);
         sendConfirmationNotification(result.sent, result.address);
-        
+        $('#resend-validation').html("resend validation email");
     });
 }
 

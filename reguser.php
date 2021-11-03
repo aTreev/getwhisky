@@ -28,36 +28,32 @@
 		$email=$_POST['email'];
 		$dob=$_POST['dob'];
 		$userpass=$_POST['userpass'];
-		$reguser=new User();
-		$result=$reguser->registerUser($userid,$username,$userpass,$firstname,$surname,$email,$dob, $vKey);
-		if($result['insert']==1) {
-			$page->loginDiscreet($username, $userpass);
-			// send verification email
-			$emailTo = $email;
-			$subject = "getwhisky email verification";
-			$message = "<h1>Thank you for registering with getwhisky</h1><p>Please click on the link below to verify your account!</p><a href='http://ecommercev2/verify.php?vkey=$vKey'>Verify account</a>";
-			$headers = "From: neilunidev@yahoo.com\r\n";
-			$headers .= "MIME-Version: 1.0\r\n";
-			$headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
-			mail($emailTo, $subject, $message, $headers);
 
-			?>
+		$result = $page->registerUser($userid,$username,$userpass,$firstname,$surname,$email,$dob, $vKey)
+?>
 			<!-- menu display -->
 			<header>
 				<?php echo $page->displayHeader(); ?>
 			</header>
-			<h1>Thank you for registering with getwhisky</h1>
-			<p>A verification email has been sent to <?php echo $email; ?></p>
-			<p>Please follow the link in this email to verify your account</p> 
-			<?php
-		} else {
-			echo $result['messages'];
+			<main>
+			<?php 
+			if ($result['insert']) {
+				?>
+				<h3>Thank you for registering with getwhisky</h3>
+				<p>A verification email has been sent to <?php echo $email; ?></p>
+				<p>Please follow the link in this email to verify your account</p> 
+				<a href='/user.php'>Your account</a>
+				<?php
+			} else {
+				foreach ($result['messages'] as $message) {
+					echo "<p>".$message."</p>";
+				}
 			?><a href="javascript:history.back();">Back to Registration Form</a><?php
 		}
-		
 	} catch (Exception $e) {
 		echo "Error : ", $e->getMessage();
 	}	
 ?>
+</main>
 </body>
 </html>

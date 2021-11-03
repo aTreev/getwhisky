@@ -10,9 +10,8 @@
     <title>getwhisky homepage</title>
 </head>
 <body>
-    <header>
-        <?php echo $page->displayHeader(); ?>
-    </header>
+    <?php echo $page->displayHeader(); ?>
+    <?php echo $page->displayProductMenu();?>
     <main>
     </main>
 </body>
