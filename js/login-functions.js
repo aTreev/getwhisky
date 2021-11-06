@@ -29,15 +29,12 @@ function validateResetEmail(email) {
 
     if (re.test(email)) {
         // Email ok
-        if ($("#invalid-email-message")) {
-            // Remove redundant email error message
-            $("#invalid-email-message").remove();
-        }
+        // Remove redundant email error message
+        $("#invalid-email-message").html("");
         sendResetEmail(email);
     } else {
         // Email does not match regex
-        let message = $("<p id='invalid-email-message'style='color:darkred;'>Please enter a valid email address</p>");
-        $("#submit-password-reset").parent().prepend(message);
+        $("#invalid-email-message").html("Please enter a valid email address");
     }
 }
 
@@ -59,13 +56,13 @@ function sendResetEmail(email) {
         data: "email="+email,
 
     }).done(function(result){
+        $('#submit-password-reset').html("submit");
         console.log(result);
         if (result == true) {
             // Success email sent to address
             new Alert(true, "A password reset email has been sent to "+email);
             hideModal("password-reset-modal");
             $("#password-reset-email-input").val("");
-            $('#submit-password-reset').html("submit");
         } else {
             // Email not found on server
             new Alert(false, "We were unable to find that email address, please try again");

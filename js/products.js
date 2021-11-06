@@ -1,3 +1,5 @@
+const mobileWidth = 830;
+
 function prepareProductsPage() {
     categoryId = $("#category_id").val();
     getProducts(categoryId);
@@ -11,6 +13,18 @@ function prepareProductsPage() {
  * Hides all by default
  */
 function makeFilterSectionInteractive() {
+    $(".filter-header").on("click",function(){
+        $(this).next().toggleClass("max-height-0");
+        $(this).children().last().toggleClass("fas fa-plus");
+        $(this).children().last().toggleClass("fas fa-minus");
+    })
+    if ($(window).width() <= mobileWidth) {
+        $(".filter-header").next().addClass("max-height-0");
+    } else {
+        $(".filter-header").children().last().toggleClass("fas fa-plus");
+        $(".filter-header").children().last().toggleClass("fas fa-minus");
+    }
+    
     $(".filter-item-header").next().hide();
     $(".filter-item-header").on("click",function(){
         $(this).next().toggle();
@@ -50,8 +64,11 @@ function prepareProductFilters() {
                 // remove value from map
                 selectedFilterValues.delete(currentClick.attr("attribute_id"));
             }
+            // Hide filters for UX improvement
+            if ($(window).width() <= mobileWidth) $(".filter-header").next().addClass("max-height-0");
             // convert map back to array and send the attribute values to the ajax product filter
             getProducts(categoryId, Array.from(selectedFilterValues.values()))
+
         });
     }
 }
@@ -65,15 +82,21 @@ function getProducts(categoryId, attributeValues) {
         // Ajax parameters
         url:"../php/ajax-handlers/products-page-handler.php",
         method:"POST",
-        data: {function: 1, catid: categoryId, attribute_values: attributeValues}
+        data: {function: 1, catid: categoryId, attribute_values: attributeValues},
         // Include callback for status codes?
 
         // Ajax complete
     }).done(function(result){
         if (result) {
+            result = JSON.parse(result);
             setTimeout(() => {
                 $("#product-root").css("display", "grid"); // set style to grid, displays products in grid
-                $("#product-root").html(result);
+                $("#product-count").html("")
+                $("#product-root").html(result.html);
+                if (result.count) {
+                    if (result.count == 0 || result.count > 1) $("#product-count").html("<p>"+result.count+" products found with selected filters</p>")
+                    else $("#product-count").html("<p>"+result.count+" product found with selected filters</p>")
+                }
             
             }, 200);
         } else {

@@ -11,11 +11,10 @@
     <link rel="stylesheet" href="style/css/verify.css">
 </head>
 <body>
-    <header>
-        <?php
-            echo $page->displayHeader();
-        ?>
-    </header>
+    <?php
+        echo $page->displayHeader();
+        echo $page->displayProductMenu();
+    ?>
     <?php 
         if (isset($_GET['vkey'])) {
             $vKey = $_GET['vkey'];
@@ -56,5 +55,14 @@
         }
     ?>
 </body>
+<script src="js/functions.js"></script>
+<script>
+    document.onreadystatechange = function() {
+        if(document.readyState==="complete") {
+            prepareMenu();
+            prepareProductsPage();
+        }
+    }
+</script>
 </html>
 

@@ -17,6 +17,7 @@ p, li, a, span, time, label { font-size:var(--font-size-regtext) }
  --font-size-subheading: 2.2rem;
  --font-size-subheading-small: 1.8rem;
  --font-size-regtext: 1.6rem;
+ --icon-size-small:1.9rem;
 }
 i {
   cursor: pointer;
@@ -62,12 +63,29 @@ main {
   z-index: 50;
 }
 
+.menu-overlay {
+  display:none;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: black;
+  opacity: 0.5;
+  z-index: 50;
+}
+
 .ignore-overlay {
   position: relative;
   z-index: 90;
 }
 
-.prevent-scrolling {
+.prevent-scrolling-all {
+  height:100%;
+  overflow: hidden;
+}
+
+.prevent-scrolling-menu {
   height:100%;
   overflow: hidden;
 }
@@ -267,7 +285,7 @@ form label {
   border: 1px solid #ccc;
   box-sizing: border-box;
   font-size: 1.4rem;
-  background-color: #f1f2f1f2;
+  background-color: #f1f1f1fb;
 }
 
 .form-item-50 {
@@ -278,14 +296,14 @@ form label {
   border: 1px solid #ccc;
   box-sizing: border-box;
   font-size: 1.4rem;
-  background-color: #f1f2f1f2
+  background-color: #f1f1f1fb;
 }
 
 ::placeholder {
   text-transform: uppercase;
   font-size: 1.4rem;
-  color: #4d4d4d;
-  font-family: var(--font-monospace)
+  color: black;
+  font-family: var(--font-monospace);
 }
 ::-webkit-datetime-edit-text { color: #8e8e8e; }
 ::-webkit-datetime-edit-month-field { color: #8e8e8e; text-transform: uppercase; font-size: 1.2rem; }

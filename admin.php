@@ -11,11 +11,10 @@
     <title>getwhisky homepage</title>
 </head>
 <body>
-	<header>
-		<?php
-			echo $page->displayHeader();
-		?>
-	</header>
+	<?php
+        echo $page->displayHeader();
+        echo $page->displayProductMenu();
+    ?>
 	<h1>Admin Page</h1>
 	<main>
 
@@ -29,4 +28,13 @@
 	</form>
 	</main>
 </body>
+<script src="js/functions.js"></script>
+<script>
+    document.onreadystatechange = function() {
+        if(document.readyState==="complete") {
+            prepareMenu();
+            prepareProductsPage();
+        }
+    }
+</script>
 </html>

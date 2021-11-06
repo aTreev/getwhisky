@@ -20,6 +20,7 @@ function getFilteredProducts() {
     $allProducts = $page->getProducts();
     $filteredProducts = [];
     $htmlToReturn = "";
+    $filteredTwice = false;
     
     // Category passed filter products by category
     if (isset($_POST['catid']) && util::valInt($_POST['catid'])) {
@@ -34,6 +35,8 @@ function getFilteredProducts() {
 
         // Additional filters passed, further filter the products
         if (isset($_POST['attribute_values'])) {
+            $filteredTwice = true;
+            
             // Sanitize all array inputs
             $attributeValues = array_filter($_POST['attribute_values'], "ctype_digit");
             // reset filtered products to empty array
@@ -60,7 +63,14 @@ function getFilteredProducts() {
             $htmlToReturn.=$product;
         }
 
-        echo $htmlToReturn;
+        $result = ["html" => $htmlToReturn];
+        // If filters have been applied return the number of products found
+        if ($filteredTwice) {
+            $result = ["html" => $htmlToReturn, "count" => count($filteredProducts)];
+        }
+        echo json_encode($result);
+        //echo $result['html'];
+        //echo $result['count'];
     }
     
 }

@@ -13,11 +13,10 @@
     <title>password recovery</title>
 </head>
 <body>
-    <header>
-        <?php 
-            echo $page->displayHeader();
-        ?>
-    </header>
+    <?php
+        echo $page->displayHeader();
+        echo $page->displayProductMenu();
+    ?>
     <main>
         <?php 
             if (util::valStr($_GET['resetKey'])) {
@@ -111,4 +110,13 @@
         ?>
     </main>
 </body>
+<script src="js/functions.js"></script>
+<script>
+    document.onreadystatechange = function() {
+        if(document.readyState==="complete") {
+            prepareMenu();
+            prepareProductsPage();
+        }
+    }
+</script>
 </html>

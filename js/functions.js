@@ -1,8 +1,9 @@
 function prepareMenu() {
+    const mobileWidth = 768;
     /**********
      * Initial check for mobile or desktop
      */
-    if ($(window).width() < 639) {
+    if ($(window).width() < mobileWidth) {
         setMobileMenu();
     } else {
         setDesktopMenu();
@@ -11,13 +12,13 @@ function prepareMenu() {
     
     /***************
      * Check whether the screen is small enough to switch menu after resize
-     */
+     ***/
     $(window).resize(function(){
         // remove any menu specific properties
-        $(".page-overlay").hide();
+        $(".menu-overlay").hide();
         $("body").removeClass("prevent-scrolling");
 
-        if ($(window).width() < 639) {
+        if ($(window).width() < mobileWidth) {
             $("#product-menu-container").css("transform", "translateX(-100%)");
             $("#product-menu-container").css("display","none");
             setMobileMenu();
@@ -32,19 +33,22 @@ function prepareMenu() {
     /******************
      * Add an event listener to the body to allow menu to open when the menu-button is clicked
      * and closed when anywhere else on the body is clicked
-     */
+     ***/
     $(document).on("click", function(e){
-        if (e.target.classList.contains("product-menu-button")) {
-            // Menu button clicked show menus and prevent scrolling
-            $("#product-menu-container").css({"transform":"translateX(0%)"});
-            $(".page-overlay").show();
-            $("body").addClass("prevent-scrolling");
-        } else {
-            // Body clicked, hide menus and re-allow scrolling
-            $("#product-menu-container").css("transform", "translateX(-100%)");
-            $(".page-overlay").hide();
-            $("body").removeClass("prevent-scrolling");
+        if ($(window).width() < mobileWidth) {
+            if (e.target.classList.contains("product-menu-button")) {
+                // Menu button clicked show menus and prevent scrolling
+                $("#product-menu-container").css({"transform":"translateX(0%)"});
+                $(".menu-overlay").show();
+                $("body").addClass("prevent-scrolling-menu");
+            } else {
+                // Body clicked, hide menus and re-allow scrolling
+                $("#product-menu-container").css("transform", "translateX(-100%)");
+                $(".menu-overlay").hide();
+                $("body").removeClass("prevent-scrolling-menu");
+            }
         }
+        
     })
 }
 
@@ -73,19 +77,27 @@ function setDesktopMenu() {
     menu.removeClass("product-menu-list-mobile");
 }
 
-function showModal(id, showOverlay=false) {
+function showModal(id, showOverlay) {
     $("#"+id).show();
     if (showOverlay) $(".page-overlay").show();
-    let escapeListener = document.addEventListener("keyup", function(e){
-        if (e.key === "Escape") {
-            hideModal(id, escapeListener);
-        }
-    })
+    $(document.body).toggleClass("prevent-scrolling-all");
+    
+    let closeModalListener = function(e) {
+           if(!(($(e.target).closest("#"+id).length > 0 ) )){
+            hideModal(id);
+            $(document).unbind("click", closeModalListener);
+           }
+    }
+    setTimeout(() => {
+       $(document).bind("click", closeModalListener)
+    }, 200);
 }
 
-function hideModal(id, escapeListener) {
+
+function hideModal(id) {
     $("#"+id).hide();
     $(".page-overlay").hide();
+    $(document.body).toggleClass("prevent-scrolling-all");
 }
 
 /**************************

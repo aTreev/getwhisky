@@ -12,11 +12,10 @@
 	<title>user page</title>
 </head>
 <body>
-	<header>
-		<?php
-			echo $page->displayHeader();
-		?>
-	</header>
+	<?php
+        echo $page->displayHeader();
+        echo $page->displayProductMenu();
+    ?>
 	
 	<main>
 		<div id="user-root" style='margin-top:20px;'>
@@ -33,11 +32,13 @@
 	</main>
 </body>
 <script src="js/classes/alert.class.js"></script>
+<script src="js/functions.js"></script>
 <script src="js/user-page-functions.js"></script>
 <script>
 	document.onreadystatechange = function(){
         if(document.readyState=="complete") {
             prepareUserPage();
+			prepareMenu();
         }
     }
 </script>

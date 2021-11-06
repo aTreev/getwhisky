@@ -10,9 +10,19 @@
     <title>getwhisky homepage</title>
 </head>
 <body>
-    <?php echo $page->displayHeader(); ?>
-    <?php echo $page->displayProductMenu();?>
+    <?php
+        echo $page->displayHeader();
+        echo $page->displayProductMenu();
+    ?>
     <main>
     </main>
 </body>
+<script src="js/functions.js"></script>
+<script>
+    document.onreadystatechange = function() {
+        if(document.readyState==="complete") {
+            prepareMenu();
+        }
+    }
+</script>
 </html>

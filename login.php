@@ -10,9 +10,10 @@
     <title>getwhisky login</title>
 </head>
 <body>
-    <header>
-        <?php echo $page->displayHeader(); ?>   
-    </header>
+    <?php
+        echo $page->displayHeader();
+        echo $page->displayProductMenu();
+    ?>
     <main>
         <form method="post" action="processlogin.php" class="form-main">
             <div class="form-header">
@@ -42,6 +43,7 @@
             <div class='modal-content' id='reset-password-form'>
                 <p>If you have forgotten your password, please enter the email address you use to log in to getwhisky. We will then email you a link to reset the password to your registered account.</p>
                 <form>
+                <p id='invalid-email-message' style='color:darkred;'></p>
                 <div class="input-container-100">
                     <i class="input-icon far fa-envelope" aria-hidden="true"></i>
                     <input class='form-item' type="email" id='password-reset-email-input' placeholder="email"/>
@@ -59,6 +61,7 @@
     document.onreadystatechange = function() {
         if(document.readyState==="complete") {
             prepareLoginPage();
+            prepareMenu();
         }
     }
 </script>

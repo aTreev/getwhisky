@@ -253,6 +253,7 @@ class Page {
 		$html="";
 		$html.="<header>";
 			$html.="<div class='page-overlay'></div>";
+			$html.="<div class='menu-overlay'></div>";
 			$html.="<div class='header-content'>";
 				$html.="<a href='/index.php'><img class='header-logo' src='assets/getwhisky-logo-lowercase.png' alt=''></a>";
 					$html.="<nav class='header-menu'>";

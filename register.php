@@ -11,9 +11,10 @@
     <title>getwhisky registration</title>
 </head>
 <body>
-    <header>
-        <?php echo $page->displayHeader(); ?>
-    </header>
+    <?php
+        echo $page->displayHeader();
+        echo $page->displayProductMenu();
+    ?>
     <?php 
                 echo "Session userid: ".$_SESSION['userid'];
                 echo "<br>";
@@ -60,11 +61,13 @@
     </main>
 </body>
 <script src="js/user-registration-form.js"></script>
+<script src="js/functions.js"></script>
 <script>
     'use strict';
     document.onreadystatechange = function() {
         if(document.readyState==="complete") {
             new Form("regform");
+            prepareMenu();
         }
     }
 </script>

@@ -24,12 +24,15 @@
                         <?php
                             echo $page->displayCategoryDetails($categoryId);
                         ?>
+                        <div id='product-count'></div>
+
                     </div>
                     <div id="products-container">
                         <input type="hidden" id="category_id" value="<?php echo $categoryId;?>">
                         <div id="filter-root">
                             <div class="filter-header">
                                 <h3>Filters</h3>
+                                <i class='fas fa-plus'></i>
                             </div>
                             <div class="filter-items">
                                 <?php 
