@@ -26,7 +26,6 @@ function prepareMenu() {
             setDesktopMenu();
             $("#product-menu-container").css("transform", "translateX(0%)");
             $("#product-menu-container").css("display","block");
-
         }
     });
 
@@ -82,12 +81,15 @@ function showModal(id, showOverlay) {
     if (showOverlay) $(".page-overlay").show();
     $(document.body).toggleClass("prevent-scrolling-all");
     
+    // Define a function for closing modal when out of focus
     let closeModalListener = function(e) {
            if(!(($(e.target).closest("#"+id).length > 0 ) )){
             hideModal(id);
+            // Unbind the event listener when the modal has been closed
             $(document).unbind("click", closeModalListener);
            }
     }
+    // bind the close modal function to the document
     setTimeout(() => {
        $(document).bind("click", closeModalListener)
     }, 200);

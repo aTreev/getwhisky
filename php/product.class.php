@@ -117,7 +117,7 @@ class Product {
     public function __toString() {
         $html = "";
             $html.="<div class='product'>";
-                $html.="<img src='".$this->getImage()."'>";
+                $html.="<img src='".$this->getImage()."' loading='lazy'>";
                 $html.="<h3 class='product-name'>".$this->getName()."</h3>";
                 $html.="<h4 class='product-type'>".$this->getType()."</h4>";
                 $html.="<p class='product-desc-short'>".$this->getAlcoholVolume()." abv / ".$this->getBottleSize()."</p>";

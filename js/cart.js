@@ -1,0 +1,67 @@
+function prepareCartPage() {
+    addPageEventListeners();
+    
+}
+
+function addPageEventListeners() {
+    $("[name='update-qty']").on("click", function(){
+        let quantity = $(this).parent().prev().children()[1].value;
+        let productId = $(this).parent().prev().children()[2].value;
+        if (quantity > 0) {
+            updateCartQuantity(productId, quantity);
+        } else {
+            removeFromCart(productId)
+        }
+    });
+
+    $("[name='remove-from-cart']").on("click", function(){
+        let productId = $(this).parent().prev().children()[2].value;
+        removeFromCart(productId)
+    });
+}
+
+
+function updateCartQuantity(productId, quantity) {
+    $.ajax({
+        url: "../php/ajax-handlers/cart-handler.php",
+        method:"POST",
+        data: {function: 1, productId: productId, quantity: quantity}
+
+    }).done(function(result){
+        result = JSON.parse(result);
+        // .result = 1 success
+        if (result.result == 1) {
+            $("#cart-container").html(result.html);
+            $(".cart-count").html(result.cartCount);
+            addPageEventListeners();
+            new Alert(true, "Item quantity updated!");
+        }
+
+        // .result = 2 insufficient stock
+        if (result.result == 2) {
+            new Alert(false, "Quantity too high");
+        }
+
+    });
+}
+
+
+function removeFromCart(productId) {
+    $.ajax({
+        url: "../php/ajax-handlers/cart-handler.php",
+        method:"POST",
+        data: {function: 2, productId: productId}
+
+    }).done(function(result){
+        console.log(result);
+        result = JSON.parse(result);
+        if (result.result == 1) {
+            $("#cart-container").html(result.html);
+            $(".cart-count").html(result.cartCount);
+            addPageEventListeners();
+            new Alert(true, "Item removed from cart");
+        } else {
+            new Alert(false, "Error processing request, please try again!");
+        }
+    })
+}

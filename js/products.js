@@ -1,4 +1,4 @@
-const mobileWidth = 830;
+const productsMobileBreakpoint = 830;
 
 function prepareProductsPage() {
     categoryId = $("#category_id").val();
@@ -18,16 +18,16 @@ function makeFilterSectionInteractive() {
         $(this).children().last().toggleClass("fas fa-plus");
         $(this).children().last().toggleClass("fas fa-minus");
     })
-    if ($(window).width() <= mobileWidth) {
+    if ($(window).width() <= productsMobileBreakpoint) {
         $(".filter-header").next().addClass("max-height-0");
     } else {
         $(".filter-header").children().last().toggleClass("fas fa-plus");
         $(".filter-header").children().last().toggleClass("fas fa-minus");
     }
     
-    $(".filter-item-header").next().hide();
+    //Filter dropdown clicked
     $(".filter-item-header").on("click",function(){
-        $(this).next().toggle();
+        $(this).next().toggleClass("filter-item-options-show");
         $(this).children().last().toggleClass("fas fa-plus");
         $(this).children().last().toggleClass("fas fa-minus");
 
@@ -57,6 +57,8 @@ function prepareProductFilters() {
                 currentClick.prop("checked", true);
                 // enter the value into the map
                 selectedFilterValues.set(currentClick.attr("attribute_id"), currentClick.val());
+                // Hide filters for UX improvement
+                if ($(window).width() <= productsMobileBreakpoint) $(".filter-header").next().addClass("max-height-0");
             } else {
                 // if checkbox item is unchecked
                 // remove checked from clicked checkbox
@@ -64,8 +66,6 @@ function prepareProductFilters() {
                 // remove value from map
                 selectedFilterValues.delete(currentClick.attr("attribute_id"));
             }
-            // Hide filters for UX improvement
-            if ($(window).width() <= mobileWidth) $(".filter-header").next().addClass("max-height-0");
             // convert map back to array and send the attribute values to the ajax product filter
             getProducts(categoryId, Array.from(selectedFilterValues.values()))
 
@@ -88,6 +88,7 @@ function getProducts(categoryId, attributeValues) {
         // Ajax complete
     }).done(function(result){
         if (result) {
+            console.log(result);
             result = JSON.parse(result);
             setTimeout(() => {
                 $("#product-root").css("display", "grid"); // set style to grid, displays products in grid

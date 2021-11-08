@@ -17,6 +17,16 @@ class ProductCRUD {
 		return $resultset;
     }
 
+    public function getProductById($productId, $style=MYSQLI_ASSOC) {
+        $this->sql = "SELECT * FROM products WHERE id = ?";
+		$this->stmt = self::$db->prepare($this->sql);
+        $this->stmt->bind_param("i",$productId);
+		$this->stmt->execute();
+		$result = $this->stmt->get_result();
+		$resultset=$result->fetch_all($style);
+		return $resultset;
+    }
+
     public function getProductAttributeValueIds($productId, $style=MYSQLI_ASSOC) {
         $this->sql = "SELECT attribute_value_id FROM entity_value WHERE product_id = ?;";
         $this->stmt = self::$db->prepare($this->sql);

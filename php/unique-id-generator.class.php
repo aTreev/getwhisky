@@ -1,5 +1,6 @@
 <?php 
     require_once("usercrud.class.php");
+    require_once("cartcrud.class.php");
 
     class UniqueIdGenerator {
     /**********************************
@@ -36,8 +37,8 @@
                 break;
 
                 case "cart_id":      
-                    $this->column = "cart_id";       
-                    //$this->retrieveCartIds();
+                    $this->column = "id";       
+                    $this->retrieveCartIds();
                 break;
 
                 case "vkey":
@@ -101,5 +102,10 @@
         private function retrievePasswordResetKeys() {
             $source = new UserCRUD();
             $this->retrievedIds = $source->getExistingPasswordResetKeys();
+        }
+
+        private function retrieveCartIds() {
+            $source = new CartCRUD();
+            $this->retrievedIds = $source->getExistingCartIds();
         }
     }

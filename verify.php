@@ -29,12 +29,7 @@
                         <p>You are now being redirected</p>
                         <img src="/assets/loader.gif">
                     </div>
-                    <script>
-                        setTimeout(() => {
-                            window.location.href = "/user.php";
-                        }, 5000);
-                    </script>  
-                            
+                        
                 <?php
             } else {
                 ?>
@@ -46,9 +41,6 @@
                         <img src="/assets/loader.gif">
                     </div>
                     <script>
-                        setTimeout(() => {
-                            window.location.href = "/user.php";
-                        }, 5000);
                     </script>  
                 <?php
             }
@@ -61,6 +53,10 @@
         if(document.readyState==="complete") {
             prepareMenu();
             prepareProductsPage();
+
+            setTimeout(() => {
+                window.location.href = "/user.php";
+            }, 5000);
         }
     }
 </script>

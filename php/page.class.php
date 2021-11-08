@@ -4,6 +4,7 @@ require_once("user.class.php");
 require_once("product-menu.class.php");
 require_once("product.class.php");
 require_once("product-filter.class.php");
+require_once("cart.class.php");
 require_once("unique-id-generator.class.php");
 
 class Page {
@@ -13,6 +14,7 @@ class Page {
 	private $productMenu;
 	private $products = [];
 	private $productCategoryFilters;
+	private $cart;
 	
 	public function __construct($pagetype=0){
 		session_start();
@@ -22,6 +24,7 @@ class Page {
 		$this->setStatus(false);
         $this->checkUser();
 		$this->getProductsFromDatabase();
+		$this->initializeUserCart();
 	}
 	
 	public function getProducts() { return $this->products; }
@@ -29,8 +32,11 @@ class Page {
 	public function getPagetype() { return $this->pagetype;}
 	public function getStatus() { return $this->isauthenticated;}
 	public function getUser() {return $this->user;}    
+	public function getCart() { return $this->cart; }
+
 	private function setPagetype($pagetype) {$this->pagetype=(int)$pagetype;}
 	private function setStatus($status) {$this->isauthenticated=(bool)$status;}
+	private function setCart($cart) { $this->cart = $cart; }
 	
 	// Checks for a user in the $_SESSION
 	// if session is found set status is set to true and
@@ -39,7 +45,7 @@ class Page {
 	public function checkUser() {
 		// Establish guest session
 		if (!isset($_SESSION['userid'])) {
-			$_SESSION['userid'] = md5(time(). bin2hex(random_bytes(10)));
+			$_SESSION['userid'] = "guest-".md5(time(). bin2hex(random_bytes(10)));
 			$_SESSION['guest'] = true;
 		}
 
@@ -258,7 +264,7 @@ class Page {
 				$html.="<a href='/index.php'><img class='header-logo' src='assets/getwhisky-logo-lowercase.png' alt=''></a>";
 					$html.="<nav class='header-menu'>";
 						$html.="<ul>";					
-							$html.="<li><a href='/cart.php'><i class='header-nav-icon fas fa-shopping-basket'><span class='cart-count'>0</span></i></a><a class='header-nav-link' href='/cart.php'>basket</a></li>";
+							$html.="<li><a href='/cart.php'><i class='header-nav-icon fas fa-shopping-basket'><span class='cart-count'>".$this->getCart()->getCartItemCount()."</span></i></a><a class='header-nav-link' href='/cart.php'>basket</a></li>";
 							if ($this->getUser()->getUsertype() == 0) {
 								$html.="<li><a class='header-nav-link' href='/login.php'>Sign in</a></li>";
 							}
@@ -281,6 +287,9 @@ class Page {
 		return $html;
 	}
 
+	/***************************************************************************************************************************************************
+	 * Product methods
+	 ***********************************************************/
 	public function displayProductMenu() {
 		$html = "";
 		$html.="<nav id='product-menu-container' class='product-menu-container'>";
@@ -315,6 +324,79 @@ class Page {
 			$html.="<p>".$detail['description']."</p>";
 		}
 		return $html;
+	}
+
+	/**********************************************************************************************
+	 * Cart methods
+	 ****************************************************************************/
+
+	/********************
+	 * Method checks whether a user has an existing cart on the database and retrieves it
+	* If no cart exists a new cart is created on the database and the function recalled
+	* to retrieve the newly created cart.
+	*********************/
+	public function initializeUserCart() {
+	$haveCart = 0;
+	$source = new CartCRUD();
+	$haveCart = $source->getUserCart($this->getUser()->getUserid());
+	if ($haveCart) {
+		// Existing cart found on database create cart instance in page
+		$this->setCart(new Cart($haveCart[0]));
+	} else {
+		// create new cart on database
+		$uniqueIdGenerator = new UniqueIdGenerator("cart_id");
+		$cartId = $uniqueIdGenerator->getUniqueId();
+		$newCart = $source->createNewCart($cartId, $this->getUser()->getUserid());
+		if ($newCart) {
+			// If creating cart was successful recall function to initialize the cart
+			$this->initializeUserCart();
+		} else {
+			// Failed, handle errors.
+		}
+	}
+	}
+
+	public function displayCart() {
+		return $this->getCart();
+	}
+
+	public function addToCart() {
+
+	}
+
+	/********************************************************
+ 	* Updates the stock of an item in the cart
+	* Does an initial check for the product stock to see whether there is enough stock
+	* If there is sufficient stock it calls the updateItemQuantity function inside the cart
+	* Returns various results depending on state
+	* 	0	-	General fail
+	* 	1	-	Update success
+	* 	2	-	Insufficient stock to update quantity
+	******************************/
+	public function updateCartItemQuantity($productId, $quantity) {
+		// Guard clause to prevent 0 quantity being submitted
+		if ($quantity <= 0) return 0;
+
+		// check for sufficient stock
+		$stock = 0;
+		foreach($this->getProducts() as $product) {
+			if ($product->getId() == $productId) $stock = $product->getStock();
+		}
+
+		if ($quantity <= $stock) {
+		// stock ok - update cart quantity to passed quantity
+		$result = $this->getCart()->updateCartItemQuantity($productId, $quantity);
+		} else {
+		// insufficient stock
+		$result = 2;
+		}
+	
+		return $result;
+	}
+
+	public function removeFromCart($productId) {
+		$result = $this->getCart()->removeFromCart($productId);
+		return $result;
 	}
 }
 ?>
