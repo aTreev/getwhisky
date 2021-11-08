@@ -13,6 +13,7 @@
     <?php
         echo $page->displayHeader();
         echo $page->displayProductMenu();
+        echo $page->displayCartNotifications();
     ?>
     <main>
         
@@ -52,6 +53,7 @@
         
     </main>
 </body>
+<script src="js/classes/alert.class.js"></script>
 <script src="js/functions.js"></script>
 <script src="js/products.js"></script>
 <script>

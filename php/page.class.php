@@ -287,15 +287,7 @@ class Page {
 		return $html;
 	}
 
-	public function displayCartNotifications() {
-		$html = "";
-		if (isset($_SESSION['cart-update-notification'])) {
-            $html.=$_SESSION['cart-update-notification'];
-            unset($_SESSION['cart-update-notification']);
-        }
-		return $html;
-	}
-
+	
 	/***************************************************************************************************************************************************
 	 * Product methods
 	 ***********************************************************/
@@ -369,8 +361,19 @@ class Page {
 		return $this->getCart();
 	}
 
-	public function addToCart() {
+	public function displayCartNotifications() {
+		$html = "";
+		if (isset($_SESSION['cart-update-notification'])) {
+            $html.=$_SESSION['cart-update-notification'];
+            unset($_SESSION['cart-update-notification']);
+        }
+		return $html;
+	}
 
+
+	public function addToCart($productId) {
+		$result = $this->getCart()->addToCart($productId);
+		return $result;
 	}
 
 	/********************************************************

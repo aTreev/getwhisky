@@ -10,7 +10,7 @@ if (isset($_POST['function']) && util::valInt($_POST['function'])) {
         break;
         case 2:
             addToCart();
-            break;
+        break;
     }
 }
 
@@ -75,5 +75,20 @@ function getFilteredProducts() {
     
 }
 
+/*******
+ * Adds a product to cart via the page object
+ * returns the success state and cartCount
+ ******/
+function addToCart() {
+    if (isset($_POST['productId']) && util::valInt($_POST['productId'])) {
+        $productId = $_POST['productId'];
+        $page = new Page();
 
+        $result = $page->addToCart($productId);
+        $cartCount = $page->getCart()->getCartItemCount();
+
+        $returnResult = ['result' => $result, 'cartCount' => $cartCount];
+        echo json_encode($returnResult);
+    }
+}
 ?>

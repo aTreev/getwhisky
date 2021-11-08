@@ -7,8 +7,6 @@ class Cart {
     private $userid;        // Id of the user the cart belongs to
     private $checked_out;   // Whether the cart has been checked out or not
     private $items = [];    // Items in the cart -- retrieved during object initialization
-    private $updatedItems = [];
-    private $removedItems = [];
 
     public function __construct($cart) {
         $this->setId($cart["id"]);
@@ -39,6 +37,7 @@ class Cart {
      *********/
     // TODO: Check for stock prior to adding and send a message to frontend somehow
     private function retrieveCartItems() {
+        $this->items = [];
         $source = new CartCRUD();
         $retrievedItems = $source->getCartItems($this->getId());
 
@@ -119,6 +118,35 @@ class Cart {
                     $item->setQuantity($quantity);
                 }
             }
+        }
+        return $result;
+    }
+
+    public function addToCart($productId) {
+        $result = 0;
+        $alreadyInCart = 0;
+        foreach($this->getItems() as $item) {
+            if ($item->getProductId() == $productId) {
+                $alreadyInCart = 1;
+                $quantityInCart = $item->getQuantity();
+                break;
+            }
+        }
+
+        if ($alreadyInCart) {
+            //increment by 1
+            $update = new CartCRUD();
+            $result = $update->updateCartItemQuantity($this->getId(), $productId, $quantityInCart+1);
+        }
+
+        if (!$alreadyInCart) {
+            // add to cart
+            $insert = new CartCRUD();
+            $result = $insert->addToCart($this->getId(), $productId);
+        }
+        // if successful reload cart items
+        if ($result) {
+            $this->retrieveCartItems();
         }
         return $result;
     }

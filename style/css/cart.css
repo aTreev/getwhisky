@@ -37,8 +37,12 @@
 }
 
 .cart-item-right {
-    margin-top: 40px;
+    margin-top: 10px;
     width: 100%;
+}
+
+.cart-item-right h3 {
+    font-weight: 400;
 }
 
 .cart-item-functions {
@@ -159,4 +163,9 @@
     #cart-summary-root {
         width: 100%;
     }
-  }
+}
+
+
+@media screen and (max-width: 576px) {
+    
+}

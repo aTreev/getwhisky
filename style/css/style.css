@@ -448,6 +448,10 @@ button[type=submit]:hover {
   color: darkgreen;
 }
 
+.success a {
+  color: darkgreen;
+}
+
 /* Error states */
 .error {
   background-color: rgb(255, 110, 110);

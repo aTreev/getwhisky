@@ -6,12 +6,13 @@ function prepareProductsPage() {
     // add more values as filter options are selected
     prepareProductFilters();
     makeFilterSectionInteractive();
+    
 }
 
 /****************
  * Adds a click listener that toggles whether the filter options are visible
  * Hides all by default
- */
+ ******/
 function makeFilterSectionInteractive() {
     $(".filter-header").on("click",function(){
         $(this).next().toggleClass("max-height-0");
@@ -74,21 +75,20 @@ function prepareProductFilters() {
 }
 
 function getProducts(categoryId, attributeValues) {
-    $(document).ajaxStart(function(){
-        $("#product-root").html("<img style='display:block;margin:auto;' src='/assets/loader.gif'>");
-        $("#product-root").css("display", "block"); // set display to block, centers loader and content
-    });
     $.ajax({
         // Ajax parameters
         url:"../php/ajax-handlers/products-page-handler.php",
         method:"POST",
         data: {function: 1, catid: categoryId, attribute_values: attributeValues},
+        beforeSend: function(){
+            $("#product-root").html("<img style='display:block;margin:auto;' src='/assets/loader.gif'>");
+            $("#product-root").css("display", "block"); // set display to block, centers loader and content
+        }
         // Include callback for status codes?
 
         // Ajax complete
     }).done(function(result){
         if (result) {
-            console.log(result);
             result = JSON.parse(result);
             setTimeout(() => {
                 $("#product-root").css("display", "grid"); // set style to grid, displays products in grid
@@ -98,10 +98,30 @@ function getProducts(categoryId, attributeValues) {
                     if (result.count == 0 || result.count > 1) $("#product-count").html("<p>"+result.count+" products found with selected filters</p>")
                     else $("#product-count").html("<p>"+result.count+" product found with selected filters</p>")
                 }
+
+                $("[name='add-to-cart']").on("click", function(){
+                    let productId = $(this).prev().val();
+                    addToCart(productId);
+                });
             
             }, 200);
         } else {
             $("#product-root").html("<div class='no-products-found'><h2>We couldn't find any products!</h2><p>Try reducing the number of filters</p></div>");
         }
-    })
+    });
+}
+
+function addToCart(productId) {
+
+    $.ajax({
+        url:"../php/ajax-handlers/products-page-handler.php",
+        method:"POST",
+        data: {function: 2, productId: productId}
+    }).done(function(result){
+        result = JSON.parse(result);
+        if (result.result == 1) {
+            $(".cart-count").html(result.cartCount);
+            new Alert(true, "Item added to basket <a href='/cart.php'>view basket</a>");
+        }
+    });
 }

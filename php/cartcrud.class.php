@@ -90,5 +90,17 @@ class CartCRUD {
 			return $this->stmt->affected_rows;
 		}
     }
+
+    public function addToCart($cartId, $productId) {
+        $this->sql = "INSERT INTO cart_items (`cart_id`, `product_id`, `quantity`) VALUES (?,?,1);";
+        $this->stmt = self::$db->prepare($this->sql);
+        $this->stmt->bind_param("si", $cartId, $productId);
+        $this->stmt->execute();
+        if($this->stmt->affected_rows!=1) {
+			return 0;
+		} else {
+			return $this->stmt->affected_rows;
+		}
+    }
 }
 ?>

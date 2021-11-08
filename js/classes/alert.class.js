@@ -37,7 +37,7 @@ class Alert {
 
 
         let message = document.createElement("p");
-        message.innerText = this.messageText;
+        message.innerHTML = this.messageText;
 
         messageContainer.insertAdjacentElement("beforeend",alertIcon);
         messageContainer.insertAdjacentElement("beforeend",message);

@@ -129,7 +129,8 @@ class Product {
                 }
                 $html.="</div>";
                 if ($this->getSTock() > 0) {
-                    $html.="<button type='submit'>Add to cart</button>";
+                    $html.="<input type='hidden' value='".$this->getId()."'>";
+                    $html.="<button name='add-to-cart' type='submit'>Add to cart</button>";
                 } else {
                     $html.="<button class='out-of-stock-btn'>Out of stock</button>";
                 }
