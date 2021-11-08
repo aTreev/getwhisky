@@ -31,6 +31,7 @@ function updateCartQuantity(productId, quantity) {
         result = JSON.parse(result);
         // .result = 1 success
         if (result.result == 1) {
+            // Update html and eventListeners
             $("#cart-container").html(result.html);
             $(".cart-count").html(result.cartCount);
             addPageEventListeners();
@@ -53,9 +54,11 @@ function removeFromCart(productId) {
         data: {function: 2, productId: productId}
 
     }).done(function(result){
-        console.log(result);
         result = JSON.parse(result);
+
+        // .result = 1 successfully removed
         if (result.result == 1) {
+            // Update html and eventListeners
             $("#cart-container").html(result.html);
             $(".cart-count").html(result.cartCount);
             addPageEventListeners();

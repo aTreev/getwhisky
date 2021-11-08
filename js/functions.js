@@ -49,6 +49,28 @@ function prepareMenu() {
         }
         
     })
+
+    // Check for any cart notifications
+    if ($(".cart-notification")) {
+        $(".cart-notification").css("transform", "translateX(0%)")
+        let hideTimeout = setTimeout(() => {
+                $(".cart-notification").css("transform", "translateX(150%)");
+            }, 5000);
+        
+        $(".cart-notification").on("mouseover", function(){
+            clearTimeout(hideTimeout);
+        })
+        $(".cart-notification").on("mouseleave", function(){
+            console.log("mouse leave");
+            setTimeout(() => {
+                $(".cart-notification").css("transform", "translateX(150%)");
+            }, 5000);
+        })
+
+        $("#close-cart-notification").on("click", function(){
+            $(".cart-notification").remove();
+        })
+    }
 }
 
 function setMobileMenu() {

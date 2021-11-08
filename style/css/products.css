@@ -101,7 +101,8 @@
 
 .product-price-discounted {
     position: relative;
-    color:rgb(206, 0, 0);
+    color:grey;
+    opacity: 0.8;
 }
 
 .product-price-discounted:before {
@@ -132,6 +133,17 @@
     width: 100%;
     margin: auto;
     z-index: 15;
+}
+.out-of-stock-btn {
+    position: relative;
+    z-index: 15;
+    width: 100%;
+    padding: 14px 20px;
+    border: none;
+    border-radius: 4px;
+    background-color: var(--bg-secondary);
+    font-size: 1.6rem;
+    color: white;
 }
 
 .no-products-found {
@@ -182,35 +194,34 @@
 
 
 .filter-item {
-    padding: 10px 20px 10px 20px;
+    padding: 0px 20px 0px 20px;
 }
 .filter-item-header {
-    padding: 15px 0px 15px 0px;
+    padding: 20px 0px 20px 0px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     cursor: pointer;
     user-select: none;
-    border-bottom: 1px solid rgb(228, 228, 228);
+    border-top: 1px solid rgb(228, 228, 228);
     text-transform: capitalize;
 }
 
-.filter-items .filter-item:last-child .filter-item-header {
-    border-bottom: none;
+.filter-items .filter-item:first-child .filter-item-header {
+    border-top: none;
 }
 .filter-item-header i {
     font-size: 1.6rem;
 }
 .filter-item-options {
-    border-bottom: 1px solid rgb(228, 228, 228);
     max-height: 0;
     overflow: hidden;
     margin-top: -1px;
-    transition: all 200ms ease-in-out;
+    transition: all 250ms ease-in-out;
 }
 
 .filter-item-options-show {
-    padding: 10px 0px 5px 0px;
+    padding: 0px 0px 10px 0px;
     max-height: 2000px;
 }
 

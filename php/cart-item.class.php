@@ -9,6 +9,7 @@ class Cartitem {
     private $discounted;
     private $discountPrice;
     private $price;     // price of the product
+    private $stock;
 
 
     public function __construct($item) {
@@ -30,6 +31,8 @@ class Cartitem {
     public function getDiscounted(){ return $this->discounted; }
     public function getDiscountPrice(){ return $this->discountPrice; }
     public function getPrice(){ return $this->price; }
+    public function getStock(){ return $this->stock; }
+
 
     private function setCartId($cartId) { $this->cartId = $cartId; }
     private function setProductId($productId) { $this->productId = $productId; }
@@ -39,6 +42,8 @@ class Cartitem {
     private function setDiscounted($discounted){ $this->discounted = $discounted; }
     private function setDiscountPrice($discountPrice){ $this->discountPrice = $discountPrice; }
     private function setPrice($price) { $this->price = $price; }
+    private function setStock($stock) { $this->stock = $stock; }
+
 
     private function retrieveItemDetails() {
         $source = new CartCRUD();
@@ -48,6 +53,7 @@ class Cartitem {
         $this->setDiscounted($itemDetails[0]['discounted']);
         $this->setDiscountPrice($itemDetails[0]['discount_price']);
         $this->setPrice($itemDetails[0]['price']);
+        $this->setStock($itemDetails[0]['stock']);
     }
 
     public function returnCorrectPriceForTotal() {

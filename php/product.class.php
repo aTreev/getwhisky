@@ -96,11 +96,8 @@ class Product {
         }
     }
 
-    private function displayDiscountState() {
-        $timeRemaining = strtotime($this->getDiscountEndDatetime()) - time();
-        if (floor($timeRemaining/60/60) < 1) {
-            return "<p style='position:absolute;top:5px;right:5px;font-size:1.4rem;color:red;'>Deal ends soon!</p>";
-        }        
+    private function getDiscountPercentage() {
+        return floor((($this->getPrice() - $this->getDiscountPrice()) / $this->getPrice()) * 100);
     }
 
     private function retrieveAttributeValueIds() {
@@ -124,14 +121,18 @@ class Product {
                 $html.="<input type='hidden' name='product_id' value='".$this->getId()."'>";
                 $html.="<div class='product-price-container'>";
                 if ($this->isDiscounted()) {
-                    $html.=$this->displayDiscountState();
+                    $html.="<p style='position:absolute;top:-1px;left:-1px;font-size:1.4rem;color:white;background-color:red;padding:12px 20px 12px 20px;'>-".$this->getDiscountPercentage()."%</p>";
                     $html.="<p class='product-price-discounted'>£".$this->getPrice()."</p>";
                     $html.="<p class='product-price'>£".$this->getDiscountPrice()."</p>";
                 } else {
                     $html.="<p class='product-price'>£".$this->getPrice()."</p>";
                 }
                 $html.="</div>";
-                $html.="<button type='submit'>Add to cart</button>";
+                if ($this->getSTock() > 0) {
+                    $html.="<button type='submit'>Add to cart</button>";
+                } else {
+                    $html.="<button class='out-of-stock-btn'>Out of stock</button>";
+                }
                 $html.="<a class='product-wrapper-link' href='/productpage.php?pid=".$this->getId()."'><span></span></a>";
             $html.="</div>";
         return $html;

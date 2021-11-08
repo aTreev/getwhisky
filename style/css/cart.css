@@ -94,7 +94,8 @@
 
 .old-price {
     position: relative;
-    color:rgb(206, 0, 0);
+    color:grey;
+    opacity: 0.8;
 }
 
 .old-price:before {
