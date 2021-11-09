@@ -122,6 +122,15 @@ class Cart {
         return $result;
     }
 
+    /***************
+     * Searches through the cart's items to check if an item is already present
+     * if the item is already present the quantity is incremented after a stock check
+     * if the item is not present the product's stock is checked before adding new item to cart
+     * Returns messages depending on result
+     *  0   -   Generic fail
+     *  1   -   Added to cart
+     *  2   -   Insufficient stock
+     ****************/
     public function addToCart($productId) {
         $result = 0;
         $alreadyInCart = 0;
@@ -129,23 +138,38 @@ class Cart {
             if ($item->getProductId() == $productId) {
                 $alreadyInCart = 1;
                 $quantityInCart = $item->getQuantity();
+                $stock = $item->getStock();
                 break;
             }
         }
 
+        // already in cart update quantity
         if ($alreadyInCart) {
-            //increment by 1
             $update = new CartCRUD();
-            $result = $update->updateCartItemQuantity($this->getId(), $productId, $quantityInCart+1);
+            // Check sufficient stock for quantity increase
+            if ($stock > $quantityInCart+1) {
+                $result = $update->updateCartItemQuantity($this->getId(), $productId, $quantityInCart+1);
+            } else {
+                // insufficient stock send out of stock error code
+                $result = 2;
+            }
         }
 
+        // Not in cart add new cart item
         if (!$alreadyInCart) {
-            // add to cart
+            // check stock greater than 0
             $insert = new CartCRUD();
-            $result = $insert->addToCart($this->getId(), $productId);
+            $stock = $insert->checkOutOfStock($productId)[0]['stock'];
+            if ($stock == 0) {
+                // out of stock error code
+                $result = 2;
+            } else {
+                // add to cart
+                $result = $insert->addToCart($this->getId(), $productId);
+            }
         }
         // if successful reload cart items
-        if ($result) {
+        if ($result == 1) {
             $this->retrieveCartItems();
         }
         return $result;

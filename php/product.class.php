@@ -111,6 +111,41 @@ class Product {
         $this->setAttributes($indexedAttributes);
     }
 
+    public function displayProductPage() {
+        $html = "";
+        $html.="<div class='product-top-container'>";
+            $html.="<div class='product-top-left'>";
+                $html.="<img src='".$this->getImage()."'>";
+            $html.="</div>";
+            $html.="<div class='product-top-right'>";
+                $html.="<h2>".$this->getName()." <span class='product-type'>".$this->getType()."</span></h2>";
+                $html.="<p class='product-desc-short'>".$this->getAlcoholVolume()." abv / ".$this->getBottleSize()."</p>";
+                if ($this->isDiscounted()) {
+                    $html.="<div class='discount-price-container'>";
+                        $html.="<h3 class='product-price-discounted'>£".$this->getPrice()."</h3>";
+                        $html.="<h3 class='product-price'>£".$this->getDiscountPrice()."</h3>";
+                        $html.="<p style='font-size:1.4rem;color:white;background-color:red;padding:8px 15px 8px 15px;border-radius:4px;'>-".$this->getDiscountPercentage()."%</p>";
+                    $html.="</div>";
+                } else {
+                    $html.="<div class='discount-price-container'>";
+                        $html.="<h3 class='product-price'>£".$this->getPrice()."</h3>";
+                    $html.="</div>";
+                }
+                $html.="<p class='product-description'>".$this->getDescription()."</p>";
+
+                $html.="<label for='product-quantity'>Quantity: <input type='number' name='product-quantity' value='1'></label>";
+                if ($this->getSTock() > 0) {
+                    $html.="<input type='hidden' value='".$this->getId()."'>";
+                    $html.="<button name='add-to-cart' class='add-to-cart-btn'>Add to cart</button>";
+                } else {
+                    $html.="<button class='out-of-stock-btn'>Out of stock</button>";
+                }
+            $html.="</div>";
+        $html.="</div>";
+
+        return $html;
+    }
+
     public function __toString() {
         $html = "";
             $html.="<div class='product'>";

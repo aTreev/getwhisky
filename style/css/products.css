@@ -136,14 +136,15 @@
 }
 .out-of-stock-btn {
     position: relative;
+    width:100%;
     z-index: 15;
-    width: 100%;
     padding: 14px 20px;
-    border: none;
+    border: 1px solid lightgrey;
     border-radius: 4px;
-    background-color: var(--bg-secondary);
+    background-color: none;
     font-size: 1.6rem;
-    color: white;
+    color: grey;
+    background: lightgrey;
 }
 
 .no-products-found {
@@ -277,6 +278,9 @@
         grid-gap: 0px;
     }
     .product button[type=submit] {
+        width: 50%;
+    }
+    .product .out-of-stock-btn {
         width: 50%;
     }
 }

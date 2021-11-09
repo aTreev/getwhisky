@@ -15,6 +15,7 @@ class Page {
 	private $products = [];
 	private $productCategoryFilters;
 	private $cart;
+	private $product;
 	
 	public function __construct($pagetype=0){
 		session_start();
@@ -33,10 +34,12 @@ class Page {
 	public function getStatus() { return $this->isauthenticated;}
 	public function getUser() {return $this->user;}    
 	public function getCart() { return $this->cart; }
+	public function getProduct() { return $this->product; }
 
 	private function setPagetype($pagetype) {$this->pagetype=(int)$pagetype;}
 	private function setStatus($status) {$this->isauthenticated=(bool)$status;}
 	private function setCart($cart) { $this->cart = $cart; }
+	private function setProduct($product) { $this->product = $product; }
 	
 	// Checks for a user in the $_SESSION
 	// if session is found set status is set to true and
@@ -249,7 +252,6 @@ class Page {
 				<!-- CSS -->
 				<link rel='stylesheet' href='style/css/reset.css'>
 				<link rel='stylesheet' href='style/css/style.css'>
-				<link rel='stylesheet' href='style/css/alerts.css'>
 				";
 		return $html;
 	}
@@ -309,6 +311,22 @@ class Page {
 				array_push($this->products, $newProduct);
 			}
 		} 
+	}
+
+	public function retrieveProductPageProduct($productId) {
+		$found = 0;
+		foreach($this->getProducts() as $product) {
+			if ($product->getId() == $productId) {
+				$this->setProduct($product);
+				$found = 1;
+				break;
+			}
+		}
+		return $found;
+	}
+
+	public function displayProductPage() {
+		return $this->getProduct()->displayProductPage();
 	}
 
 	public function getCategoryFilters($categoryId) { 

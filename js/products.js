@@ -43,7 +43,7 @@ function makeFilterSectionInteractive() {
 function prepareProductFilters() {
     const numAttributesOnPage = document.getElementsByClassName("filter-item-options").length;
     let selectedFilterValues = new Map();
-    for(let i = 0; i < numAttributesOnPage; i++) {
+    for(let i = 0; i <= numAttributesOnPage; i++) {
         // Checkbox code graciously taken from bPratik at https://stackoverflow.com/questions/9709209/html-select-only-one-checkbox-in-a-group
         // I don't fully understand how it works but I understand it in the context of how I want it to work so it stays...
         $("[name=attribute_value"+i+"]").click(function(){
@@ -118,10 +118,16 @@ function addToCart(productId) {
         method:"POST",
         data: {function: 2, productId: productId}
     }).done(function(result){
+        console.log(result);
         result = JSON.parse(result);
+        // added to cart
         if (result.result == 1) {
             $(".cart-count").html(result.cartCount);
             new Alert(true, "Item added to basket <a href='/cart.php'>view basket</a>");
+        }
+        // Insufficient stock
+        if (result.result == 2) {
+            new Alert(false, "Unable to add to cart due to stock shortage");
         }
     });
 }
