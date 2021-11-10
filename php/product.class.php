@@ -41,7 +41,10 @@ class Product {
         $this->setType($product['type']);
         $this->setCategoryId($product['category_id']);
 
+        // Retrieve the attribute_value ids for product filter
         $this->retrieveAttributeValueIds();
+
+        // If a discount is active check when it ends
         if ($this->isDiscounted()) {
             $this->checkDiscountEnded();
         }
@@ -85,6 +88,11 @@ class Product {
     private function setCategoryId($categoryId) { $this->categoryId = $categoryId; }
     private function setAttributes($attributes) { $this->attributes = $attributes; }
 
+
+    /***********
+     * Checks whether the set discount date has passed
+     * and ends the discount if it has
+     ****************/
     private function checkDiscountEnded() {
         if (strtotime($this->getDiscountEndDatetime()) <= time()) {
             $this->setDiscounted(false);
@@ -111,35 +119,103 @@ class Product {
         $this->setAttributes($indexedAttributes);
     }
 
+    private function getProductAttributesFull() {
+        $source = new ProductCRUD();
+        $html = "<p style='padding:20px;'><i>Product details currently unavailable</i></p>";
+        $attributes = $source->getProductAttributesFull($this->getId());
+        
+        if ($attributes) {
+            $html = "";
+            foreach($attributes as $attribute) {
+                $html.="<div class='attribute-item'>";
+                    $html.="<p>".$attribute['title']."</p>";
+                    $html.="<p>".$attribute['value']."</p>";
+                $html.="</div>";
+            }
+        }
+        return $html;
+    }
+
+    private function getProductOverviews() {
+        $source = new ProductCRUD();
+        $html = "<p style='padding:20px;'><i>Product description currently unavailable</i></p>";
+        $overviews = $source->getProductOverviews($this->getId());
+
+        if ($overviews) {
+            $html = "";
+            foreach($overviews as $overview) {
+                $html.="<div class='overview-item'>";
+                    if ($overview['image']) {
+                        $html.="<img src='".$overview['image']."'>";
+                    }
+                    $html.="<h3>".$overview['heading']."</h3>";
+                    $html.="<p>".$overview['text_body']."</p>";
+                $html.="</div>";
+            }
+        }
+        return $html;
+    }
+
     public function displayProductPage() {
         $html = "";
+        // Top portion of product container
         $html.="<div class='product-top-container'>";
             $html.="<div class='product-top-left'>";
                 $html.="<img src='".$this->getImage()."'>";
             $html.="</div>";
             $html.="<div class='product-top-right'>";
-                $html.="<h2>".$this->getName()." <span class='product-type'>".$this->getType()."</span></h2>";
+                // Name
+                $html.="<div class='product-name-container'>";
+                    $html.="<h2>".$this->getName()."</h2>";
+                    $html.="<span class='product-type'>".$this->getType()."</span>";
+                $html.="</div>";
+                // Short description / Header
                 $html.="<p class='product-desc-short'>".$this->getAlcoholVolume()." abv / ".$this->getBottleSize()."</p>";
+
+                // Price
                 if ($this->isDiscounted()) {
                     $html.="<div class='discount-price-container'>";
                         $html.="<h3 class='product-price-discounted'>£".$this->getPrice()."</h3>";
                         $html.="<h3 class='product-price'>£".$this->getDiscountPrice()."</h3>";
-                        $html.="<p style='font-size:1.4rem;color:white;background-color:red;padding:8px 15px 8px 15px;border-radius:4px;'>-".$this->getDiscountPercentage()."%</p>";
+                        $html.="<p class='percentage-indicator'>-".$this->getDiscountPercentage()."%</p>";
                     $html.="</div>";
                 } else {
                     $html.="<div class='discount-price-container'>";
                         $html.="<h3 class='product-price'>£".$this->getPrice()."</h3>";
                     $html.="</div>";
                 }
+
+                // Description
                 $html.="<p class='product-description'>".$this->getDescription()."</p>";
 
+                // Quantity input and add to cart button
                 $html.="<label for='product-quantity'>Quantity: <input type='number' name='product-quantity' value='1'></label>";
                 if ($this->getSTock() > 0) {
-                    $html.="<input type='hidden' value='".$this->getId()."'>";
+                    $html.="<input type='hidden' id='product-id' value='".$this->getId()."'>";
                     $html.="<button name='add-to-cart' class='add-to-cart-btn'>Add to cart</button>";
                 } else {
                     $html.="<button class='out-of-stock-btn'>Out of stock</button>";
                 }
+
+            $html.="</div>";
+        $html.="</div>";
+        // Bottom portion of product container
+        $html.="<div class='product-bottom-container'>";
+            $html.="<div class='product-bottom-left'></div>";
+            $html.="<div class='product-bottom-right'>";
+                // Buttons to open tabs name attribute contains the key used to open tabs
+                $html.="<div class='product-bottom-tab-btns'>";
+                    $html.="<h3 name='attributes' class='tab-btn'>Details</h3>"; 
+                    $html.="<h3 name='overviews' class='tab-btn'>Description</h3>";
+                $html.="</div>";
+                // First tab - product attributes
+                $html.="<div class='attributes tab' id='attributes'>";
+                    $html.=$this->getProductAttributesFull();
+                $html.="</div>";
+                // Second tab - product overviews
+                $html.="<div class='overviews tab' id='overviews'>";
+                    $html.=$this->getProductOverviews();
+                $html.="</div>";
             $html.="</div>";
         $html.="</div>";
 
@@ -156,7 +232,7 @@ class Product {
                 $html.="<input type='hidden' name='product_id' value='".$this->getId()."'>";
                 $html.="<div class='product-price-container'>";
                 if ($this->isDiscounted()) {
-                    $html.="<p style='position:absolute;top:-1px;left:-1px;font-size:1.4rem;color:white;background-color:red;padding:12px 20px 12px 20px;'>-".$this->getDiscountPercentage()."%</p>";
+                    $html.="<p class='percentage-indicator'>-".$this->getDiscountPercentage()."%</p>";
                     $html.="<p class='product-price-discounted'>£".$this->getPrice()."</p>";
                     $html.="<p class='product-price'>£".$this->getDiscountPrice()."</p>";
                 } else {

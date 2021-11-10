@@ -1,6 +1,11 @@
 <?php 
     require_once("php/page.class.php");
     $page = new Page();
+    /****************
+     * Product page
+     * HTML for this page is constructed through the
+     * product.class.php displayProductPage() method
+     *******/
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -28,6 +33,7 @@
         <div id='product-root'>
             <?php echo $page->displayProductPage(); ?>
         </div>
+        <div id='related-products-root'></div>
         <?php
         } else {
             ?>
@@ -40,10 +46,12 @@
 </body>
 <script src='js/functions.js'></script>
 <script src='js/classes/alert.class.js'></script>
+<script src='js/product-page.js'></script>
 <script>
     document.onreadystatechange = function() {
         if(document.readyState==="complete") {
             prepareMenu();
+            prepareProductPage();
         }
     }
 </script>

@@ -40,7 +40,7 @@ function updateCartQuantity(productId, quantity) {
 
         // .result = 2 insufficient stock
         if (result.result == 2) {
-            new Alert(false, "Quantity too high");
+            new Alert(false, "The selected quantity is unavailable");
         }
 
     });

@@ -94,7 +94,7 @@ function getProducts(categoryId, attributeValues) {
                 $("#product-root").css("display", "grid"); // set style to grid, displays products in grid
                 $("#product-count").html("")
                 $("#product-root").html(result.html);
-                if (result.count) {
+                if (result.count >= 0) {
                     if (result.count == 0 || result.count > 1) $("#product-count").html("<p>"+result.count+" products found with selected filters</p>")
                     else $("#product-count").html("<p>"+result.count+" product found with selected filters</p>")
                 }
@@ -105,8 +105,6 @@ function getProducts(categoryId, attributeValues) {
                 });
             
             }, 200);
-        } else {
-            $("#product-root").html("<div class='no-products-found'><h2>We couldn't find any products!</h2><p>Try reducing the number of filters</p></div>");
         }
     });
 }

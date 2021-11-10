@@ -36,7 +36,32 @@ class ProductCRUD {
         $resultset=$result->fetch_all($style);
         return $resultset;
     }
-    
+
+    public function getProductAttributesFull($productId, $style=MYSQLI_ASSOC) {
+        $this->sql = "  SELECT attribute.title, attribute_value.value  FROM attribute_value
+                        JOIN entity_value
+                        ON entity_value.attribute_value_id = attribute_value.id
+                        JOIN attribute
+                        ON attribute_value.attribute_id = attribute.id
+                        WHERE entity_value.product_id = ?;";
+        $this->stmt = self::$db->prepare($this->sql);
+        $this->stmt->bind_param("i",$productId);
+        $this->stmt->execute();
+        $result = $this->stmt->get_result();
+        $resultset=$result->fetch_all($style);
+        return $resultset;
+    }   
+
+    public function getProductOverviews($productId, $style=MYSQLI_ASSOC) {
+        $this->sql = "SELECT image, heading, text_body FROM product_overviews WHERE product_id = ?;";
+        $this->stmt = self::$db->prepare($this->sql);
+        $this->stmt->bind_param("i", $productId);
+        $this->stmt->execute();
+        $result = $this->stmt->get_result();
+        $resultset=$result->fetch_all($style);
+        return $resultset;
+    }
+
     public function endProductDiscount($productId) {
         $this->sql = "UPDATE `products` SET `discounted`=0,`discount_price`=null,`discount_end_datetime`=null where id = ?;";
         $this->stmt = self::$db->prepare($this->sql);

@@ -147,7 +147,7 @@ class Cart {
         if ($alreadyInCart) {
             $update = new CartCRUD();
             // Check sufficient stock for quantity increase
-            if ($stock > $quantityInCart+1) {
+            if ($stock >= $quantityInCart+1) {
                 $result = $update->updateCartItemQuantity($this->getId(), $productId, $quantityInCart+1);
             } else {
                 // insufficient stock send out of stock error code
