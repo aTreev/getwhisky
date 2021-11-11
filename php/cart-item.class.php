@@ -9,7 +9,7 @@ class Cartitem {
     private $discounted;
     private $discountPrice;
     private $price;     // price of the product
-    private $stock;
+    private $stock;     // product stock
 
 
     public function __construct($item) {

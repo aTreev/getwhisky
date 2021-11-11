@@ -37,10 +37,13 @@ function updateCartQuantity(productId, quantity) {
             addPageEventListeners();
             new Alert(true, "Item quantity updated!");
         }
-
-        // .result = 2 insufficient stock
+        // insufficient stock
         if (result.result == 2) {
             new Alert(false, "The selected quantity is unavailable");
+        }
+        // Invalid product id supplied
+        if (result.result == 3 || result.result == 4) {
+            new Alert(false, "Error processing request, please try again!");
         }
 
     });
@@ -55,7 +58,6 @@ function removeFromCart(productId) {
 
     }).done(function(result){
         result = JSON.parse(result);
-
         // .result = 1 successfully removed
         if (result.result == 1) {
             // Update html and eventListeners

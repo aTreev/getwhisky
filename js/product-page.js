@@ -1,5 +1,12 @@
 function prepareProductPage() {
     prepareProductTabs();
+
+    $("[name='add-to-cart").on("click", function(){
+        let productId = $("#product-id").val();
+        let quantity = $("[name='product-quantity']").val();
+
+        addToCart(productId, quantity);
+    });
 }
 
 
@@ -25,14 +32,14 @@ function prepareProductTabs() {
 }
 
 
-function addToCart(productId) {
+function addToCart(productId, quantity) {
 
     $.ajax({
-        url:"../php/ajax-handlers/products-page-handler.php",
+        url:"../php/ajax-handlers/product-page-handler.php",
         method:"POST",
-        data: {function: 2, productId: productId}
+        data: {function: 1, productId: productId, quantity: quantity}
+
     }).done(function(result){
-        console.log(result);
         result = JSON.parse(result);
         // added to cart
         if (result.result == 1) {
@@ -41,7 +48,11 @@ function addToCart(productId) {
         }
         // Insufficient stock
         if (result.result == 2) {
-            new Alert(false, "Unable to add to cart due to stock shortage");
+            new Alert(false, "Unable to add specified quantity to cart");
+        }
+        // invalid product id supplied
+        if (result.result == 3) {
+            new Alert(false, "We were unable to find that product, please try again");
         }
     });
 }

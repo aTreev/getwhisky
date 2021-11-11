@@ -24,7 +24,7 @@ function updateCartItemQuantity() {
 
         $result = $page->updateCartItemQuantity($productId, $quantity);
 
-        if ($result) {
+        if ($result == 1) {
             $newCartHtml.= $page->displayCart();
             $newCartCount = $page->getCart()->getCartItemCount();
         }
@@ -45,7 +45,7 @@ function removeFromCart() {
 
         $result = $page->removeFromCart($productId);
 
-        if ($result) {
+        if ($result == 1) {
             $newCartHtml.=$page->displayCart();
             $newCartCount = $page->getCart()->getCartItemCount();
         }

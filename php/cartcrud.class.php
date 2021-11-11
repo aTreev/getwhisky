@@ -91,10 +91,10 @@ class CartCRUD {
 		}
     }
 
-    public function addToCart($cartId, $productId) {
-        $this->sql = "INSERT INTO cart_items (`cart_id`, `product_id`, `quantity`) VALUES (?,?,1);";
+    public function addToCart($cartId, $productId, $quantity) {
+        $this->sql = "INSERT INTO cart_items (`cart_id`, `product_id`, `quantity`) VALUES (?,?,?);";
         $this->stmt = self::$db->prepare($this->sql);
-        $this->stmt->bind_param("si", $cartId, $productId);
+        $this->stmt->bind_param("sii", $cartId, $productId, $quantity);
         $this->stmt->execute();
         if($this->stmt->affected_rows!=1) {
 			return 0;
@@ -105,6 +105,16 @@ class CartCRUD {
 
     public function checkOutOfStock($productId, $style=MYSQLI_ASSOC) {
         $this->sql = "SELECT stock FROM products WHERE id = ?";
+		$this->stmt = self::$db->prepare($this->sql);
+        $this->stmt->bind_param("i",$productId);
+		$this->stmt->execute();
+		$result = $this->stmt->get_result();
+		$resultset=$result->fetch_all($style);
+		return $resultset;
+    }
+
+    public function checkProductExists($productId, $style=MYSQLI_ASSOC) {
+        $this->sql = "SELECT * FROM products WHERE id = ?";
 		$this->stmt = self::$db->prepare($this->sql);
         $this->stmt->bind_param("i",$productId);
 		$this->stmt->execute();

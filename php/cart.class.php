@@ -14,6 +14,7 @@ class Cart {
         $this->setCheckedOut($cart["checked_out"]);
         // get cart items
         $this->retrieveCartItems();
+        // Check stock of items
         $this->checkItemStock();
     }
 
@@ -35,7 +36,6 @@ class Cart {
      * Retrieves the items in the cart from the database
      * pushes each item to the items array as a constructed object
      *********/
-    // TODO: Check for stock prior to adding and send a message to frontend somehow
     private function retrieveCartItems() {
         $this->items = [];
         $source = new CartCRUD();
@@ -48,6 +48,13 @@ class Cart {
         }
     }
 
+
+    /*********
+     * Checks the stock of items in the cart and removes any that are out of stock
+     * Also adjusts quantity if a quantity higher than available is in cart
+     * Constructs and sends a notification to the $_SESSION which is called on every page
+     * and handled via JavaScript
+     **************************************************/
     private function checkItemStock() {
         $countItems = count($this->getItems());
         $itemsUpdated = 0;
@@ -103,16 +110,68 @@ class Cart {
         return $count;
     }
 
+
+
+    /****
+     * The next 4 methods are extremely inefficient and messy
+     * TODO:    
+     * Move stock and product existance checking to the 
+     * page class that has access to all products
+     ******************************/
+
+
+
+    /**********
+     * Checks that a product actually exists
+     * used as a guard clause in other methods
+     ********/
+    private function checkProductExists($productId) {
+        $testProduct = new CartCRUD();
+        if (!$testProduct->checkProductExists($productId)) return 0;
+        return 1;
+    }
+
     /**************
      * Publicly accessible method to update the quantity of an item in cart
      * Updates the item on the database, if the query was successful, updates the
      * quantity in the item object
+     * Returns different values depending on the result
+     *  0   -   Generic Fail
+     *  1   -   Successful update
+     *  2   -   Insufficient quantity for update
+     *  3   -   Invalid product id supplied
      ************/
     public function updateCartItemQuantity($productId, $quantity) {
-        $source = new CartCRUD();
-        $result = $source->updateCartItemQuantity($this->getId(), $productId, $quantity);
+        // Guard clause to check the product exists
+        if (!$this->checkProductExists($productId)) return 3;
+        $result = 0;
+        $stock = 0;
+        $itemFound = 0;
 
-        if ($result) {            
+        // Check if item in cart and get stock
+        foreach($this->getItems() as $item) {
+            if ($item->getProductId() == $productId) {
+                $stock = $item->getStock();
+                $itemFound = 1;
+                break;
+            }
+        }
+
+        // Item not found
+        if (!$itemFound) {
+            $result =  4;
+        } else {
+            // Item found, check if stock available
+            if ($stock >= $quantity) {
+                $source = new CartCRUD();
+                $result = $source->updateCartItemQuantity($this->getId(), $productId, $quantity);
+            } else {
+                $result = 2;
+            }
+        }
+
+        // Succesfully updated, update in object
+        if ($result == 1) {            
             foreach($this->getItems() as $item) {
                 if ($item->getProductId() == $productId) {
                     $item->setQuantity($quantity);
@@ -130,42 +189,40 @@ class Cart {
      *  0   -   Generic fail
      *  1   -   Added to cart
      *  2   -   Insufficient stock
+     *  3   -   Invalid product supplied
      ****************/
-    public function addToCart($productId) {
+    public function addToCart($productId, $quantity) {
+        // Guard clause to check the product exists
+        if (!$this->checkProductExists($productId)) return 3;
         $result = 0;
-        $alreadyInCart = 0;
+        $inCart = 0;
+        
+        // Check if in cart and get quantity
         foreach($this->getItems() as $item) {
             if ($item->getProductId() == $productId) {
-                $alreadyInCart = 1;
+                $inCart = 1;
                 $quantityInCart = $item->getQuantity();
-                $stock = $item->getStock();
                 break;
             }
         }
 
         // already in cart update quantity
-        if ($alreadyInCart) {
-            $update = new CartCRUD();
-            // Check sufficient stock for quantity increase
-            if ($stock >= $quantityInCart+1) {
-                $result = $update->updateCartItemQuantity($this->getId(), $productId, $quantityInCart+1);
-            } else {
-                // insufficient stock send out of stock error code
-                $result = 2;
-            }
+        if ($inCart) {
+            $result = $this->updateCartItemQuantity($productId, $quantityInCart+$quantity);
+            
         }
 
         // Not in cart add new cart item
-        if (!$alreadyInCart) {
+        if (!$inCart) {
             // check stock greater than 0
             $insert = new CartCRUD();
             $stock = $insert->checkOutOfStock($productId)[0]['stock'];
-            if ($stock == 0) {
+            if ($stock == 0 || $stock < $quantity) {
                 // out of stock error code
                 $result = 2;
             } else {
                 // add to cart
-                $result = $insert->addToCart($this->getId(), $productId);
+                $result = $insert->addToCart($this->getId(), $productId, $quantity);
             }
         }
         // if successful reload cart items
@@ -176,11 +233,14 @@ class Cart {
     }
 
     public function removeFromCart($productId) {
+        // Guard clause to check the product exists
+        if (!$this->checkProductExists($productId)) return 3;
+
         $source = new CartCRUD();
         $result = $source->removeFromCart($this->getId(), $productId);
 
-        if ($result) {
-            // delete item from cart
+        if ($result == 1) {
+            // delete item from cart object
             $tmpItems = $this->getItems(); 
             $countItems = count($tmpItems);
 
@@ -226,10 +286,8 @@ class Cart {
                 $html.="<a class='continue-shopping' href='/index.php'>Continue shopping</a>";
             $html.="</div>";
         }
-        
 
         return $html;
-
     }
 }
 

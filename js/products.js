@@ -125,7 +125,11 @@ function addToCart(productId) {
         }
         // Insufficient stock
         if (result.result == 2) {
-            new Alert(false, "Unable to add to cart due to stock shortage");
+            new Alert(false, "Unable to add specified quantity to cart");
+        }
+        // invalid product id supplied
+        if (result.result == 3) {
+            new Alert(false, "We were unable to find that product, please try again");
         }
     });
 }

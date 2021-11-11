@@ -355,24 +355,24 @@ class Page {
 	* to retrieve the newly created cart.
 	*********************/
 	public function initializeUserCart() {
-	$haveCart = 0;
-	$source = new CartCRUD();
-	$haveCart = $source->getUserCart($this->getUser()->getUserid());
-	if ($haveCart) {
-		// Existing cart found on database create cart instance in page
-		$this->setCart(new Cart($haveCart[0]));
-	} else {
-		// create new cart on database
-		$uniqueIdGenerator = new UniqueIdGenerator("cart_id");
-		$cartId = $uniqueIdGenerator->getUniqueId();
-		$newCart = $source->createNewCart($cartId, $this->getUser()->getUserid());
-		if ($newCart) {
-			// If creating cart was successful recall function to initialize the cart
-			$this->initializeUserCart();
+		$haveCart = 0;
+		$source = new CartCRUD();
+		$haveCart = $source->getUserCart($this->getUser()->getUserid());
+		if ($haveCart) {
+			// Existing cart found on database create cart instance in page
+			$this->setCart(new Cart($haveCart[0]));
 		} else {
-			// Failed, handle errors.
+			// create new cart on database
+			$uniqueIdGenerator = new UniqueIdGenerator("cart_id");
+			$cartId = $uniqueIdGenerator->getUniqueId();
+			$newCart = $source->createNewCart($cartId, $this->getUser()->getUserid());
+			if ($newCart) {
+				// If creating cart was successful recall function to initialize the cart
+				$this->initializeUserCart();
+			} else {
+				// Failed, handle errors.
+			}
 		}
-	}
 	}
 
 	public function displayCart() {
@@ -389,38 +389,15 @@ class Page {
 	}
 
 
-	public function addToCart($productId) {
-		$result = $this->getCart()->addToCart($productId);
+	public function addToCart($productId, $quantity=1) {
+		$result = $this->getCart()->addToCart($productId, $quantity);
 		return $result;
 	}
 
-	/********************************************************
- 	* Updates the stock of an item in the cart
-	* Does an initial check for the product stock to see whether there is enough stock
-	* If there is sufficient stock it calls the updateItemQuantity function inside the cart
-	* Returns various results depending on state
-	* 	0	-	General fail
-	* 	1	-	Update success
-	* 	2	-	Insufficient stock to update quantity
-	******************************/
 	public function updateCartItemQuantity($productId, $quantity) {
 		// Guard clause to prevent 0 quantity being submitted
 		if ($quantity <= 0) return 0;
-
-		// check for sufficient stock
-		$stock = 0;
-		foreach($this->getProducts() as $product) {
-			if ($product->getId() == $productId) $stock = $product->getStock();
-		}
-
-		if ($quantity <= $stock) {
-		// stock ok - update cart quantity to passed quantity
 		$result = $this->getCart()->updateCartItemQuantity($productId, $quantity);
-		} else {
-		// insufficient stock
-		$result = 2;
-		}
-	
 		return $result;
 	}
 

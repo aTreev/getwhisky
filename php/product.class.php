@@ -104,10 +104,19 @@ class Product {
         }
     }
 
+    /**********
+     * Calculates and returns the percentage discount
+     ****************************/
     private function getDiscountPercentage() {
         return floor((($this->getPrice() - $this->getDiscountPrice()) / $this->getPrice()) * 100);
     }
 
+    
+    /*****************
+     * Retrieves the ids of the attribute values associated with the product
+     * These ids are used with the product filter
+     * Restructures from associative to array to an indexed array for streamlined array searching
+     *****************************/
     private function retrieveAttributeValueIds() {
         $source = new ProductCRUD();
         $attributes = $source->getProductAttributeValueIds($this->getId());
@@ -119,9 +128,15 @@ class Product {
         $this->setAttributes($indexedAttributes);
     }
 
+
+    /*************
+     * Retrieves product attributes, creates and returns the html
+     * Does this on the fly instead of using instance variables
+     * as these are only needed on the product page
+     *********************/
     private function getProductAttributesFull() {
         $source = new ProductCRUD();
-        $html = "<p style='padding:20px;'><i>Product details currently unavailable</i></p>";
+        $html = "<p style='padding:20px;cursor:default;padding-bottom:200px;'><i>Product details currently unavailable</i></p>";
         $attributes = $source->getProductAttributesFull($this->getId());
         
         if ($attributes) {
@@ -136,9 +151,15 @@ class Product {
         return $html;
     }
 
+    
+    /*************
+     * Retrieves product overviews, creates and returns the html
+     * Does this on the fly instead of using instance variables
+     * as these are only needed on the product page
+     *********************/
     private function getProductOverviews() {
         $source = new ProductCRUD();
-        $html = "<p style='padding:20px;'><i>Product description currently unavailable</i></p>";
+        $html = "<p style='padding:20px;cursor:default;padding-bottom:200px;'><i>Product description currently unavailable</i></p>";
         $overviews = $source->getProductOverviews($this->getId());
 
         if ($overviews) {
@@ -156,6 +177,10 @@ class Product {
         return $html;
     }
 
+
+    /************
+     * Constructs and returns the html for the product page
+     ****************************/
     public function displayProductPage() {
         $html = "";
         // Top portion of product container
@@ -201,7 +226,9 @@ class Product {
         $html.="</div>";
         // Bottom portion of product container
         $html.="<div class='product-bottom-container'>";
+            // Dummy container to align page consistently
             $html.="<div class='product-bottom-left'></div>";
+            // Container for the dynamic product detail tabs
             $html.="<div class='product-bottom-right'>";
                 // Buttons to open tabs name attribute contains the key used to open tabs
                 $html.="<div class='product-bottom-tab-btns'>";
@@ -216,12 +243,16 @@ class Product {
                 $html.="<div class='overviews tab' id='overviews'>";
                     $html.=$this->getProductOverviews();
                 $html.="</div>";
+                // Third tab - reviews?
             $html.="</div>";
         $html.="</div>";
 
         return $html;
     }
 
+    /************
+     * __toString used to display products on the category pages
+     ***********************************/
     public function __toString() {
         $html = "";
             $html.="<div class='product'>";
