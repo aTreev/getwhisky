@@ -1,10 +1,16 @@
 const productsMobileBreakpoint = 830;
-
+const categoryId = $("#category_id").val();
+let selectedFilterValues = new Map();
+let selectedSortValue;
+let limit = 50;
+/************
+ * Convert this to use globals that are populated
+ * and passed to the getproducts function
+ ****************************************/
 function prepareProductsPage() {
-    categoryId = $("#category_id").val();
     getProducts(categoryId);
-    // add more values as filter options are selected
     prepareProductFilters();
+    prepareProductSortOptions();
     makeFilterSectionInteractive();
     
 }
@@ -39,19 +45,18 @@ function makeFilterSectionInteractive() {
  * Function gets all the selected product filters
  * Ensures that only one option of each filter can be selected
  * Calls the getProducts() function and passes the selected filters as an array
- */
+ *******/
 function prepareProductFilters() {
     const numAttributesOnPage = document.getElementsByClassName("filter-item-options").length;
-    let selectedFilterValues = new Map();
     for(let i = 0; i <= numAttributesOnPage; i++) {
         // Checkbox code graciously taken from bPratik at https://stackoverflow.com/questions/9709209/html-select-only-one-checkbox-in-a-group
         // I don't fully understand how it works but I understand it in the context of how I want it to work so it stays...
         $("[name=attribute_value"+i+"]").click(function(){
-            let currentClick = $(this);
+            const currentClick = $(this);
             // if checkbox item is checked
             if (currentClick.is(":checked")) {
                 // get the group of attribute_value+number
-                let group = $("[name=attribute_value"+i+"]");
+                const group = $("[name=attribute_value"+i+"]");
                 // set all checkboxes in group to unchecked
                 group.prop("checked", false);
                 // set specific checkbox to checked
@@ -68,18 +73,44 @@ function prepareProductFilters() {
                 selectedFilterValues.delete(currentClick.attr("attribute_id"));
             }
             // convert map back to array and send the attribute values to the ajax product filter
-            getProducts(categoryId, Array.from(selectedFilterValues.values()))
+            getProducts(categoryId, Array.from(selectedFilterValues.values()), selectedSortValue)
 
         });
     }
 }
 
-function getProducts(categoryId, attributeValues) {
+/*************
+ * Function provides functionality to the sorting buttons,
+ * calls the getProducts() function on click and highlights
+ * the selected value
+ *******************/
+function prepareProductSortOptions() {
+
+    // Add a click event to each of the sorting options
+    $("[name=sort]").each(function(){
+        $(this).click(function(){
+            // set the global product sorting option to selected value
+            selectedSortValue = $(this).attr("sort-option");
+            $("[name=sort]").css("font-weight", "400");
+            $(this).css("font-weight", "700");
+            getProducts(categoryId, Array.from(selectedFilterValues.values()), selectedSortValue);
+        });
+    })
+}
+
+
+/*******************
+ * Function retrieves products from PHP, passing any filters via POST
+ * Receives HTML markup and a product count if a filter has been selected
+ * Provides the add to cart functionality to buttons every time the function
+ * is called as products are entirely loaded in again
+ *********************/
+function getProducts(categoryId, attributeValues, selectedSortValue) {
     $.ajax({
         // Ajax parameters
         url:"../php/ajax-handlers/products-page-handler.php",
         method:"POST",
-        data: {function: 1, catid: categoryId, attribute_values: attributeValues},
+        data: {function: 1, categoryId: categoryId, attributeValues: attributeValues, sortOption: selectedSortValue},
         beforeSend: function(){
             $("#product-root").html("<img style='display:block;margin:auto;' src='/assets/loader.gif'>");
             $("#product-root").css("display", "block"); // set display to block, centers loader and content
@@ -93,7 +124,9 @@ function getProducts(categoryId, attributeValues) {
             setTimeout(() => {
                 $("#product-root").css("display", "grid"); // set style to grid, displays products in grid
                 $("#product-count").html("")
-                $("#product-root").html(result.html);
+                $("#product-root").html(result.html);   // set html to received html
+
+                // Set count if received
                 if (result.count >= 0) {
                     if (result.count == 0 || result.count > 1) $("#product-count").html("<p>"+result.count+" products found with selected filters</p>")
                     else $("#product-count").html("<p>"+result.count+" product found with selected filters</p>")
@@ -125,7 +158,7 @@ function addToCart(productId) {
         }
         // Insufficient stock
         if (result.result == 2) {
-            new Alert(false, "Unable to add specified quantity to cart");
+            new Alert(false, "Unable to add to cart due to item shortage");
         }
         // invalid product id supplied
         if (result.result == 3) {

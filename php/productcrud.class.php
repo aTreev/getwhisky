@@ -9,7 +9,7 @@ class ProductCRUD {
     }
 
     public function getProducts($style=MYSQLI_ASSOC) {
-        $this->sql = "SELECT * FROM products";
+        $this->sql = "SELECT * FROM products order by id DESC";
 		$this->stmt = self::$db->prepare($this->sql);
 		$this->stmt->execute();
 		$result = $this->stmt->get_result();

@@ -20,11 +20,11 @@ function getFilteredProducts() {
     $allProducts = $page->getProducts();
     $filteredProducts = [];
     $htmlToReturn = "";
-    $filteredTwice = false;
+    $filtered = false;
     
     // Category passed filter products by category
-    if (isset($_POST['catid']) && util::valInt($_POST['catid'])) {
-        $categoryId = util::sanInt($_POST['catid']);
+    if (isset($_POST['categoryId']) && util::valInt($_POST['categoryId'])) {
+        $categoryId = util::sanInt($_POST['categoryId']);
         foreach($allProducts as $product) {
             if ($product->getCategoryId() == $categoryId) {
                 array_push($filteredProducts, $product);
@@ -34,11 +34,11 @@ function getFilteredProducts() {
 
 
         // Additional filters passed, further filter the products
-        if (isset($_POST['attribute_values'])) {
-            $filteredTwice = true;
+        if (isset($_POST['attributeValues'])) {
+            $filtered = true;
             
             // Sanitize all array inputs
-            $attributeValues = array_filter($_POST['attribute_values'], "ctype_digit");
+            $attributeValues = array_filter($_POST['attributeValues'], "ctype_digit");
             // reset filtered products to empty array
             $filteredProducts = [];
             
@@ -57,6 +57,25 @@ function getFilteredProducts() {
                 }
             }
         }
+        
+        if (isset($_POST['sortOption']) && util::valStr($_POST['sortOption'])) {
+            $sortOption = util::sanStr($_POST['sortOption']);
+            switch($sortOption) {
+                case "price_low":
+                    usort($filteredProducts, function($first, $second){
+                        return ($first)->getPrice() > ($second)->getPrice();
+                    });
+                break;
+                case "price_high":
+                    usort($filteredProducts, function($first, $second){
+                        return ($first)->getPrice() < ($second)->getPrice();
+                    });
+                break;
+                case "latest":
+                    // don't sort as already sorted from DB
+                break;
+            }
+        }
 
         
         foreach($filteredProducts as $product) {
@@ -65,7 +84,7 @@ function getFilteredProducts() {
 
         $result = ["html" => $htmlToReturn];
         // If filters have been applied return the number of products found
-        if ($filteredTwice) {
+        if ($filtered) {
             $result = ["html" => $htmlToReturn, "count" => count($filteredProducts)];
         }
         echo json_encode($result);

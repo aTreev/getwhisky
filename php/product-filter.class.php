@@ -61,6 +61,12 @@ class ProductFilter {
                 $html.="</div>";
             $html.="</div>";
         }
+        $html.="<div class='sort-by-container'>";
+            $html.="<h4>Sort by</h4>";
+            $html.="<button name='sort' sort-option='latest' style='font-weight:700;'>Latest</button>";
+            $html.="<button name='sort' sort-option='price_low'>Price (low)</button>";
+            $html.="<button name='sort' sort-option='price_high'>Price (high)</button>";
+        $html.="</div>";
         return $html;
     }
 }

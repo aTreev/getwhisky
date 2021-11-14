@@ -7,6 +7,9 @@ require_once("product-filter.class.php");
 require_once("cart.class.php");
 require_once("unique-id-generator.class.php");
 
+/****************
+ * TODO: transfer cart from guest user to registered user on login
+ */
 class Page {
 	private $user;
 	private $pagetype;

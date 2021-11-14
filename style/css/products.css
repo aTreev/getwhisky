@@ -252,6 +252,21 @@
     cursor: pointer;
 }
 
+
+.sort-by-container {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+}
+.sort-by-container button {
+    margin-top: 15px;
+    font-size: var(--font-size-regtext);
+    border: none;
+    background:none;
+    text-align: left;
+    cursor: pointer;
+}
+
 @media screen and (max-width: 1200px) {
     #product-root {
         grid-template-columns: repeat(auto-fill, 48%);
