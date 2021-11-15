@@ -113,6 +113,9 @@ class Page {
 		}
 	}
 
+	private function transferCart() {
+		
+	}
 	/****************
 	 * A single use function that logs the user in on the backend
 	 * during the registration process

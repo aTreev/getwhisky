@@ -270,12 +270,14 @@ class Product {
                     $html.="<p class='product-price'>£".$this->getPrice()."</p>";
                 }
                 $html.="</div>";
+                /*
                 if ($this->getSTock() > 0) {
                     $html.="<input type='hidden' value='".$this->getId()."'>";
                     $html.="<button name='add-to-cart' type='submit'>Add to cart</button>";
                 } else {
                     $html.="<button class='out-of-stock-btn'>Out of stock</button>";
                 }
+                */
                 $html.="<a class='product-wrapper-link' href='/productpage.php?pid=".$this->getId()."'><span></span></a>";
             $html.="</div>";
         return $html;

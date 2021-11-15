@@ -26,9 +26,7 @@ html, * {
   font-family: var(--font-default);
 }
 
-body {
-  background-color: #fcfcfc;
-}
+
 main {
   position: relative;
   width: 1200px;

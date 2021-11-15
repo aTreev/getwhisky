@@ -35,7 +35,7 @@ function updateCartQuantity(productId, quantity) {
             $("#cart-container").html(result.html);
             $(".cart-count").html(result.cartCount);
             addPageEventListeners();
-            new Alert(true, "Item quantity updated!");
+            new Alert(true, "Item quantity updated");
         }
         // insufficient stock
         if (result.result == 2) {
@@ -43,7 +43,7 @@ function updateCartQuantity(productId, quantity) {
         }
         // Invalid product id supplied
         if (result.result == 3 || result.result == 4) {
-            new Alert(false, "Error processing request, please try again!");
+            new Alert(false, "Error processing request, please try again");
         }
 
     });
@@ -66,7 +66,7 @@ function removeFromCart(productId) {
             addPageEventListeners();
             new Alert(true, "Item removed from cart");
         } else {
-            new Alert(false, "Error processing request, please try again!");
+            new Alert(false, "Error processing request, please try again");
         }
     })
 }

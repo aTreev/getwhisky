@@ -113,7 +113,7 @@ input[type=number]::-webkit-inner-spin-button {
 }
 .add-to-cart-btn {
     position: relative;
-    width: 50%;
+    width: 35%;
     z-index: 15;
     padding: 14px 20px;
     border: none;
@@ -128,7 +128,7 @@ input[type=number]::-webkit-inner-spin-button {
 }
 .out-of-stock-btn {
     position: relative;
-    width: 50%;
+    width: 35%;
     z-index: 15;
     padding: 14px 20px;
     border: 1px solid lightgrey;
@@ -159,6 +159,7 @@ input[type=number]::-webkit-inner-spin-button {
 
 .tab-btn {
     border: 1px solid lightgrey;
+    border-radius: 4px;
     padding: 10px 0px 10px 0px;
     width: 200px;
     text-align: center;
@@ -203,7 +204,7 @@ input[type=number]::-webkit-inner-spin-button {
 
 @media screen and (max-width: 1200px) {
     .add-to-cart-btn, .out-of-stock-btn {
-        width: 60%;
+        width: 50%;
     }
     
 }

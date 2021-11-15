@@ -19,8 +19,8 @@ function getFilteredProducts() {
     // Retrieve all products from page class
     $allProducts = $page->getProducts();
     $filteredProducts = [];
-    $htmlToReturn = "";
     $filtered = false;
+    $htmlToReturn = "";
     
     // Category passed filter products by category
     if (isset($_POST['categoryId']) && util::valInt($_POST['categoryId'])) {
@@ -31,7 +31,6 @@ function getFilteredProducts() {
                 $allProducts = $filteredProducts;
             }
         }
-
 
         // Additional filters passed, further filter the products
         if (isset($_POST['attributeValues'])) {
@@ -58,10 +57,18 @@ function getFilteredProducts() {
             }
         }
         
+        /*************
+         * Sorts the products by the given sorting option
+         * PHP object array sort method as seen from
+         * https://stackoverflow.com/questions/4282413/sort-array-of-objects-by-object-fields
+         * by Roman Yakoviv
+         *******/
         if (isset($_POST['sortOption']) && util::valStr($_POST['sortOption'])) {
             $sortOption = util::sanStr($_POST['sortOption']);
+
             switch($sortOption) {
                 case "price_low":
+                    // usort with callback function does it magically i guess
                     usort($filteredProducts, function($first, $second){
                         return ($first)->getPrice() > ($second)->getPrice();
                     });
@@ -77,7 +84,7 @@ function getFilteredProducts() {
             }
         }
 
-        
+        // Set return html
         foreach($filteredProducts as $product) {
             $htmlToReturn.=$product;
         }
@@ -88,8 +95,6 @@ function getFilteredProducts() {
             $result = ["html" => $htmlToReturn, "count" => count($filteredProducts)];
         }
         echo json_encode($result);
-        //echo $result['html'];
-        //echo $result['count'];
     }
     
 }
