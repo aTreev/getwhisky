@@ -285,7 +285,16 @@
     cursor: pointer;
 }
 
-
+#load-more {
+    display: block;
+    margin: auto;
+    margin-bottom: auto;
+    padding: 10px 20px;
+    width: 30%;
+    background-color: white;
+    border: 1px solid black;
+    margin-bottom: 60px;
+}
 
 
 @media screen and (max-width: 1200px) {

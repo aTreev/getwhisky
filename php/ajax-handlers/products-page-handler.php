@@ -85,14 +85,13 @@ function getFilteredProducts() {
         }
 
         // Set return html
-        foreach($filteredProducts as $product) {
-            $htmlToReturn.=$product;
+        $products = [];
+        for($i = 0; $i < count($filteredProducts); $i++) {
+            $products[$i] = $filteredProducts[$i]->__toString();
         }
-
-        $result = ["html" => $htmlToReturn];
-        // If filters have been applied return the number of products found
+        $result = ["html" => $products];
         if ($filtered) {
-            $result = ["html" => $htmlToReturn, "count" => count($filteredProducts)];
+            $result = ["html" =>$products, "count" => count($filteredProducts)];
         }
         echo json_encode($result);
     }
