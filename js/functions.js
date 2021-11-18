@@ -1,18 +1,37 @@
 function prepareMenu() {
     const mobileWidth = 768;
+    const searchBarBreakpoint = 851;
+    let searchBarMobile;
+    let searchBarDesktop
+    
     /**********
      * Initial check for mobile or desktop
-     */
+     *********************/
     if ($(window).width() < mobileWidth) {
         setMobileMenu();
     } else {
         setDesktopMenu();
         $("#product-menu-container").show();
     }
+
+    /*************
+     * Initial check for ideal search bar placement
+     ***********************/
+    if($(window).width() <= searchBarBreakpoint) {
+        $(".header-content").after($(".search-bar-container"));
+        searchBarMobile = true;
+        searchBarDesktop = false;
+        $(".search-bar-container").show();
+    } else {
+        $("#getwhisky-logo-link").after($(".search-bar-container"));
+        searchBarDesktop = true;
+        searchBarMobile = false; 
+        $(".search-bar-container").show();
+    }
     
     /***************
      * Check whether the screen is small enough to switch menu after resize
-     ***/
+     ************************/
     $(window).resize(function(){
         // remove any menu specific properties
         $(".menu-overlay").hide();
@@ -26,6 +45,25 @@ function prepareMenu() {
             setDesktopMenu();
             $("#product-menu-container").css("transform", "translateX(0%)");
             $("#product-menu-container").css("display","block");
+        }
+
+        /***************
+         * Changes the position of the search bar depending on screen size
+         * Does a check prior to changing to prevent unnecessary dom manipulation
+         *********************/
+        if ($(window).width() < searchBarBreakpoint) {
+            if (!searchBarMobile) {
+                $(".header-content").after($(".search-bar-container"));
+                searchBarMobile = true;
+                searchBarDesktop = false;
+            }
+        } else {
+            if (!searchBarDesktop) {
+               $("#getwhisky-logo-link").after($(".search-bar-container"));
+                searchBarDesktop = true;
+                searchBarMobile = false; 
+            }
+            
         }
     });
 
@@ -50,7 +88,7 @@ function prepareMenu() {
         
     })
 
-    // Check for any cart notifications
+    // Check for any cart notifications, display and add close functionality
     if ($(".cart-notification")) {
         $(".cart-notification").css("transform", "translateX(0%)")
         let hideTimeout = setTimeout(() => {
@@ -84,7 +122,6 @@ function setMobileMenu() {
     menu.removeClass("product-menu-list");
     menu.addClass("product-menu-list-mobile");
     menuContainer.show();
-
 }
 
 function setDesktopMenu() {

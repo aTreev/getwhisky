@@ -210,9 +210,6 @@ class Product {
                     $html.="</div>";
                 }
 
-                // Description
-                $html.="<p class='product-description'>".$this->getDescription()."</p>";
-
                 // Quantity input and add to cart button
                 $html.="<label for='product-quantity'>Quantity: <input type='number' name='product-quantity' value='1'></label>";
                 if ($this->getSTock() > 0) {
@@ -221,6 +218,11 @@ class Product {
                 } else {
                     $html.="<button class='out-of-stock-btn'>Out of stock</button>";
                 }
+
+                // Description
+                $html.="<p class='product-description'>".$this->getDescription()."</p>";
+
+                
 
             $html.="</div>";
         $html.="</div>";

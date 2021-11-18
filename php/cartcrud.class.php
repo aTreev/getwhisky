@@ -35,7 +35,7 @@ class CartCRUD {
     }
 
     public function createNewCart($cartId, $userId) {
-        $today = date("Y-d-m");
+        $today = date("Y-m-d");
         $this->sql = "INSERT INTO cart (`id`, `userid`, `created_date`, `checked_out`) VALUES (?,?,?,0)";
         $this->stmt = self::$db->prepare($this->sql);
         $this->stmt->bind_param("sss", $cartId, $userId, $today);

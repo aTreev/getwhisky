@@ -7,7 +7,8 @@ body {
 
 .product-top-container {
     display: flex;
-    height: 500px;
+    height: auto;
+    margin-bottom: 40px;
 }
 
 .product-top-container img {
@@ -42,15 +43,15 @@ body {
 .product-name-container span {
     font-family: 'Merriweather', serif;
     opacity: 0.8;
-    font-size: 1.4rem;
+    font-size: 1.6rem;
     font-weight: 700;
     text-transform: uppercase;
 
 }
 .product-top-right .product-desc-short {
     font-size:calc(var(--font-size-regtext) + 0.2rem);
-    color: grey;
-    opacity: 0.8;
+    color: black;
+    opacity: 0.6;
 }
 .product-top-right .product-price {
     font-weight: 500;

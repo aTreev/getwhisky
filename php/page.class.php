@@ -114,7 +114,7 @@ class Page {
 	}
 
 	private function transferCart() {
-		
+
 	}
 	/****************
 	 * A single use function that logs the user in on the backend
@@ -269,10 +269,18 @@ class Page {
 			$html.="<div class='page-overlay'></div>";
 			$html.="<div class='menu-overlay'></div>";
 			$html.="<div class='header-content'>";
-				$html.="<a href='/index.php'><img class='header-logo' src='assets/getwhisky-logo-lowercase.png' alt=''></a>";
+				$html.="<a href='/index.php' id='getwhisky-logo-link'><img class='header-logo' alt='getwhisky logo - link to homepage' src='assets/getwhisky-logo-lowercase.png' alt=''></a>";
+				$html.="<div class='search-bar-container'>";
+					$html.="<input type='text' placeholder='search getwhisky' id='product-search-bar'/>";
+					$html.="<i class='fas fa-search'></i>";
+					$html.="</div>";
 					$html.="<nav class='header-menu'>";
 						$html.="<ul>";					
-							$html.="<li><a href='/cart.php'><i class='header-nav-icon fas fa-shopping-basket'><span class='cart-count'>".$this->getCart()->getCartItemCount()."</span></i></a><a class='header-nav-link' href='/cart.php'>basket</a></li>";
+							if ($this->getCart()) {
+								$html.="<li><a href='/cart.php'><i class='header-nav-icon fas fa-shopping-basket'><span class='cart-count'>".$this->getCart()->getCartItemCount()."</span></i></a><a class='header-nav-link' href='/cart.php'>basket</a></li>";
+							} else {
+								$html.="<li><a href='/cart.php'><i class='header-nav-icon fas fa-shopping-basket'></i></a><a class='header-nav-link' href='/cart.php'>basket</a></li>";
+							}
 							if ($this->getUser()->getUsertype() == 0) {
 								$html.="<li><a class='header-nav-link' href='/login.php'>Sign in</a></li>";
 							}
@@ -372,13 +380,16 @@ class Page {
 			$uniqueIdGenerator = new UniqueIdGenerator("cart_id");
 			$cartId = $uniqueIdGenerator->getUniqueId();
 			$newCart = $source->createNewCart($cartId, $this->getUser()->getUserid());
+			return $newCart;
 			if ($newCart) {
 				// If creating cart was successful recall function to initialize the cart
 				$this->initializeUserCart();
 			} else {
 				// Failed, handle errors.
+				return $haveCart;
 			}
 		}
+		return $haveCart;
 	}
 
 	public function displayCart() {

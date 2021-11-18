@@ -12,6 +12,7 @@
 #category-details p {
     font-weight: 500;
     opacity: 0.7;
+    line-height: 1.8;
 }
 
 .filter-header {
@@ -28,6 +29,7 @@
     user-select: none;
     align-items: center;
     gap: 10px;
+    margin-top: 20px;
 }
 #show-filters-btn {
     user-select: none;
@@ -36,8 +38,11 @@
     overflow: hidden;
     width: 0px;
 }
-.filters-btn-active {
+#show-filters-btn:hover {
     background-color: rgb(228, 228, 228);
+}
+.filters-btn-active {
+    background-color: #f1f2f1;
 }
 .sort-by-container h4 {
     font-weight: 400;
@@ -231,7 +236,7 @@
     padding: 0px 20px 0px 20px;
 }
 .filter-item-header {
-    padding: 20px 0px 20px 0px;
+    padding: 20px 0px 10px 0px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -255,27 +260,25 @@
 .filter-item-options {
     max-height: 0;
     overflow: hidden;
-    margin-top: -1px;
-    transition: all 250ms ease-in-out;
+    margin-top: 10px;
+    transition: max-height 300ms ease-in-out;
 }
 
 .filter-item-options-show {
-    padding: 0px 0px 10px 0px;
     max-height: 2000px;
 }
 
 .filter-item-option {
     display: flex;
     align-items: center;
+    
 }
 
 .filter-item-option label {
     display: block;
     width: 100%;
     padding: 10px 0px 10px 0px;
-
 }
-
 .filter-item-option label {
     margin-left: 5px;
     user-select: none;
@@ -294,6 +297,12 @@
     background-color: white;
     border: 1px solid black;
     margin-bottom: 60px;
+    cursor: pointer;
+    font-size: var(--font-size-regtext);
+}
+
+#load-more:hover {
+    background-color: #f1f2f1;
 }
 
 
@@ -304,6 +313,9 @@
     #product-root {
         grid-template-columns: repeat(auto-fill, 48%);
     }
+    #category-details {
+        width: 75%;
+    }
 }
 
 @media screen and (max-width: 830px) {
@@ -313,6 +325,7 @@
     .filter-item-option {
         border: 1px solid lightgrey;
         margin-bottom: 10px;
+        padding: 5px;
     }
     .filter-header {
         flex-direction: column;

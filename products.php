@@ -26,7 +26,6 @@
                             echo $page->displayCategoryDetails($categoryId);
                         ?>
                         <div id='product-count'></div>
-
                     </div>
                     <div class='filter-header'>
                         <h4 id='show-filters-btn'>Show Filters</h4>

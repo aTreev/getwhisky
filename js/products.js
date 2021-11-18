@@ -5,7 +5,6 @@
  * prevents the need for parameters
  *********************************/
 
-
 /**** 
  * Viewport breakpoint, used for applying stylings
  * based on window width
@@ -33,9 +32,9 @@ let selectedSortValue;
 /**********
  * Amount of products that should be rendered
  * used as a method pagination, increased by user
- * selecting to view more products
+ * selecting to view more products default 20
  ***************/
-let limit = 2;
+let limit = 8;
 
 /**********
  * The number of products currently rendered on the page
@@ -138,7 +137,10 @@ function prepareProductFilters() {
                 // enter the value into the map
                 selectedFilterValues.set(currentClick.attr("attribute_id"), currentClick.val());
                 // Hide filters for UX improvement
-                if ($(window).width() <= productsMobileBreakpoint) $("#filter-root").hide();
+                if ($(window).width() <= productsMobileBreakpoint) {
+                    $("#filter-root").hide();
+                    $("#show-filters-btn").toggleClass("filters-btn-active");
+                }
             } else {
                 // if checkbox item is unchecked
                 // remove checked from clicked checkbox
@@ -199,9 +201,9 @@ function getProducts(categoryId, attributeValues, selectedSortValue) {
                 $("#product-root").css("display", "grid"); // set style to grid, displays products in grid
                 $("#product-count").html(""); // Reset product count html
                 $("#product-root").html(""); //Reset product div html
-
+                $("#load-more").remove();
                 // Reset global variables
-                limit = 2;
+                limit = 8;
                 productsRendered = 0;
                 productHtmlArray = result.html;
 
@@ -221,17 +223,19 @@ function getProducts(categoryId, attributeValues, selectedSortValue) {
 // renders products to page uses pagination, sets global variables
 function renderProducts() {
     for(let i = productsRendered; i < limit; i++) {
+        console.log(limit);
         $("#product-root").append(productHtmlArray[i]);
         productsRendered++;
     }
-
-    if (productsRendered < productHtmlArray.length) {
+    if (productsRendered < productHtmlArray.length && !document.getElementById("load-more")) {
         $("#products-container").after("<button id='load-more'>Show more</button>");
         $("#load-more").on("click", function(){
-            limit = limit + 1;
+            limit = limit + 20;
             $(this).remove();
             renderProducts();
         });
+    } else {
+        
     }
 }
 
