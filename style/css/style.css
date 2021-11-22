@@ -108,27 +108,6 @@ header {
 .header-logo {
   max-width: 300px;
 }
-.search-bar-container {
-  width: 50%;
-  position: relative;
-  display: none;
-}
-#product-search-bar {
-  padding: 12px 0px 12px 0px;
-  text-indent: 15px;
-  width: 100%;
-  font-size: var(--font-size-regtext);
-  border:1px solid lightgrey;
-}
-#product-search-bar:focus {
-  outline: none;
-}
-.search-bar-container i {
-  position: absolute;
-  top: 12px;
-  right: 5px;
-  font-size: 2.4rem;
-}
 .header-menu {
   height: 40px;
   display: flex;
@@ -178,6 +157,115 @@ header {
   right: -5px;
   top: -10px;
   font-size: 1.2rem;
+}
+
+/***********************************************************************************
+* PRODUCT SEARCH CSS
+***********************************************************************************/
+.search-bar-container {
+  width: 50%;
+  position: relative;
+  display: none;
+}
+#product-search-bar {
+  padding: 12px 0px 12px 0px;
+  text-indent: 15px;
+  width: 100%;
+  font-size: var(--font-size-regtext);
+  border:1px solid lightgrey;
+}
+#product-search-bar:focus {
+  outline: none;
+}
+.search-bar-container i {
+  position: absolute;
+  top: 12px;
+  right: 5px;
+  font-size: 2.4rem;
+}
+#search-results {
+  position: absolute;
+  width:110%;
+  background-color: white;
+  margin-top: -1px;
+  z-index: 14;
+  height: 250px;
+  border: 1px solid lightgrey;
+  box-shadow: 0px 5px 15px grey;
+  overflow-y: scroll;
+  display: none;
+  scrollbar-width: thin;
+  scroll-behavior: smooth;
+}
+.search-result-item {
+  display: flex;
+  gap: 30px;
+  padding: 10px;
+  align-items: center;
+  cursor: pointer;
+  position: relative;
+}
+.search-result-item:hover {
+  text-decoration: underline;
+  background-color:rgb(226, 226, 226);
+}
+.search-result-item img {
+  width: 40px;
+  border: 1px solid lightgrey;
+}
+.sr-text-container {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.sr-text-container h4 {
+  font-weight: 500;
+  opacity: 0.8;
+}
+.sr-price-container {
+  display: flex;
+  gap: 10px;
+}
+.sr-product-price-discounted {
+  font-size: var(--font-size-regtext);
+}
+.sr-product-price {
+  font-size: var(--font-size-regtext);
+}
+.sr-product-price-discounted {
+  position: relative;
+  color:grey;
+  opacity: 0.8;
+  font-weight: 400;
+}
+.sr-product-price-discounted:before {
+  position: absolute;
+  content: "";
+  left: 0;
+  top: 50%;
+  right: 0;
+  border-top: 2px solid;
+  border-color: inherit;
+  
+  -webkit-transform:rotate(-5deg);
+  -moz-transform:rotate(-5deg);
+  -ms-transform:rotate(-5deg);
+  -o-transform:rotate(-5deg);
+  transform:rotate(-5deg);
+}
+.sr-wrapper-link {
+  position:absolute; 
+    width:100%;
+    height:100%;
+    top:0;
+    left: 0;
+    z-index: 12;
+  
+    /* fixes overlap error in IE7/8, 
+       make sure you have an empty gif */
+    background-image: url('empty.gif');
+}
+.sr-wrapper-link:hover {
 }
 
 /**********************************************************************************

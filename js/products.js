@@ -75,6 +75,12 @@ function makeFilterSectionInteractive() {
     // the corresponding styling
     if ($(window).width() <= productsMobileBreakpoint) {
         $("#filter-root").hide();
+        $(".filter-item-options").each(function(){
+            $(this).removeClass("filter-item-options-show");
+            $("#show-filters-btn").removeClass("filters-btn-active");
+            $(this).prev().children().last().removeClass("fas fa-minus");
+            $(this).prev().children().last().addClass("fas fa-plus");
+        });
     } else {
         $(".filter-item-options").each(function(){
             $(this).addClass("filter-item-options-show");
@@ -85,7 +91,7 @@ function makeFilterSectionInteractive() {
 
     // Check if window is resized and reset stylings
     $(window).resize(function(){
-        if ($(this).width() < productsMobileBreakpoint) {
+        if ($(this).width() <= productsMobileBreakpoint) {
             // mobile stylings
             $("#filter-root").hide();
             $(".filter-item-options").each(function(){
@@ -220,7 +226,7 @@ function getProducts(categoryId, attributeValues, selectedSortValue) {
     });
 }
 
-// renders products to page uses pagination, sets global variables
+// renders products to page uses pagination, updates global variables
 function renderProducts() {
     for(let i = productsRendered; i < limit; i++) {
         console.log(limit);

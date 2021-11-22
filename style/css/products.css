@@ -7,7 +7,7 @@
     position: relative;
 }
 #category-details h2 {
-    margin-bottom: 20px;
+    margin-bottom: 5px;
 }
 #category-details p {
     font-weight: 500;
@@ -318,7 +318,7 @@
     }
 }
 
-@media screen and (max-width: 830px) {
+@media screen and (max-width: 835px) {
     #products-container {
         margin-left: 1px;
     }

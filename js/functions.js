@@ -3,6 +3,8 @@ function prepareMenu() {
     const searchBarBreakpoint = 851;
     let searchBarMobile;
     let searchBarDesktop
+
+    prepareProductSearch();
     
     /**********
      * Initial check for mobile or desktop
@@ -72,6 +74,7 @@ function prepareMenu() {
      * and closed when anywhere else on the body is clicked
      ***/
     $(document).on("click", function(e){
+        // Click listener for mobile menu
         if ($(window).width() < mobileWidth) {
             if (e.target.classList.contains("product-menu-button")) {
                 // Menu button clicked show menus and prevent scrolling
@@ -86,6 +89,10 @@ function prepareMenu() {
             }
         }
         
+        // Click listener for search results
+        if (!e.target.classList.contains("product-search-bar")) {
+            $("#search-results").hide();
+        }
     })
 
     // Check for any cart notifications, display and add close functionality
@@ -134,6 +141,44 @@ function setDesktopMenu() {
     menu.addClass("product-menu-list");
     menu.removeClass("product-menu-list-mobile");
 }
+
+
+/**************
+ * Prepares the product search feature by adding a keyup eventlistener
+ * to the page search bar
+ * Sends an ajax request to retrieve products and display them asynchronously
+ ***********************************************/
+function prepareProductSearch() {
+
+    $("#product-search-bar").on("keyup", function(){
+        // Guard clause to prevent backend query on empty string also resets html
+        if ($(this).val().length < 1) {
+            $("#search-results").html(""); 
+            $("#search-results").hide();
+            return;
+        }
+
+        $("#search-results").show();
+        
+        $.ajax({
+            url: "../php/ajax-handlers/product-search-handler.php",
+            method: "POST",
+            data: {searchQuery: $(this).val()}
+
+        }).done(function(result){
+            result = JSON.parse(result);
+            if (result.result == 1) {
+                $("#search-results").html(result.html);
+            } else {
+                $("#search-results").html("<p style='padding:20px;'>No product suggestions</p>")
+            }
+        });
+
+
+    });
+}
+
+
 
 function showModal(id, showOverlay) {
     $("#"+id).show();

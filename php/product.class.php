@@ -177,6 +177,34 @@ class Product {
         return $html;
     }
 
+    /*******************************
+     * Constructs and returns the html for a product search result
+     ******************************************/
+    public function displayProductAsSearchResult() {
+        $html = "";
+
+        // Search result item container
+        $html.="<div class='search-result-item'>";
+            // product details
+            $html.="<img src='".$this->getImage()."'>";
+            $html.="<div class='sr-text-container'>";
+                $html.="<h4>".$this->getName()."</h4>";
+                // Pricing logic
+                $html.="<div class='sr-price-container'>";
+                    if ($this->isDiscounted()) {
+                    $html.="<p class='sr-product-price-discounted'>£".$this->getPrice()."</p>";
+                    $html.="<p class='sr-product-price'>£".$this->getDiscountPrice()."</p>";
+                    } else {
+                    $html.="<p class='sr-product-price'>£".$this->getPrice()."</p>";
+                    }
+                $html.="</div>";
+            $html.="</div>";
+            $html.="<a class='sr-wrapper-link' href='/productpage.php?pid=".$this->getId()."'><span></span></a>";
+        $html.="</div>";
+        return $html;
+    }
+
+
 
     /************
      * Constructs and returns the html for the product page
