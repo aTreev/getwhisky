@@ -6,7 +6,8 @@
 // TODO: chance to generalized prepareApp, move code to separate functions
 function prepareMenu() {
     const mobileWidth = 768;
-    const searchBarBreakpoint = 851;
+    // 834 works as pixel sizes a bit buggy between JS and CSS
+    const searchBarBreakpoint = 818; 
     let searchBarMobile;
     let searchBarDesktop
 
@@ -60,7 +61,7 @@ function prepareMenu() {
          * Changes the position of the search bar depending on screen size
          * Does a check prior to changing to prevent unnecessary dom manipulation
          *********************/
-        if ($(window).width() < searchBarBreakpoint) {
+        if ($(window).width() <= searchBarBreakpoint) {
             if (!searchBarMobile) {
                 $(".header-content").after($(".search-bar-container"));
                 searchBarMobile = true;

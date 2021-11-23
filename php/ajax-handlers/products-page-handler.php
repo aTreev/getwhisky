@@ -79,7 +79,9 @@ function getFilteredProducts() {
                     });
                 break;
                 case "latest":
-                    // don't sort as already sorted from DB
+                    // do nothing, already sorted from db
+                break;
+                default:
                 break;
             }
         }
@@ -89,7 +91,9 @@ function getFilteredProducts() {
         for($i = 0; $i < count($filteredProducts); $i++) {
             $products[$i] = $filteredProducts[$i]->__toString();
         }
+
         $result = ["html" => $products];
+        // Return a count if filters have been applied
         if ($filtered) {
             $result = ["html" =>$products, "count" => count($filteredProducts)];
         }

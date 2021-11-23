@@ -221,7 +221,6 @@
 #filter-root {
     background-color: white;
     width: 400px;
-    display: none;
     position: relative;
 }
 
@@ -363,6 +362,9 @@
     .product button[type=submit] {
         width: 75%;
     }
+    #load-more {
+        width: 50%;
+    }
 }
 
 @media screen and (max-width: 576px) {
@@ -384,5 +386,9 @@
     main {
         width: 100%;
         margin:auto;
+    }
+    #load-more {
+        width: 75%;
+        padding: 15px;
     }
 }

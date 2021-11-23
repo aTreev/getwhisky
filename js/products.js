@@ -8,8 +8,9 @@
 /**** 
  * Viewport breakpoint, used for applying stylings
  * based on window width
+ * 818 seems to work with 835 breakpoint in products.css
 ****/
-const productsMobileBreakpoint = 830;
+const productsMobileBreakpoint = 818;
 
 /*******
  * id of the current products category
@@ -63,7 +64,7 @@ function prepareProductsPage() {
  * Hides all by default
  ******/
 function makeFilterSectionInteractive() {
-    $("#filter-root").toggle();
+    //$("#filter-root").toggle();
 
     // Button to show filters
     $("#show-filters-btn").on("click",function(){
@@ -73,7 +74,7 @@ function makeFilterSectionInteractive() {
     
     // Check whether window is mobile or desktop and apply
     // the corresponding styling
-    if ($(window).width() <= productsMobileBreakpoint) {
+    if ($(window).width() <= productsMobileBreakpoint + 1) {
         $("#filter-root").hide();
         $(".filter-item-options").each(function(){
             $(this).removeClass("filter-item-options-show");
@@ -91,7 +92,7 @@ function makeFilterSectionInteractive() {
 
     // Check if window is resized and reset stylings
     $(window).resize(function(){
-        if ($(this).width() <= productsMobileBreakpoint) {
+        if ($(this).width() <= productsMobileBreakpoint + 1) {
             // mobile stylings
             $("#filter-root").hide();
             $(".filter-item-options").each(function(){
@@ -144,8 +145,8 @@ function prepareProductFilters() {
                 selectedFilterValues.set(currentClick.attr("attribute_id"), currentClick.val());
                 // Hide filters for UX improvement
                 if ($(window).width() <= productsMobileBreakpoint) {
-                    $("#filter-root").hide();
-                    $("#show-filters-btn").toggleClass("filters-btn-active");
+                    //$("#filter-root").hide();
+                    //$("#show-filters-btn").toggleClass("filters-btn-active");
                 }
             } else {
                 // if checkbox item is unchecked
