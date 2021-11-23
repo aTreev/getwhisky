@@ -30,18 +30,18 @@ let selectedFilterValues = new Map();
 let selectedSortValue;
 
 /**********
- * Amount of products that should be rendered
- * used as a method pagination, increased by user
+ * Amount of products that should be displayed
+ * used as a method of pagination, increased by user
  * selecting to view more products default 20
  ***************/
 let limit = 8;
 
 /**********
- * The number of products currently rendered on the page
+ * The number of products currently displayed on the page
  * Checked against the limit to determine how many products
- * to render
+ * to display
  ********************/
-let productsRendered = 0;
+let productsDisplayed = 0;
 
 /***************
  * The array of product html returned from PHP
@@ -129,7 +129,7 @@ function prepareProductFilters() {
     const numAttributesOnPage = document.getElementsByClassName("filter-item-options").length;
     for(let i = 0; i <= numAttributesOnPage; i++) {
         // Checkbox code graciously taken from bPratik at https://stackoverflow.com/questions/9709209/html-select-only-one-checkbox-in-a-group
-        // I don't fully understand how it works but I understand it in the context of how I want it to work so it stays...
+        // I don't fully understand the code but I understand how it works... so it stays.
         $("[name=attribute_value"+i+"]").click(function(){
             const currentClick = $(this);
             // if checkbox item is checked
@@ -151,7 +151,7 @@ function prepareProductFilters() {
                 // if checkbox item is unchecked
                 // remove checked from clicked checkbox
                 currentClick.prop("checked", false);
-                // remove value from map
+                // remove value from Map
                 selectedFilterValues.delete(currentClick.attr("attribute_id"));
             }
             // convert map back to array and send the attribute values to the ajax product filter
@@ -210,11 +210,11 @@ function getProducts(categoryId, attributeValues, selectedSortValue) {
                 $("#load-more").remove();
                 // Reset global variables
                 limit = 8;
-                productsRendered = 0;
+                productsDisplayed = 0;
                 productHtmlArray = result.html;
 
-                // Render products
-                renderProducts();
+                // Display products
+                displayProducts();
 
                 // Set count if received
                 if (result.count >= 0) {
@@ -226,22 +226,21 @@ function getProducts(categoryId, attributeValues, selectedSortValue) {
     });
 }
 
-// renders products to page uses pagination, updates global variables
-function renderProducts() {
-    for(let i = productsRendered; i < limit; i++) {
+// Displays products to page allows for pagination, 
+// uses global variables and recursion to achieve functionality
+function displayProducts() {
+    for(let i = productsDisplayed; i < limit; i++) {
         console.log(limit);
         $("#product-root").append(productHtmlArray[i]);
-        productsRendered++;
+        productsDisplayed++;
     }
-    if (productsRendered < productHtmlArray.length && !document.getElementById("load-more")) {
+    if (productsDisplayed < productHtmlArray.length && !document.getElementById("load-more")) {
         $("#products-container").after("<button id='load-more'>Show more</button>");
         $("#load-more").on("click", function(){
             limit = limit + 20;
             $(this).remove();
-            renderProducts();
+            displayProducts();
         });
-    } else {
-        
     }
 }
 

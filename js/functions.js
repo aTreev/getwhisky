@@ -1,9 +1,16 @@
+/******************
+ * The functions.js file contains functions that are global across all pages.
+ * Also contains functions that are structured to be reused across the site
+ * i.e. modals and password testing
+ *********/
+// TODO: chance to generalized prepareApp, move code to separate functions
 function prepareMenu() {
     const mobileWidth = 768;
     const searchBarBreakpoint = 851;
     let searchBarMobile;
     let searchBarDesktop
 
+    // Prep the product search
     prepareProductSearch();
     
     /**********
@@ -72,7 +79,7 @@ function prepareMenu() {
     /******************
      * Add an event listener to the body to allow menu to open when the menu-button is clicked
      * and closed when anywhere else on the body is clicked
-     ***/
+     ******/
     $(document).on("click", function(e){
         // Click listener for mobile menu
         if ($(window).width() < mobileWidth) {
@@ -95,7 +102,7 @@ function prepareMenu() {
         }
     })
 
-    // Check for any cart notifications, display and add close functionality
+    // Check for any cart notifications, display and add closeBtn functionality
     if ($(".cart-notification")) {
         $(".cart-notification").css("transform", "translateX(0%)")
         let hideTimeout = setTimeout(() => {
@@ -118,6 +125,7 @@ function prepareMenu() {
     }
 }
 
+// Sets the menu layout for mobile
 function setMobileMenu() {
     let menuButton = $("#product-menu-button");
     let menu = $("#product-menu");
@@ -131,6 +139,7 @@ function setMobileMenu() {
     menuContainer.show();
 }
 
+// Sets the menu layout for desktop
 function setDesktopMenu() {
     let menuButton = $("#product-menu-button");
     let menu = $("#product-menu");
@@ -157,15 +166,17 @@ function prepareProductSearch() {
             $("#search-results").hide();
             return;
         }
-
+        // Show search results container
         $("#search-results").show();
         
+        // AJAX request
         $.ajax({
             url: "../php/ajax-handlers/product-search-handler.php",
             method: "POST",
             data: {searchQuery: $(this).val()}
 
         }).done(function(result){
+            // Parse result and perform appropriate action
             result = JSON.parse(result);
             if (result.result == 1) {
                 $("#search-results").html(result.html);
