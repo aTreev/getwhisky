@@ -271,7 +271,7 @@ class Page {
 			$html.="<div class='header-content'>";
 				$html.="<a href='/index.php' id='getwhisky-logo-link'><img class='header-logo' alt='getwhisky logo - link to homepage' src='assets/getwhisky-logo-lowercase.png' alt=''></a>";
 				$html.="<div class='search-bar-container'>";
-					$html.="<input type='text' placeholder='search getwhisky' id='product-search-bar' class='product-search-bar'/>";
+					$html.="<input type='text' placeholder='Looking for something?' id='product-search-bar' class='product-search-bar'/>";
 					$html.="<i class='fas fa-search'></i>";
 					$html.="<div id='search-results'></div>";
 					$html.="</div>";

@@ -52,7 +52,6 @@
     document.onreadystatechange = function() {
         if(document.readyState==="complete") {
             prepareMenu();
-            prepareProductsPage();
 
             setTimeout(() => {
                 window.location.href = "/user.php";

@@ -10,7 +10,7 @@
  * based on window width
  * 818 seems to work with 835 breakpoint in products.css
 ****/
-const productsMobileBreakpoint = 818;
+const productsMobileBreakpoint = 835;
 
 /*******
  * id of the current products category
@@ -34,6 +34,7 @@ let selectedSortValue;
  * Amount of products that should be displayed
  * used as a method of pagination, increased by user
  * selecting to view more products default 20
+ * Tweak this value here and in the getProducts() function
  ***************/
 let limit = 8;
 
@@ -74,7 +75,7 @@ function makeFilterSectionInteractive() {
     
     // Check whether window is mobile or desktop and apply
     // the corresponding styling
-    if ($(window).width() <= productsMobileBreakpoint + 1) {
+    if ($(window).width() <= productsMobileBreakpoint) {
         $("#filter-root").hide();
         $(".filter-item-options").each(function(){
             $(this).removeClass("filter-item-options-show");
@@ -92,7 +93,7 @@ function makeFilterSectionInteractive() {
 
     // Check if window is resized and reset stylings
     $(window).resize(function(){
-        if ($(this).width() <= productsMobileBreakpoint + 1) {
+        if ($(this).width() <= productsMobileBreakpoint) {
             // mobile stylings
             $("#filter-root").hide();
             $(".filter-item-options").each(function(){
@@ -218,58 +219,45 @@ function getProducts(categoryId, attributeValues, selectedSortValue) {
                 displayProducts();
 
                 // Set count if received
-                if (result.count >= 0) {
-                    if (result.count == 0 || result.count > 1) $("#product-count").html("<p>"+result.count+" products found with selected filters</p>")
-                    else $("#product-count").html("<p>"+result.count+" product found with selected filters</p>")
-                }
+                if (result.count != null) {
+                    if (result.count == 0 || result.count > 1) {
+                        $("#product-count").html("<p>"+result.count+" products found with selected filters</p>");
+                    }
+                    else {
+                        $("#product-count").html("<p>"+result.count+" product found with selected filters</p>");
+                    }
+
+                    if (result.count == 0) {
+                        $("#product-root").css("display", "block");
+                        $("#product-root").html("<h2 style='text-align:center;padding:40px;'>Oops! We couldn't find anything</h2><img style='width:200px;display:block;margin:auto;' src='../assets/product-images/no-products-found.jpg'><p style='text-align:center;margin-bottom:60px;'>Please try again with fewer filters or try using the search bar!</p>");
+                    }
+                } 
+                
             }, 200);
         }
     });
 }
 
+/******
+ * Scroll Event attached to the document that checks whether the user
+ * has scrolled to the bottom of the page.
+ * Calls the displayProducts() function when bottom of page is reached
+ ******************/
+$(window).scroll(function(){
+    if ((window.innerHeight + window.pageYOffset) >= document.body.offsetHeight-20) {
+        displayProducts();
+    }
+});
+
+
+
 // Displays products to page allows for pagination, 
 // uses global variables and recursion to achieve functionality
 function displayProducts() {
     for(let i = productsDisplayed; i < limit; i++) {
-        console.log(limit);
         $("#product-root").append(productHtmlArray[i]);
         productsDisplayed++;
     }
-    if (productsDisplayed < productHtmlArray.length && !document.getElementById("load-more")) {
-        $("#products-container").after("<button id='load-more'>Show more</button>");
-        $("#load-more").on("click", function(){
-            limit = limit + 20;
-            $(this).remove();
-            displayProducts();
-        });
-    }
+    limit = limit + 20;
+    
 }
-
-/*
-    Add to cart button removed from products page
-
-function addToCart(productId) {
-
-    $.ajax({
-        url:"../php/ajax-handlers/products-page-handler.php",
-        method:"POST",
-        data: {function: 2, productId: productId}
-    }).done(function(result){
-        console.log(result);
-        result = JSON.parse(result);
-        // added to cart
-        if (result.result == 1) {
-            $(".cart-count").html(result.cartCount);
-            new Alert(true, "Item added to basket <a href='/cart.php'>view basket</a>");
-        }
-        // Insufficient stock
-        if (result.result == 2) {
-            new Alert(false, "Unable to add to cart due to item shortage");
-        }
-        // invalid product id supplied
-        if (result.result == 3) {
-            new Alert(false, "We were unable to find that product, please try again");
-        }
-    });
-}
-*/

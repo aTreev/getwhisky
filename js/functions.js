@@ -7,7 +7,7 @@
 function prepareMenu() {
     const mobileWidth = 768;
     // 834 works as pixel sizes a bit buggy between JS and CSS
-    const searchBarBreakpoint = 818; 
+    const searchBarBreakpoint = 835; 
     let searchBarMobile;
     let searchBarDesktop
 
@@ -17,7 +17,7 @@ function prepareMenu() {
     /**********
      * Initial check for mobile or desktop
      *********************/
-    if ($(window).width() < mobileWidth) {
+    if ($(window).width() <= mobileWidth) {
         setMobileMenu();
     } else {
         setDesktopMenu();
@@ -47,7 +47,7 @@ function prepareMenu() {
         $(".menu-overlay").hide();
         $("body").removeClass("prevent-scrolling");
 
-        if ($(window).width() < mobileWidth) {
+        if ($(window).width() <= mobileWidth) {
             $("#product-menu-container").css("transform", "translateX(-100%)");
             $("#product-menu-container").css("display","none");
             setMobileMenu();
@@ -83,7 +83,7 @@ function prepareMenu() {
      ******/
     $(document).on("click", function(e){
         // Click listener for mobile menu
-        if ($(window).width() < mobileWidth) {
+        if ($(window).width() <= mobileWidth) {
             if (e.target.classList.contains("product-menu-button")) {
                 // Menu button clicked show menus and prevent scrolling
                 $("#product-menu-container").css({"transform":"translateX(0%)"});
@@ -159,7 +159,6 @@ function setDesktopMenu() {
  * Sends an ajax request to retrieve products and display them asynchronously
  ***********************************************/
 function prepareProductSearch() {
-
     $("#product-search-bar").on("keyup", function(){
         // Guard clause to prevent backend query on empty string also resets html
         if ($(this).val().length < 1) {
@@ -167,6 +166,7 @@ function prepareProductSearch() {
             $("#search-results").hide();
             return;
         }
+        let searchQuery = $(this).val();
         // Show search results container
         $("#search-results").show();
         
@@ -174,14 +174,17 @@ function prepareProductSearch() {
         $.ajax({
             url: "../php/ajax-handlers/product-search-handler.php",
             method: "POST",
-            data: {searchQuery: $(this).val()}
+            data: {location: "search-bar", searchQuery: $(this).val()}
 
         }).done(function(result){
             // Parse result and perform appropriate action
             result = JSON.parse(result);
             if (result.result == 1) {
+                // Products found show result and link
                 $("#search-results").html(result.html);
+                $("#search-results").append("<div class='search-result-item'><p style='padding: 10px;'>View all results</p><a href='/product-search.php?q="+searchQuery+"' class='sr-wrapper-link'><span></span></a></div>");
             } else {
+                // None found, notify user
                 $("#search-results").html("<p style='padding:20px;'>No product suggestions</p>")
             }
         });

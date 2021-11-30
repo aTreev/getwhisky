@@ -41,11 +41,12 @@ class Cart {
         $source = new CartCRUD();
         $retrievedItems = $source->getCartItems($this->getId());
 
-        if (count($retrievedItems) > 0) {
-            foreach($retrievedItems as $item) {
-                array_push($this->items, new CartItem($item));
-            }
+        if (count($retrievedItems) == 0) return;
+
+        foreach($retrievedItems as $item) {
+            array_push($this->items, new CartItem($item));
         }
+        
     }
 
 
@@ -157,25 +158,18 @@ class Cart {
             }
         }
 
-        // Item not found
-        if (!$itemFound) {
-            $result =  4;
-        } else {
-            // Item found, check if stock available
-            if ($stock >= $quantity) {
-                $source = new CartCRUD();
-                $result = $source->updateCartItemQuantity($this->getId(), $productId, $quantity);
-            } else {
-                $result = 2;
-            }
-        }
+        // Item not found return error code
+        if (!$itemFound) return  4;
+        // Insufficient stock return error code
+        if ($stock < $quantity) return 2;
+            
+        $source = new CartCRUD();
+        $result = $source->updateCartItemQuantity($this->getId(), $productId, $quantity);
 
         // Succesfully updated, update in object
-        if ($result == 1) {            
-            foreach($this->getItems() as $item) {
-                if ($item->getProductId() == $productId) {
-                    $item->setQuantity($quantity);
-                }
+        foreach($this->getItems() as $item) {
+            if ($item->getProductId() == $productId) {
+                $item->setQuantity($quantity);
             }
         }
         return $result;
@@ -208,27 +202,21 @@ class Cart {
 
         // already in cart update quantity
         if ($inCart) {
-            $result = $this->updateCartItemQuantity($productId, $quantityInCart+$quantity);
-            
-        }
-
-        // Not in cart add new cart item
-        if (!$inCart) {
+           $result = $this->updateCartItemQuantity($productId, $quantityInCart+$quantity); 
+        } else {
             // check stock greater than 0
             $insert = new CartCRUD();
             $stock = $insert->checkOutOfStock($productId)[0]['stock'];
-            if ($stock == 0 || $stock < $quantity) {
-                // out of stock error code
-                $result = 2;
-            } else {
-                // add to cart
-                $result = $insert->addToCart($this->getId(), $productId, $quantity);
-            }
+            // out of stock error code
+            if ($stock == 0 || $stock < $quantity) return 2;
+
+            // add to cart
+            $result = $insert->addToCart($this->getId(), $productId, $quantity);
         }
-        // if successful reload cart items
-        if ($result == 1) {
-            $this->retrieveCartItems();
-        }
+            
+        // reload cart items
+        $this->retrieveCartItems();
+        
         return $result;
     }
 
@@ -276,7 +264,9 @@ class Cart {
                 }
                 $html.="<h3>Basket Summary</h3>";
                 $html.="<p>Total: £".$total."</p>";
-                $html.="<button type='submit'>Checkout</submit>";
+                $html.="<form action='php/create-checkout-session.php' method='POST'>";
+                    $html.="<button type='submit'>Checkout</submit>";
+                $html.="</form>";
             $html."</div>";
         } else {
             // Display if empty cart

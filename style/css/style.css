@@ -26,15 +26,13 @@ html, * {
   font-family: var(--font-default);
 }
 
-
 main {
   position: relative;
-  width: 1200px;
+  width: 1600px;
   margin: auto;
   padding: 0px;
   overflow: hidden;
 }
-
 .no_select {
   -webkit-touch-callout: none;
   /* iOS Safari */
@@ -48,7 +46,6 @@ main {
   /* Non-prefixed version, currently
   supported by Chrome, Edge, Opera and Firefox */
 }
-
 .page-overlay {
   display:none;
   position: fixed;
@@ -60,7 +57,6 @@ main {
   opacity: 0.5;
   z-index: 50;
 }
-
 .menu-overlay {
   display:none;
   position: fixed;
@@ -97,7 +93,7 @@ header {
 }
 
 .header-content {
-  width: 1200px;
+  width: 1600px;
   height: 150px;
   margin: auto;
   position: relative;
@@ -172,7 +168,8 @@ header {
   text-indent: 15px;
   width: 100%;
   font-size: var(--font-size-regtext);
-  border:1px solid lightgrey;
+  border: none;
+  border-bottom:1px solid lightgrey;
 }
 #product-search-bar:focus {
   outline: none;
@@ -197,6 +194,20 @@ header {
   scrollbar-width: thin;
   scroll-behavior: smooth;
 }
+/* Chrome scrollbar effects */
+#search-results::-webkit-scrollbar {
+  height: 6px;
+  width: 6px;
+  background: lightgrey;
+}
+#search-results::-webkit-scrollbar-thumb {
+  background: #393812;
+  -webkit-border-radius: 1ex;
+  border-radius: 1ex;
+  -webkit-box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.75);
+  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.75);
+}
+
 .search-result-item {
   display: flex;
   gap: 30px;
@@ -301,7 +312,7 @@ header {
 
 .product-menu-list {
   display: flex;
-  width: 1200px;
+  width: 1600px;
   margin: auto;
   justify-content: space-between;
 }
@@ -408,6 +419,7 @@ form label {
   color: black;
   text-transform: capitalize;
   font-weight: 400;
+  opacity: 0.8;
 }
 ::-webkit-datetime-edit-text { color: #8e8e8e; }
 ::-webkit-datetime-edit-month-field { color: #8e8e8e; text-transform: uppercase; font-size: 1.2rem; }
@@ -589,6 +601,7 @@ button[type=submit]:hover {
   font-family: sans-serif;
   border-radius: 12px;
   border:1px solid lightgrey;
+  text-align: center;
 
 }
 .verify-container h3, .verify-container p {
@@ -644,7 +657,7 @@ button[type=submit]:hover {
 /*********************************************************************
 *   MEDIA QUERIES
 *********************************************************************/
-@media screen and (max-width: 1200px) {
+@media screen and (max-width: 1600px) {
   main {
     width: 95%;
     margin-left: 2.5%;
@@ -655,6 +668,12 @@ button[type=submit]:hover {
     margin-left: 2.5%;
     margin-right: 2.5%;
   }
+  .product-menu-list {
+    width: 100%;
+  }
+}
+
+@media screen and (max-width: 1200px) {
   .header-logo {
     max-width: 175px;
   }
@@ -669,7 +688,7 @@ button[type=submit]:hover {
 ***************************************************************************/
 @media screen and (max-width: 835px) {
   .search-bar-container {
-    width: 99.8%;
+    width: 100%;
   }
   .search-bar-container i {
     right: 20px;
