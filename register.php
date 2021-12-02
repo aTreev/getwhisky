@@ -28,21 +28,19 @@
                     getwhisky sign up
                 </h3>
                 <p>
-                    sign up for an account to unlock features like order history!
+                    sign up with us to receive perks like order history
                 </p>
             </div>
+
             <div class="input-container-100">
-                <i class="input-icon far fa-user"></i>
-                <input class="form-item" type="text" id="username" name="username" placeholder="username" required />
+                <i class="input-icon far fa-envelope"></i>
+                <input class="form-item" type="email" id="email" name="email" placeholder="email address" required />
             </div>
+            
             <div class="input-container-50">
                 <input class="form-item-50" type="text" id="firstname" name="firstname" placeholder="first name" required />
                 <input class="form-item-50" type="text" id="surname" name="surname" placeholder="last name" required />
 
-            </div>
-            <div class="input-container-100">
-                <i class="input-icon far fa-envelope"></i>
-                <input class="form-item" type="email" id="email" name="email" placeholder="email address" required />
             </div>
 
             <div class="input-container-100">

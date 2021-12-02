@@ -7,7 +7,6 @@ require_once("userhash.class.php");
 
 class User {
     private $userid;
-	private $username;
 	private $userhash; 
 	private $firstname;
     private $surname; 
@@ -19,7 +18,6 @@ class User {
 	
 	public function __construct() {
 		$this->userid=-1;
-		$this->username="Anon";
 		$this->usertype=0;
         $this->verified=false;
 		$this->userhash=new UserHash(); // when user is constructed an instance of userHash is also
@@ -36,15 +34,8 @@ class User {
 		}
 	}
 	
-	private function setUsername($username) {
-		$message="";
-		if (util::valUName($username)) {
-			$this->username=$username;
-		} else {$message="Invalid username<br />";}
-		return $message;
-	}
-	
-	// checks for validation via the util class and sends an error message if username
+
+	// checks for validation via the util class and sends an error message if firstname
 	// does not meet criteria
 	private function setFirstname($firstname) {
 		$message="";
@@ -90,7 +81,6 @@ class User {
 	}
 	
 	public function getUserid() { return $this->userid; }
-	public function getUsername() { return $this->username; }
 	public function getFirstname() { return $this->firstname; }
 	public function getSurname() { return $this->surname; }
 	public function getEmail() { return $this->email; }
@@ -101,19 +91,18 @@ class User {
 
         /*  
             UserCRUD class is used to get the data. It is checked that a single record is returned
-            method should return either 0 records, if the username is not found, or 1 record if the
-            username is found.
+            method should return either 0 records, if the email is not found, or 1 record if the
+            email is found.
             If a single record is returned the setters are used to set the values of the different 
             fields for the class.
         */
-        public function getUserByName($userid) {
+        public function getUserByEmail($email) {
             $haveuser=false;
             $source=new UserCRUD();
-            $data=$source->getUserByName($userid);
+            $data=$source->getUserbYEmail($email);
             if(count($data)==1) {
                 $user=$data[0];
                 $this->setUserid($user["userid"]);
-                $this->setUsername($user["username"]);
                 $this->setFirstname($user["firstname"]);
                 $this->setSurname($user["surname"]);
                 $this->setSession($user["lastsession"]);
@@ -128,8 +117,8 @@ class User {
 		}
 		
 		// takes the details submitted by a user compares it to the details stored in the database
-		public function authNamePass($username, $userpass) {
-			$authenticated=$this->getUserByName($username);
+		public function authEmailPass($email, $userpass) {
+			$authenticated=$this->getUserByEmail($email);
 			if($authenticated) {
 				$authenticated=$this->userhash->testPass($userpass);
 			}
@@ -143,7 +132,6 @@ class User {
 			if(count($data)==1) {
 				$user=$data[0];
 				$this->setUserid($user["userid"]);
-				$this->setUsername($user["username"]);
 				$this->setFirstname($user["firstname"]);
 				$this->setSurname($user["surname"]);
 				$this->setSession($user["lastsession"]);
@@ -197,19 +185,18 @@ class User {
 		// user, passes the parameters to a store method in the userCRUD class.
 		// messages variable will be used to notify the user of any issues.
         // sends a verification key to the database but doesn't store that key as unnecessary.
-		public function registerUser($userid,$username,$password, $firstname,$surname, $email, $vKey) {
+		public function registerUser($userid, $password, $firstname,$surname, $email, $vKey) {
 			$insert=0;
 			$messages="";
 			$target=new UserCRUD();
 		
 			$messages.=$this->setUserid($userid);
-			$messages.=$this->setUsername($username);
 			$messages.=$this->setFirstname($firstname);
 			$messages.=$this->setSurname($surname);
 			$messages.=$this->setPass($password); // adds error message if pass doesn't meet standards
 			$messages.=$this->setEmail($email);
 			if($messages=="") {
-				$insert=$target->storeNewUser($this->getUserid(), $this->getUsername(),$this->getFirstname(),$this->getSurname(),$this->userhash->getHash(),$this->getEmail(), $vKey);
+				$insert=$target->storeNewUser($this->getUserid(), $this->getFirstname(),$this->getSurname(),$this->userhash->getHash(),$this->getEmail(), $vKey);
 				if($insert!=1) { $messages.=$insert;$insert=0; }
 			}
 			$result=['insert' => $insert,'messages' => $messages];
@@ -243,7 +230,7 @@ class User {
 		public function __toString() {
 			$html = "";
 			$html.="<div class='account-header'>";
-				$html.="<h2>Hello ".$this->getUsername()."</h2>";
+				$html.="<h2>Hello ".$this->getFirstname()." ".$this->getSurname()."</h2>";
 				$html.="<p> Select an option below blah blah</p>";
 
 			$html.="</div>";

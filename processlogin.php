@@ -6,10 +6,10 @@
 <?php
 	require_once("php/page.class.php");
 	try {
-		$username=$_POST['username'];
+		$email=$_POST['email'];
 		$userpass=$_POST['userpass'];
 		$page=new Page();
-		$page->login($username,$userpass);
+		$page->login($email,$userpass);
 	} catch(Exception $e) {
 		echo "Error : ", $e->getMessage();
 	}

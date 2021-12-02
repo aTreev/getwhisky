@@ -5,7 +5,6 @@
  *****************************************************/
 function prepareRegistrationForm() {
 	const form = $("#regform");
-	const usernameField = $("#username");
 	const firstNameField = $("#firstname");
 	const surnameField = $("#surname");
 	const emailField = $("#email");
@@ -24,19 +23,19 @@ function prepareRegistrationForm() {
 	submitButton.click(function(ev){
 		$(".registration-feedback").remove();
 		ev.preventDefault();
-		let ue = fn = sn = pw = false;
+		let em = fn = sn = pw = false;
 
 		// Promise callback due to waiting for ajax call
-		registrationCheckUsernameEmail(usernameField, emailField).then(function(valid){
-			ue = valid;
+		registrationCheckEmail(emailField).then(function(valid){
+			em = valid;
 			sn = checkName(surnameField);
 			fn = checkName(firstNameField);
 			pw = checkPassword(passwordField, repeatPasswordField);
 
 			// register the user
-			if (ue && fn && sn && pw) {
+			if (em && fn && sn && pw) {
 				submitButton.html("Please wait...");
-				registerUser(form, usernameField.val(), firstNameField.val(), surnameField.val(), emailField.val(), passwordField.val())
+				registerUser(form, firstNameField.val(), surnameField.val(), emailField.val(), passwordField.val())
 			}
 		});
 	});
@@ -51,8 +50,7 @@ function doFeedback(inputField, feedbackStr) {
 // Checks to see if the inputs are valid
 // Checks to see if they already exist on the database
 // returns a promise boolean valid or !valid
-function registrationCheckUsernameEmail(usernameField, emailField, callback) {
-	const username = usernameField.val();
+function registrationCheckEmail(emailField) {
 	const email = emailField.val();
 
 	return new Promise(function(resolve) {
@@ -60,23 +58,17 @@ function registrationCheckUsernameEmail(usernameField, emailField, callback) {
 			// Ajax parameters
 			url:"../php/ajax-handlers/checkuser.php",
 			method:"POST",
-			data: {username: username, email: email}
+			data: {email: email}
 			
 		})
 		.done(function(result){
 			result = JSON.parse(result);
 			let valid = true;
 
-			if (result.userexists == 1) {
-				doFeedback(usernameField, "Username already exists"); valid = false;
-			}
 			if (result.emailexists == 1) {
 				doFeedback(emailField, "Email already exists"); valid = false;
 			}
 
-			if (result.userexists == 2) {
-				doFeedback(usernameField, "Username must be between 5 and 20 characters"); valid = false;
-			}
 			if (result.emailexists == 2) {
 				doFeedback(emailField, "Invalid email format"); valid = false;
 			}
@@ -170,19 +162,20 @@ function checkPassword(passwordField, repeatPasswordField) {
 }
 
 
-function registerUser(form, username, firstName, surname, email, password) {
+function registerUser(form, firstName, surname, email, password) {
 	$.ajax({
 		url: "../php/ajax-handlers/user-reg-handler.php",
 		method: "POST",
-		data: {username:username, firstname:firstName, surname:surname, email:email, userpass:password}
+		data: {firstname:firstName, surname:surname, email:email, userpass:password}
 	})
 	.done(function(result){
+		console.log(result);
 		result = JSON.parse(result);
 
 		if (result.insert == 1) {
 			// do a fancy animation on success
 			form.css("height", "510px");
-			form.html("<div class='register-thank-you'><h3>Thank you!</h3><p>You have successfully registered to getwhisky.</p><a href='user.php'>Take me to my account</a></div>");
+			form.html(`<div class='register-thank-you'><h3>Thank you!</h3><p>You have successfully registered to getwhisky.</p><p>A verification email has been sent to ${email}</p><a href='user.php'>Take me to my account</a></div>`);
 			setTimeout(() => {
 				$(".register-thank-you").addClass("register-thank-you-show");
 			}, 200);

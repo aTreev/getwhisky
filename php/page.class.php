@@ -90,9 +90,9 @@ class Page {
 	 * if the hash of the passed in password matches the hash in the database
 	 * the user is logged in and a session is stored in the database
 	 **************************************************/
-	public function login($username, $userpass) {
+	public function login($email, $userpass) {
 		session_regenerate_id();
-		if($this->getUser()->authNamePass($username,$userpass)) {
+		if($this->getUser()->authEmailPass($email,$userpass)) {
 			$_SESSION['guest'] = false;
 			$this->getUser()->storeSession($this->getUser()->getUserid(),session_id());
 			$_SESSION['userid']=$this->getUser()->getUserid();
@@ -125,9 +125,9 @@ class Page {
 	 * A single use function that logs the user in on the backend
 	 * during the registration process
 	 **************************************************/
-	public function loginDiscreet($username, $userpass) {
+	public function loginDiscreet($email, $userpass) {
 		session_regenerate_id();
-		if($this->getUser()->authNamePass($username,$userpass)) {
+		if($this->getUser()->authEmailPass($email,$userpass)) {
 			$this->getUser()->storeSession($this->getUser()->getUserid(),session_id());
 			$_SESSION['userid']=$this->getUser()->getUserid();
 			$_SESSION['guest'] = false;
@@ -164,11 +164,11 @@ class Page {
 		}
 	}
 
-	public function registerUser($userid,$username,$userpass,$firstname,$surname,$email, $vKey) {
+	public function registerUser($userid,$userpass,$firstname,$surname,$email, $vKey) {
 		$reguser=new User();
-		$result=$reguser->registerUser($userid,$username,$userpass,$firstname,$surname,$email, $vKey);
+		$result=$reguser->registerUser($userid,$userpass,$firstname,$surname,$email, $vKey);
 		if($result['insert']==1) {
-			$this->loginDiscreet($username, $userpass);
+			$this->loginDiscreet($email, $userpass);
 			// send verification email
 			$emailTo = $email;
 			$subject = "getwhisky email verification";

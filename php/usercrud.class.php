@@ -8,16 +8,6 @@ class UserCRUD {
 	public function __construct() {
 		self::$db = db::getInstance();
 	}
-	// SQL statement to select specific user from database
-	public function getUserByName($username, $style=MYSQLI_ASSOC) {
-		$this->sql="SELECT * FROM usertable WHERE username = ?";
-		$this->stmt = self::$db->prepare($this->sql);
-		$this->stmt->bind_param("s",$username);
-		$this->stmt->execute();
-		$result = $this->stmt->get_result();
-		$resultset=$result->fetch_all($style);
-		return $resultset;
-	}
 
 	public function getUserByEmail($email, $style=MYSQLI_ASSOC) {
 		$this->sql="SELECT * FROM usertable WHERE email = ?";
@@ -48,19 +38,16 @@ class UserCRUD {
 	}
 
 	// stores the details passed from the registration()
-	// returns error to message if email or username already exists
-	public function storeNewUser($userid, $username,$firstname,$surname,$hash,$email, $vKey) {
-		$this->sql="INSERT INTO usertable (userid,username,firstname,surname,userpass,email, vkey) VALUES(?,?,?,?,?,?,?);";
+	// returns error to message if email already exists
+	public function storeNewUser($userid,$firstname,$surname,$hash,$email, $vKey) {
+		$this->sql="INSERT INTO usertable (userid,firstname,surname,userpass,email, vkey) VALUES(?,?,?,?,?,?);";
 		$this->stmt = self::$db->prepare($this->sql);
-		$this->stmt->bind_param("sssssss",$userid, $username,$firstname,$surname,$hash,$email, $vKey);
+		$this->stmt->bind_param("ssssss",$userid, $firstname,$surname,$hash,$email, $vKey);
 		$this->stmt->execute();
 		if($this->stmt->affected_rows!=1) {
 			$errors="";
 			if(strpos($this->stmt->error,'email')) {
 				$errors.="Email address exists<br />";
-			}
-			if(strpos($this->stmt->error,'username')) {
-				$errors.="Username exists<br />";
 			}
 			return $errors;
 		} else {
@@ -88,32 +75,10 @@ class UserCRUD {
 		}
 	}
 
-	// grabs all users ordered by the switch statement and returns the result
-	public function getAllUsers($orderby="username", $style=MYSQLI_ASSOC) {
-		//nb switch 'whitelist' prevents possibility of injection
-		switch ($orderby) {
-			case "username": $order="username";
-						break;
-			case "userid": $order="userid";
-						break;
-			case "surname": $order="surname";
-						break;
-			default: $order="username";
-						break;
-		}
-		$this->sql="SELECT userid, username, firstname, surname FROM usertable ORDER BY ?;";
-		$this->stmt= self::$db->prepare($this->sql);
-		$this->stmt->bind_param("s", $order);
-		$this->stmt->execute();
-		$result=$this->stmt->get_result();
-		$resultset=$result->fetch_all($style);
-		return $resultset;
-	}
-
-	public function testUserEmail($username, $email, $style=MYSQLI_ASSOC) {
-		$this->sql="SELECT * FROM usertable WHERE username = ? OR email = ?";
+	public function testUserEmail($email, $style=MYSQLI_ASSOC) {
+		$this->sql="SELECT * FROM usertable WHERE email = ?";
 		$this->stmt = self::$db->prepare($this->sql);
-		$this->stmt->bind_param("ss",$username, $email);
+		$this->stmt->bind_param("s", $email);
 		$this->stmt->execute();
 		$result = $this->stmt->get_result();
 		$resultset=$result->fetch_all($style);

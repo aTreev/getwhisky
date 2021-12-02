@@ -31,16 +31,19 @@
             <div id='product-count'></div>
         </div>
         <div class='filter-header'>
-            <div></div>
+            <h4 id='show-filters-btn'>Show Filters</h4>
             <div class="sort-by-container">
                 <h4>Sort by: &nbsp;</h4>
-                <button name='sort' sort-option='latest' style='font-weight:700;'>Latest</button>
-                <button name='sort' sort-option='price_low'>Price (low)</button>
-                <button name='sort' sort-option='price_high'>Price (high)</button>
+                <div class="sort-by-btn-container">
+                    <button name='sort' sort-option='latest' style='font-weight:700;'>Latest</button>
+                    <button name='sort' sort-option='price_low'>Price (low)</button>
+                    <button name='sort' sort-option='price_high'>Price (high)</button>
+                </div>
+                
             </div>
         </div>
-        <div class='product-container'>
-            <div id='product-root'></div>
+        <div id='products-container'>
+            <div id='product-root' style='margin-left:0px;'></div>
         </div>
     </main>
 </body>

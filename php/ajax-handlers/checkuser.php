@@ -4,21 +4,17 @@
 	require_once("../usercrud.class.php");
 	require_once("../util.class.php");
 
-	$username=$_POST["username"];
 	$email=$_POST['email'];
 
-	$userexists=util::valUName($username)?0:2;
 	$emailexists=util::valEmail($email)?0:2;
-	if(util::valEmail($email) && util::valUName($username)) {
+	if(util::valEmail($email)) {
 		$source=new UserCrud();
-		$recordset=$source->testUserEmail($username,$email);
+		$recordset=$source->testUserEmail($email);
 		foreach($recordset as $record) {
-			if(strcasecmp($record['username'],$username) == 0) { $userexists=1;}
 			if(strcasecmp($record['email'],$email) == 0) { $emailexists=1;}
 		}
 	}
 	$json=array (
-		'userexists' => $userexists,
 		'emailexists' => $emailexists
 		);
 	echo json_encode($json);

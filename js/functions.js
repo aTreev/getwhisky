@@ -188,9 +188,9 @@ function prepareProductSearch() {
                 $("#search-results").html("<p style='padding:20px;'>No product suggestions</p>")
             }
         });
-
-
     });
+
+    $("#product-search-bar").on()
 }
 
 

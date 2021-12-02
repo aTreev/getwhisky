@@ -19,7 +19,7 @@
                 <h3>getwhisky sign in</h3>
             </div>
             <div class="input-container">
-            <input class="form-item" type="text" name="username" id="username" placeholder="username"/>
+            <input class="form-item" type="text" name="email" id="email" placeholder="email"/>
             </div>
             <div class="input-container">
             <input class="form-item" type="password" name="userpass" id="userpass" placeholder="password"/>
