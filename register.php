@@ -16,9 +16,10 @@
         echo $page->displayProductMenu();
     ?>
     <?php 
-                echo "Session userid: ".$_SESSION['userid'];
-                echo "<br>";
-                echo "page userid: ".$page->getUser()->getUserid();
+                //Guest session tests
+                //echo "Session userid: ".$_SESSION['userid'];
+                //echo "<br>";
+                //echo "page userid: ".$page->getUser()->getUserid();
             ?>
     <main>
         <form method="post" action="reguser.php" class="form-main" id="regform">
@@ -45,13 +46,13 @@
             </div>
 
             <div class="input-container-100">
-                <i class="input-icon far fa-calendar-alt"></i>
-                <input class="form-item" type="date" id="dob" name="dob" required/>
+                <i class="input-icon fas fa-lock"></i>
+                <input class="form-item" type="password" id="userpass" name="userpass" placeholder="password" required />
             </div>
 
             <div class="input-container-100">
                 <i class="input-icon fas fa-lock"></i>
-                <input class="form-item" type="password" id="userpass" name="userpass" placeholder="password" required />
+                <input class="form-item" type="password" id="repeatUserpass" name="repeatPassword" placeholder="password" required />
             </div>
 
             <div class="submit">
@@ -60,13 +61,14 @@
         </form>
     </main>
 </body>
-<script src="js/user-registration-form.js"></script>
 <script src="js/functions.js"></script>
+<script src="js/form-functions.js"></script>
 <script>
     'use strict';
     document.onreadystatechange = function() {
         if(document.readyState==="complete") {
-            new Form("regform");
+            prepareRegistrationForm();
+            //new Form("regform");
             prepareMenu();
         }
     }

@@ -8,7 +8,7 @@
 	<?php
 		echo $page->displayHead();
 	?>
-	
+	<link rel="stylesheet" href="style/css/user.css">
 	<title>user page</title>
 </head>
 <body>
@@ -19,13 +19,8 @@
 	
 	<main>
 		<div id="user-root" style='margin-top:20px;'>
-			<h1>Hello <?php echo $page->getUser()->getusername();?></h1>
 			<?php 
-				if ($page->getUser()->getVerifiedStatus() == 0) {
-					echo "<button id='resend-validation'>Resend validation email</button>";
-				}
 				echo $page->getUser(); 
-				
 			?>
 		</div>
 		

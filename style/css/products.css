@@ -31,6 +31,11 @@
     gap: 10px;
     margin-top: 20px;
 }
+
+.sort-by-btn-container {
+    display:flex;
+    gap: 10px;
+}
 #show-filters-btn {
     user-select: none;
     font-weight: 400;
@@ -79,8 +84,7 @@
 #product-root {
     width: 100%;
     display:grid;
-    grid-template-columns: repeat(auto-fill, 24%);
-    grid-gap: 15px;
+    grid-template-columns: repeat(auto-fill, 25%);
     height: fit-content;
 }
 
@@ -104,14 +108,15 @@
     position: relative;
     height: fit-content;
     height: -moz-fit-content;
-    border-bottom: 2px solid rgb(228, 228, 228);
-    border-top-color: transparent;
+    border: 1px solid lightgrey;
+    margin-top:-1px;
+    margin-left:-1px;
 }
 
 
 
 .product img {
-    height: 200px;
+    height: 180px;
     display: block;
     margin: auto;
     margin-bottom: 20px;
@@ -221,6 +226,8 @@
     background-color: white;
     width: 400px;
     position: relative;
+    border: 1px solid lightgrey;
+    margin-top:-1px;
 }
 
 
@@ -305,7 +312,7 @@
 
 @media screen and (max-width: 1600px) {
     #product-root {
-        grid-template-columns: repeat(auto-fill, 23%);
+        grid-template-columns: repeat(auto-fill, 25%);
     }
 }
 
@@ -314,7 +321,7 @@
         height: 140px;
     }
     #product-root {
-        grid-template-columns: repeat(auto-fill, 48%);
+        grid-template-columns: repeat(auto-fill, 33%);
     }
     #category-details {
         width: 75%;
@@ -345,12 +352,13 @@
         margin: auto;
         border: 1px solid lightgrey;
         text-align: center;
+        background-color: white;
     }
     #category-details {
         width: 100%;
     }
     #product-root {
-        grid-template-columns: repeat(auto-fill, 48%);
+        grid-template-columns: repeat(auto-fill, 50%);
     }
     #products-container {
         display: block;
@@ -359,7 +367,9 @@
         height: 200px;
     }
     #filter-root {
-        width: 100%;
+        margin: auto;
+        margin-top:-1px;
+        width: 99%;
         margin-bottom: 30px;
     }
 
@@ -379,6 +389,16 @@
     }
     .sort-by-container {
         flex-direction: column;
+    }
+    .sort-by-btn-container {
+        width: 100%;
+    }
+    .sort-by-btn-container button {
+        width: 33%;
+        padding: 15px;
+        background-color: white;
+        text-align: center;
+        border: 1px solid lightgrey;
     }
     #product-root {
         grid-template-columns: repeat(auto-fill, 100%);

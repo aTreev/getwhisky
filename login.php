@@ -6,7 +6,6 @@
 <html lang="en">
 <head>
     <?php echo $page->displayHead(); ?>
-    <link rel='stylesheet' href='style/css/register.css'>
     <title>getwhisky login</title>
 </head>
 <body>

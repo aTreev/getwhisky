@@ -49,10 +49,10 @@ class UserCRUD {
 
 	// stores the details passed from the registration()
 	// returns error to message if email or username already exists
-	public function storeNewUser($userid, $username,$firstname,$surname,$hash,$email,$dob, $vKey) {
-		$this->sql="INSERT INTO usertable (userid,username,firstname,surname,userpass,email,dob, vkey) VALUES(?,?,?,?,?,?,?,?);";
+	public function storeNewUser($userid, $username,$firstname,$surname,$hash,$email, $vKey) {
+		$this->sql="INSERT INTO usertable (userid,username,firstname,surname,userpass,email, vkey) VALUES(?,?,?,?,?,?,?);";
 		$this->stmt = self::$db->prepare($this->sql);
-		$this->stmt->bind_param("ssssssss",$userid, $username,$firstname,$surname,$hash,$email,$dob, $vKey);
+		$this->stmt->bind_param("sssssss",$userid, $username,$firstname,$surname,$hash,$email, $vKey);
 		$this->stmt->execute();
 		if($this->stmt->affected_rows!=1) {
 			$errors="";
@@ -69,10 +69,10 @@ class UserCRUD {
 	}
 
 	// updates a user's details
-	public function updateUser($username,$firstname,$surname,$hash,$email,$dob,$usertype, $userid) {
-		$this->sql="UPDATE usertable SET username=?, firstname=?, surname=?, userpass=?, email=?, dob=?, usertype=? WHERE userid=?;";
+	public function updateUser($username,$firstname,$surname,$hash,$email,$usertype, $userid) {
+		$this->sql="UPDATE usertable SET username=?, firstname=?, surname=?, userpass=?, email=?, usertype=? WHERE userid=?;";
 		$this->stmt = self::$db->prepare($this->sql);
-		$this->stmt->bind_param("ssssssis",$username,$firstname,$surname,$hash,$email,$dob,$usertype,$userid);		
+		$this->stmt->bind_param("sssssis",$username,$firstname,$surname,$hash,$email,$usertype,$userid);		
 		$this->stmt->execute();
 		if($this->stmt->affected_rows!=1) {
 			$errors="";

@@ -110,6 +110,7 @@
         ?>
     </main>
 </body>
+<script src="js/form-functions.js"></script>
 <script src="js/functions.js"></script>
 <script>
     document.onreadystatechange = function() {

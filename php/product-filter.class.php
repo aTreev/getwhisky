@@ -2,9 +2,12 @@
 require_once("menucrud.class.php");
 class ProductFilter {
     /*****************
-     * CLASS ProductFilter
+     * Class ProductFilter
      * 
-     * Generates a product filter menu for a category
+     * Generates a product filter menu based on the category id provided
+     * Retrieves the titles and filter options on instantiation
+     * 
+     * Filter html constructed and returned by calling the __toString method
      */
     private $categoryId;
     private $filterTitles = [];
@@ -31,14 +34,11 @@ class ProductFilter {
         $this->setFilterValues($source->getProductFilterValuesByCategoryId($this->categoryId));
     }
 
-    // construct the filter html and return it
-    public function getFilters() {
-        $html = "";
-        $html.=var_dump($this->getFilterTitles());
-        $html.=var_dump($this->getFilterValues());
-        return $html;
-    }
-
+    /**************
+     * The return html for filters
+     * Checks to see if a filter option has any products attached to it
+     * and displays only if a product can be obtained from the filter.
+     *****************************/
     public function __toString() {
         $html = "";
         foreach ($this->getFilterTitles() as $filter) {

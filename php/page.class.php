@@ -75,12 +75,16 @@ class Page {
 		}
 	}
 	
+	/**************
+	 * Log user out if inactive for 1 hour 3200
+	 ******************************/
 	private function checkInactivityLength() {
-		if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) > 1800) {
+		if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) > 64000) {
 			$this->logout();
 		}
 		$_SESSION['last_activity'] = time();
 	}
+
 	/*******************
 	 * Checks for user credentials with the authNamePass method
 	 * if the hash of the passed in password matches the hash in the database
@@ -116,6 +120,7 @@ class Page {
 	private function transferCart() {
 
 	}
+
 	/****************
 	 * A single use function that logs the user in on the backend
 	 * during the registration process
@@ -146,22 +151,22 @@ class Page {
 		checks that the user is authorised to carry out the update action and if so passes the data to a 
 		temporary instance of the User class.
 	*/
-	public function updateUser($username,$firstname,$surname,$password,$email,$dob,$userid, $usertype) {
+	public function updateUser($username,$firstname,$surname,$password,$email,$userid, $usertype) {
 		if($this->getUser()->getUsertype()==3 || $this->getUser()->getUserid()==$userid) {
 			$usertoupdate=new User();
 			$usertoupdate->getUserById($userid);
 			if($this->getUser()->getUsertype()!=3) {
 				$usertype="";
 			}
-			$result=$usertoupdate->updateUser($username,$firstname,$surname,$password,$email,$dob,$usertype, $userid);
+			$result=$usertoupdate->updateUser($username,$firstname,$surname,$password,$email,$usertype, $userid);
 			return $result;
 			
 		}
 	}
 
-	public function registerUser($userid,$username,$userpass,$firstname,$surname,$email,$dob, $vKey) {
+	public function registerUser($userid,$username,$userpass,$firstname,$surname,$email, $vKey) {
 		$reguser=new User();
-		$result=$reguser->registerUser($userid,$username,$userpass,$firstname,$surname,$email,$dob, $vKey);
+		$result=$reguser->registerUser($userid,$username,$userpass,$firstname,$surname,$email, $vKey);
 		if($result['insert']==1) {
 			$this->loginDiscreet($username, $userpass);
 			// send verification email
@@ -290,7 +295,6 @@ class Page {
 							}
 							if ($this->getUser()->getUsertype() >= 2) {
 								$html.="<li><a href='/user.php'><i class='header-nav-icon fas fa-user'></i></a><a class='header-nav-link' href='/user.php'>Account</a></li>";
-								$html.="<li><a class='header-nav-link' href='/logout.php'>Logout</a></li>";
 							}
 							if ($this->getUser()->getUsertype() == 1) {
 								$html.="<li><a class='header-nav-link' href='/suspended.php'>Account</a></li>";

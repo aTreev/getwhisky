@@ -12,11 +12,6 @@
     <title>Document</title>
 </head>
 <body>
-    <nav>
-        <ul class="navbar">
-            <?php echo $page->getMenu(); ?>
-        </ul>
-    </nav>
 
     
     <form method="post" action="updateself.php">

@@ -1,0 +1,37 @@
+
+.register-thank-you {
+    margin: auto;
+    margin-top: 20%;
+    text-align: center;
+    line-height: 1.8;
+    display:flex;
+    flex-direction: column;
+    gap: 30px;
+    transform: translateY(30%);
+    opacity: 0;
+    transition: all 500ms ease-in-out;
+}
+
+.register-thank-you p {
+    font-size: 1.6rem;
+}
+
+.register-thank-you a {
+    display: block;
+    text-decoration: none;
+    color: white;
+    background-color: var(--bg-secondary);
+    border-radius: 8px;
+    padding: 5px;
+    width: 80%;
+    margin: auto;
+}
+
+.register-thank-you a:hover {
+    background-color: var(--bg-secondary-light);
+}
+
+.register-thank-you-show {
+    opacity: 1;
+    transform: translateY(0%);
+}

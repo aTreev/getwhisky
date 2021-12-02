@@ -135,8 +135,10 @@ class util {
 	*******************/
 	public static function valUName($input) {
 		if(util::valStr($input) && htmlentities($input)==$input) {
+			if (strlen($input) < 5 || strlen($input) > 20) return false;
 			return true;
-		} else {return false;}
+		} 
+		return false;
 	}
 
 	public static function posted($input) {

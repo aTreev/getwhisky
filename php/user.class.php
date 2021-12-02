@@ -4,7 +4,6 @@
 require_once("util.class.php");
 require_once("usercrud.class.php");
 require_once("userhash.class.php");
-require_once("dob.class.php");
 
 class User {
     private $userid;
@@ -14,7 +13,6 @@ class User {
     private $surname; 
 	private $lastsession; 
 	private $email; 
-	private $dob; 
 	private $usertype;
     private $vKey;
     private $verified;
@@ -24,7 +22,6 @@ class User {
 		$this->username="Anon";
 		$this->usertype=0;
         $this->verified=false;
-		$this->dob = new DOB();
 		$this->userhash=new UserHash(); // when user is constructed an instance of userHash is also
 										// constructed and assigned to the userhash field
 	}
@@ -75,17 +72,7 @@ class User {
 		return $message;
 		
 	}
-	
-	private function setDOB($dob) {
-		$message="";
-		if(!$this->dob->setDOB($dob))
-		{ $message.="Date is not correct<br />"; }
-		if($this->dob->getAge()<16)
-		{ $message.= "User must be 16 years or older<br />";}	
-		return $message;
-	}
 
-	
 	private function setSession($session) {
 		$this->lastsession=$session;
 	}
@@ -107,7 +94,6 @@ class User {
 	public function getFirstname() { return $this->firstname; }
 	public function getSurname() { return $this->surname; }
 	public function getEmail() { return $this->email; }
-	public function getDOB($format="Y-m-d") { return $this->dob->format($format); }
 	public function getSession() { return $this->lastsession; }
 	public function getUsertype() { return $this->usertype; }
     public function getVerifiedStatus() { return $this->verified; }
@@ -132,7 +118,6 @@ class User {
                 $this->setSurname($user["surname"]);
                 $this->setSession($user["lastsession"]);
                 $this->setEmail($user["email"]);
-                $this->setDOB($user["dob"]);
 				$this->setUsertype($user["usertype"]);
                 $this->setVerified($user["verified"]);
 				$this->setVerificatinKey($user["vkey"]);
@@ -163,7 +148,6 @@ class User {
 				$this->setSurname($user["surname"]);
 				$this->setSession($user["lastsession"]);
 				$this->setEmail($user["email"]);
-				$this->setDOB($user["dob"]);
 				$this->setUsertype($user["usertype"]);
                 $this->setVerified($user["verified"]);
 				$this->setVerificatinKey($user["vkey"]);
@@ -213,7 +197,7 @@ class User {
 		// user, passes the parameters to a store method in the userCRUD class.
 		// messages variable will be used to notify the user of any issues.
         // sends a verification key to the database but doesn't store that key as unnecessary.
-		public function registerUser($userid,$username,$password, $firstname,$surname, $email, $dob, $vKey) {
+		public function registerUser($userid,$username,$password, $firstname,$surname, $email, $vKey) {
 			$insert=0;
 			$messages="";
 			$target=new UserCRUD();
@@ -224,9 +208,8 @@ class User {
 			$messages.=$this->setSurname($surname);
 			$messages.=$this->setPass($password); // adds error message if pass doesn't meet standards
 			$messages.=$this->setEmail($email);
-			$messages.=$this->setDOB($dob);
 			if($messages=="") {
-				$insert=$target->storeNewUser($this->getUserid(), $this->getUsername(),$this->getFirstname(),$this->getSurname(),$this->userhash->getHash(),$this->getEmail(), $this->getDOB(), $vKey);
+				$insert=$target->storeNewUser($this->getUserid(), $this->getUsername(),$this->getFirstname(),$this->getSurname(),$this->userhash->getHash(),$this->getEmail(), $vKey);
 				if($insert!=1) { $messages.=$insert;$insert=0; }
 			}
 			$result=['insert' => $insert,'messages' => $messages];
@@ -235,7 +218,7 @@ class User {
 
 		// allows a user to update their details by calling the update method in the userCRUD class
 		// also uses the util class to validate
-		public function updateUser($username,$firstname,$surname,$password,$email,$dob,$usertype, $userid) {		
+		public function updateUser($username,$firstname,$surname,$password,$email,$usertype, $userid) {		
 			$update=0;
 			$messages="";
 			$found=$this->getUserById($userid);
@@ -246,10 +229,9 @@ class User {
 				if(util::posted($surname)){$messages.=$this->setSurname($surname);}
 				if(util::posted($password)){$messages.=$this->setPass($password);}
 				if(util::posted($email)){$messages.=$this->setEmail($email);}
-				if(util::posted($dob)){$messages.=$this->setDOB($dob);}
 				if(util::posted($usertype)){$messages.=$this->setUsertype($usertype);}
 				if($messages=="") {
-					$update=$target->updateUser($this->getUsername(), $this->getFirstname(), $this->getSurname(), $this->userhash->getHash(), $this->getEmail(), $this->getDOB(),$this->getUsertype(), $userid);
+					$update=$target->updateUser($this->getUsername(), $this->getFirstname(), $this->getSurname(), $this->userhash->getHash(), $this->getEmail(),$this->getUsertype(), $userid);
 					if($update!=1) {$messages=$update;$update=0;}
 				}			
 			}
@@ -259,22 +241,59 @@ class User {
 	
 		// sends user menu data to the $ouput variable via the getters
 		public function __toString() {
-			$output="";
-			$output.="<p>User : ".$this->getusername()."</p>";
-			$output.="<p>Name : ".$this->getFirstname()." ".$this->getSurname()."</p>";
-			$output.="<p>Email : ".$this->getEmail()."</p>";
-			$output.="<p>DOB : ".$this->getDOB()."</p>";
-			$typeUser = "Anonymous";
-			switch($this->getUsertype()) {
-				case 1: $typeUser = "Suspended";
-			break;
-				case 2: $typeUser = "User";
-			break;
-				case 3: $typeUser = "Admin"; 
+			$html = "";
+			$html.="<div class='account-header'>";
+				$html.="<h2>Hello ".$this->getUsername()."</h2>";
+				$html.="<p> Select an option below blah blah</p>";
+
+			$html.="</div>";
+			if ($this->getVerifiedStatus() == 0) {
+				$html.= "<button id='resend-validation'>Resend validation email</button>";
 			}
-			$output.="<p>Account type : ".$typeUser."</p>";
-            $output.="<p>Verified? : ".$this->getVerifiedStatus()."</p>";
-			return $output;
+			$html.="<a href='logout.php'>Sign out</a>";
+			$html.="<div class='account-options'>";
+
+
+				$html.="<div class='account-option'>";
+					$html.="<div class='account-option-top'>";
+						$html.="<div class='account-icon-container'>";
+							$html.="<i class='fas fa-truck'></i>";
+						$html.="</div>";
+					$html.="</div>";
+					$html.="<div class='account-option-bottom'>";
+						$html.="<h4>Delivery Addresses</h4>";
+						$html.="<p>Manage your addresses</p>";
+					$html.="</div>";
+				$html.="</div>";
+
+				$html.="<div class='account-option'>";
+					$html.="<div class='account-option-top'>";
+						$html.="<div class='account-icon-container'>";
+							$html.="<i class='fas fa-box-open'></i>";
+						$html.="</div>";
+					$html.="</div>";
+					$html.="<div class='account-option-bottom'>";
+						$html.="<h4>Your Orders</h4>";
+						$html.="<p>View and manage your orders</p>";
+					$html.="</div>";
+				$html.="</div>";
+
+				$html.="<div class='account-option'>";
+					$html.="<div class='account-option-top'>";
+						$html.="<div class='account-icon-container'>";
+							$html.="<i class='far fa-user'></i>";
+						$html.="</div>";
+					$html.="</div>";
+					$html.="<div class='account-option-bottom'>";
+						$html.="<h4>Account Details</h4>";
+						$html.="<p>Manage your personal details</p>";
+					$html.="</div>";
+				$html.="</div>";
+
+
+			$html.="</div>";
+
+			return $html;
 		}
 	
     }

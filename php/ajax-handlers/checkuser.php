@@ -13,8 +13,8 @@
 		$source=new UserCrud();
 		$recordset=$source->testUserEmail($username,$email);
 		foreach($recordset as $record) {
-			if(strcasecmp($record['username'],$username)==0) { $userexists=1;}
-			if(strcasecmp($record['email'],$email)==0) { $emailexists=1;}
+			if(strcasecmp($record['username'],$username) == 0) { $userexists=1;}
+			if(strcasecmp($record['email'],$email) == 0) { $emailexists=1;}
 		}
 	}
 	$json=array (

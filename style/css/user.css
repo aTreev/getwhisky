@@ -1,0 +1,62 @@
+
+
+.account-header {
+    padding: 20px 0px;
+    text-align: center;
+    line-height: 1.8;
+}
+
+#user-root {
+    display: block;
+}
+
+.account-options {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap:wrap;
+    max-width: 600px;
+    margin: auto;
+}
+
+.account-option {
+    background-color: white;
+    box-shadow: 2px 2px 15px 0 rgb(0 0 0 / 20%);
+    text-align: center;
+    width: 100%;
+    margin-bottom: 60px;
+}
+
+.account-option-top {
+    padding: 25px;
+    border-bottom: 1px solid lightgrey;
+    margin-left: 60px;
+    margin-right: 60px;
+}
+
+.account-icon-container {
+    height: 48px;
+    width: 48px;
+    background-color: darkred;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+}
+.account-option-top i {
+    font-size: 20px;
+    line-height: -4rem;
+    color: white;
+}
+
+.account-option-bottom {
+    padding: 25px;
+    line-height: 1.8;
+}
+
+
+@media screen and (max-width: 768px) {
+    .account-option {
+        margin-bottom: 20px;
+    }
+}
