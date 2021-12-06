@@ -35,6 +35,7 @@ main {
   margin: auto;
   padding: 0px;
   overflow: hidden;
+  min-height: 100vh;
 }
 
 .no_select {
@@ -71,6 +72,19 @@ main {
   background-color: black;
   opacity: 0.5;
   z-index: 50;
+}
+
+.wrapper-link {
+  position:absolute; 
+    width:100%;
+    height:100%;
+    top:0;
+    left: 0;
+    z-index: 12;
+  
+    /* fixes overlap error in IE7/8, 
+       make sure you have an empty gif */
+    background-image: url('empty.gif');
 }
 
 .ignore-overlay {
@@ -351,7 +365,6 @@ header {
 ********************************************************************************************************/
 .form-main {
   box-sizing: border-box;
-  border-radius: 5px;
   background-color: white;
   padding: 25px;
   max-width: 450px;
@@ -359,7 +372,7 @@ header {
   position: relative;     
   margin-top: 40px;
   margin-bottom: 40px;
-  box-shadow: 2px 2px 15px 0 rgb(0 0 0 / 20%);
+  box-shadow: 2px 2px 15px 0 grey;
 }
 form label {
   font-weight:700;
@@ -399,23 +412,53 @@ form label {
 
 .form-item {
   width: 100%;
-  padding: 15px 40px;
+  padding: 15px 25px 15px 40px;
   margin: 10px 0;
   display:block;
-  border: 1px solid #ccc;
   box-sizing: border-box;
   font-size: 1.4rem;
-  background-color: #f1f1f1fb;
+  background-color: #f2f2f2;
+  border: none;
+  outline: none;
+  border: 1px solid #ebebeb;
 }
 
 .form-item-50 {
-  width:48%;
-  display:inline;
-  padding: 15px 40px;
-  border: 1px solid #ccc;
+  width:49%;
+  display:block;
+  padding: 15px 40px 15px 40px;
+  margin: 10px 0;
   box-sizing: border-box;
   font-size: 1.4rem;
-  background-color: #f1f1f1fb;
+  background-color: #f2f2f2;
+  border: none;
+  outline: none;
+  border: 1px solid #ebebeb;
+
+}
+/*******
+* little focus animation every form element needs a span after it
+********/
+.form-item + span::after, .form-item-50 + span::after {
+  content: '';
+  display: block;
+  margin: auto;
+  height: 2px;
+  width: 0px;
+  transition: width 300ms ease-in-out;
+  margin-top: -12px;
+}
+
+.form-item:focus + span::after, .form-item-50:focus + span::after {
+  width:100%;
+  background-color: var(--bg-secondary);
+}
+/********
+* Span hack not working for these forms
+**********/
+.form-item-50:focus {
+  border-bottom: 2px solid var(--bg-secondary);
+  padding: 15px 40px 13px 40px;
 }
 
 ::placeholder {
@@ -430,13 +473,24 @@ form label {
 ::-webkit-datetime-edit-day-field { color: #8e8e8e; text-transform: uppercase; font-size: 1.2rem; }
 ::-webkit-datetime-edit-year-field { color: #8e8e8e; text-transform: uppercase; font-size: 1.2rem; }
 
-.registration-feedback {
+.form-feedback {
   width:100%;
   margin: 10px 0;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.form-feedback i {
+  color:#b41919;
+  font-size:1.6rem;
+}
+.form-feedback p {
   display:block;
   box-sizing: border-box;
   color:#b41919;
+  font-size: 1.2rem;
 }
+
 .password-indicator {
   border-radius: 12px;
 }
@@ -458,7 +512,6 @@ button[type=submit] {
   padding: 14px 20px;
   margin: 10px 0;
   border: none;
-  border-radius: 4px;
   cursor: pointer;
   font-size: 16px;
   width: 100%;

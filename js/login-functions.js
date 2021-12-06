@@ -46,7 +46,7 @@ function validateResetEmail(email) {
 function sendResetEmail(email) {
     // add a loading indicator to the submit button because mail() load takes a while
     $(document).ajaxStart(function () {
-        $('#submit-password-reset').html("<img style='width: 32px;'src='/assets/loader-button.gif'>");
+        $('#submit-password-reset').html("Please wait...");
     })
 
     $.ajax({

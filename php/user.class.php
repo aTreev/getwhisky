@@ -4,6 +4,8 @@
 require_once("util.class.php");
 require_once("usercrud.class.php");
 require_once("userhash.class.php");
+require_once("user-address.class.php");
+require_once("unique-id-generator.class.php");
 
 class User {
     private $userid;
@@ -15,6 +17,7 @@ class User {
 	private $usertype;
     private $vKey;
     private $verified;
+	private $addresses = [];
 	
 	public function __construct() {
 		$this->userid=-1;
@@ -88,6 +91,7 @@ class User {
 	public function getUsertype() { return $this->usertype; }
     public function getVerifiedStatus() { return $this->verified; }
 	public function getVerificationKey() { return $this->vKey; }
+	public function getAddresses() { return $this->addresses; }
 
         /*  
             UserCRUD class is used to get the data. It is checked that a single record is returned
@@ -225,6 +229,42 @@ class User {
 			$result=['update' => $update, 'messages' => $messages];	
 			return $result;
 		}
+
+		private function retrieveUserAddresses() {
+			$source = new UserAddressCRUD();
+			$addresses = $source->getUserAddresses($this->getUserid());
+			foreach ($addresses as $address) {
+				array_push($this->addresses, new UserAddress($address['address_id'], $address['userid'], $address['identifier'], $address['full_name'], $address['telephone'], $address['postcode'], $address['line1'], $address['line2'], $address['city'], $address['county']));
+			}
+		}
+
+		public function getAndDisplayAddressPage() {
+			$this->retrieveUserAddresses();
+
+			$html = "";
+			$html.="<div class='address-header'>";
+				$html.="<h3>Your delivery addresses</h3>";
+			$html.="</div>";
+
+			if ($this->getAddresses()) {
+				// display addresses
+			} else {
+				$html.="<p>You currently have no saved addresses.</p>";
+				$html.="<p>Click the link below to add a delivery address.</p>";
+			}
+
+			$html.="<div class='address-btn-container'>";
+				$html.="<button id='add-new-address-btn'>Add new address</button>";
+			$html.="</div>";
+
+			return $html;
+		}
+
+		public function addNewAddress($address_id, $identifier, $fullName, $phoneNumber, $postcode, $line1, $line2, $city, $county) {
+			$insert = new UserAddressCRUD();
+			$result = $insert->addNewAddress($address_id, $this->getUserid(), $identifier, $fullName, $phoneNumber, $postcode, $line1, $line2, $city, $county);
+			return $result;
+		}
 	
 		// sends user menu data to the $ouput variable via the getters
 		public function __toString() {
@@ -238,9 +278,11 @@ class User {
 				$html.= "<button id='resend-validation'>Resend validation email</button>";
 			}
 			$html.="<a href='logout.php'>Sign out</a>";
+
+			// Links to account options
 			$html.="<div class='account-options'>";
 
-
+				// Delivery addresses
 				$html.="<div class='account-option'>";
 					$html.="<div class='account-option-top'>";
 						$html.="<div class='account-icon-container'>";
@@ -251,8 +293,10 @@ class User {
 						$html.="<h4>Delivery Addresses</h4>";
 						$html.="<p>Manage your addresses</p>";
 					$html.="</div>";
+					$html.="<a class='wrapper-link' href='/addresses.php'><span></span></a>";
 				$html.="</div>";
 
+				// Orders
 				$html.="<div class='account-option'>";
 					$html.="<div class='account-option-top'>";
 						$html.="<div class='account-icon-container'>";
@@ -265,10 +309,11 @@ class User {
 					$html.="</div>";
 				$html.="</div>";
 
+				// Account details
 				$html.="<div class='account-option'>";
 					$html.="<div class='account-option-top'>";
 						$html.="<div class='account-icon-container'>";
-							$html.="<i class='far fa-user'></i>";
+							$html.="<i class='fas fa-user'></i>";
 						$html.="</div>";
 					$html.="</div>";
 					$html.="<div class='account-option-bottom'>";

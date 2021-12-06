@@ -4,13 +4,19 @@ class util {
 	/**********************
 	* Removes html tags and trims spaces from a string
 	* Returns true if string contains a value, false if it
-	* does not
+	* optionally tests to ensure str is between set bounds
 	* @param Mixed(String) $input
 	* @return Boolean
 	**********************/
-	public static function valStr($input) {
+	public static function valStr($input, $minmax=array(null,null)) {
 		if($input==strip_tags((string)$input) && trim((string)$input)!="") {
-			return true;
+			if ($minmax[0] == null || $minmax[1] == null) {
+				return true;
+			}
+			if (strlen($input) >= $minmax[0] && strlen($input) <= $minmax[1]) {
+				return true;
+			} 
+			return false;
 		} else {return false;}
 	}
 	

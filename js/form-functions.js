@@ -21,11 +21,11 @@ function prepareRegistrationForm() {
 	 * Check that all fields are valid before registering user
 	 ***************************/
 	submitButton.click(function(ev){
-		$(".registration-feedback").remove();
+		$(".form-feedback").remove();
 		ev.preventDefault();
 		let em = fn = sn = pw = false;
 
-		// Promise callback due to waiting for ajax call
+		// Promise setup due to having to wait for an AJAX call
 		registrationCheckEmail(emailField).then(function(valid){
 			em = valid;
 			sn = checkName(surnameField);
@@ -42,7 +42,7 @@ function prepareRegistrationForm() {
 }
 
 function doFeedback(inputField, feedbackStr) {
-	inputField.parent().after("<p class='registration-feedback'>"+feedbackStr+"</p>");
+	inputField.parent().after("<div class='form-feedback'><i class='fas fa-exclamation-circle'></i><p>"+feedbackStr+"</p></div>");
 }
 
 
@@ -146,7 +146,7 @@ function checkPassword(passwordField, repeatPasswordField) {
     if(passwordStrength<8) { feedbackcolour="#F00";}
 
     var fbtarget=document.getElementById("password-feedback");
-    if(!fbtarget) {
+    if(!fbtarget && password.length > 0) {
         var fb=document.createElement("p");
         fb.setAttribute("id", "password-feedback");
         fb.classList.add("password-indicator");
@@ -162,6 +162,12 @@ function checkPassword(passwordField, repeatPasswordField) {
 }
 
 
+/****************
+ * AJAX function that registers the user when all required parameters are sent
+ * Performs additional validation through PHP on the backend
+ * Displays the response as a message
+ * TODO: add fail message
+ ***************************************/
 function registerUser(form, firstName, surname, email, password) {
 	$.ajax({
 		url: "../php/ajax-handlers/user-reg-handler.php",

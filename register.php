@@ -27,9 +27,6 @@
                 <h3>
                     getwhisky sign up
                 </h3>
-                <p>
-                    sign up with us to receive perks like order history
-                </p>
             </div>
 
             <div class="input-container-100">

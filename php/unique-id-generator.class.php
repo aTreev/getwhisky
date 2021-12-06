@@ -1,6 +1,7 @@
 <?php 
     require_once("usercrud.class.php");
     require_once("cartcrud.class.php");
+    require_once("useraddresscrud.class.php");
 
     class UniqueIdGenerator {
     /**********************************
@@ -31,11 +32,6 @@
                     $this->retrieveUserIds();       
                 break;
 
-                case "product_id":   
-                    $this->column = "product_id";    
-                    //$this->retrieveProductIds();
-                break;
-
                 case "cart_id":      
                     $this->column = "id";       
                     $this->retrieveCartIds();
@@ -47,8 +43,13 @@
                 break;
 
                 case "passwordResetKey":
-                    $this->colum = "password_reset_key";
+                    $this->column = "password_reset_key";
                     $this->retrievePasswordResetKeys();
+                break;
+
+                case "address_id":
+                    $this->column = "address_id";
+                    $this->retrieveAddressIds();
                 break;
             }
             $this->generateNewUniqueId();
@@ -107,5 +108,10 @@
         private function retrieveCartIds() {
             $source = new CartCRUD();
             $this->retrievedIds = $source->getExistingCartIds();
+        }
+
+        private function retrieveAddressIds() {
+            $source = new UserAddressCRUD();
+            $this->retrievedIds = $source->getExistingAddressIds();
         }
     }
