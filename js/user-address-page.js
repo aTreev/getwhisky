@@ -10,6 +10,8 @@ function prepareUserAddressPage() {
     });
 
     prepareNewAddressForm();
+    prepareEditAddressForms();
+    prepareDeleteAddressFunctionality();
 }
 
 
@@ -23,10 +25,13 @@ function prepareNewAddressForm() {
     const cityField = $("#add-city");
     const countyField = $("#add-county");
 
-    $("#new-address-submit").click(function(ev){
+    // Bug caused event listeners to be applied multiple times
+    // even though the entire page gets reloaded. this seems to work
+    $("#new-address-submit").off();
+    $("#new-address-submit").on("click",function(ev){
         ev.preventDefault();
         $(".form-feedback").remove();
-        let id, nm, mb, pc, l1, ci, co = false;
+        let id, nm, mb, pc, l1, ci = false;
         id = checkAddressFieldValid(identifierField, 50, "Please enter a name for the address");
         nm = checkAddressFieldValid(fullNameField, 90, "Please enter the recipients full name");
         mb = checkAddressMobile(mobileField);
@@ -36,11 +41,76 @@ function prepareNewAddressForm() {
 
         if (id && nm && mb && pc && l1 && ci) {
             // All required fields valid
-            hideModal("add-address-modal");
             addUserAddress(identifierField.val(), fullNameField.val(), mobileField.val(), postcodeField.val(), line1Field.val(), line2Field.val(), cityField.val(), countyField.val());
+            hideModal("add-address-modal");
         }
 
     });
+}
+
+/***********
+ * Provides edit address functionality to the edit address forms
+ * on the address page.
+ * This layout should make it impossible for folk to manipulate address_ids
+ * as they are retrieved on page load.
+ * Even if they could the validation on the backend wouldn't allow for anything
+ * malicious anyway
+ */
+function prepareEditAddressForms() {
+    const addressItems = $(".address-item");
+
+    // Foreach address-item add the edit functionality
+    addressItems.each(function(){
+        const addressId = $(this).attr("id");
+        
+        // Toggle the edit form on edit-button click
+        $("#edit-"+addressId).click(function(){
+            $("#address-item-edit-form-"+addressId).toggleClass("address-item-edit-form-show");
+        });
+
+        // Validate and update address on edit form submit
+        // Follows same format as the add address function
+        $("#edit-submit-"+addressId).click(function(ev){
+            ev.preventDefault();
+            const identifierField = $("#edit-identifier-"+addressId);
+            const fullNameField = $("#edit-full-name-"+addressId);
+            const mobileField = $("#edit-mobile-"+addressId);
+            const postcodeField = $("#edit-postcode-"+addressId);
+            const line1Field = $("#edit-line1-"+addressId);
+            const line2Field = $("#edit-line2-"+addressId);
+            const cityField = $("#edit-city-"+addressId);
+            const countyField = $("#edit-county-"+addressId);
+
+            $(".form-feedback").remove();
+            let id, nm, mb, pc, l1, ci = false;
+            id = checkAddressFieldValid(identifierField, 50, "Please enter a name for the address");
+            nm = checkAddressFieldValid(fullNameField, 90, "Please enter the recipients full name");
+            mb = checkAddressMobile(mobileField);
+            pc = checkAddressPostcode(postcodeField);
+            l1 = checkAddressFieldValid(line1Field, 80, "Please enter the first line of the address");
+            ci = checkAddressFieldValid(cityField, 50, "Please enter a UK town or city");
+
+            if (id && nm && mb && pc && l1 && ci) {
+                $("#address-item-edit-form-"+addressId).toggleClass("address-item-edit-form-show");
+                updateUserAddress(addressId, identifierField.val(), fullNameField.val(), mobileField.val(), postcodeField.val(), line1Field.val(), line2Field.val(), cityField.val(), countyField.val());
+            }
+        });
+    })
+}
+
+function prepareDeleteAddressFunctionality() {
+    const addressItems = $(".address-item");
+
+    addressItems.each(function(){
+        const addressId = $(this).attr("id");
+
+        $("#delete-"+addressId).click(function(){
+            const identifier = $("#edit-identifier-"+addressId).val();
+            if (!confirm(`Are you sure you wish to delete address ${identifier}?`)) return;
+
+            deleteUserAddress(addressId, identifier);
+        });
+    })
 }
 
 // Generic valdiation for an input field
@@ -85,6 +155,7 @@ function checkAddressPostcode(postcodeField) {
     return true;
 }
 
+
 function addUserAddress(identifier, fullName, mobile, postcode, line1, line2, city, county) {
     $.ajax({
         url:"../php/ajax-handlers/user-address-handler.php",
@@ -92,6 +163,59 @@ function addUserAddress(identifier, fullName, mobile, postcode, line1, line2, ci
         data: {function: 1, identifier: identifier, fullName: fullName, phoneNumber: mobile, postcode: postcode, line1: line1, line2: line2, city: city, county: county}
     })
     .done(function(result) {
-        console.log(result);
+        result = JSON.parse(result);
+
+        if (result.result == 1) {
+            $("#address-root").html(result.html);
+            new Alert(true, `Address '${identifier}' added successfully`);
+            // reload event listeners to new html
+            prepareUserAddressPage();
+
+        } else {
+            new Alert(false, "Failed to add address, please refresh and try again");
+        }
+    });
+}
+
+
+function updateUserAddress(addressId, identifier, fullName, mobile, postcode, line1, line2, city, county) {
+    $.ajax({
+        url:"../php/ajax-handlers/user-address-handler.php",
+        method: "POST",
+        data: {function: 2, addressId: addressId, identifier: identifier, fullName: fullName, phoneNumber: mobile, postcode: postcode, line1: line1, line2: line2, city: city, county: county}
+    })
+    .done(function(result) {
+        result = JSON.parse(result);
+
+        if (result.result == 1) {
+            // reload event listeners to new html
+            setTimeout(() => {
+                new Alert(true, `Address '${identifier}' updated successfully`);
+                $("#address-root").html(result.html);
+                prepareUserAddressPage();
+            }, 500);
+        } else {
+            new Alert(false, "Failed to update address, please refresh and try again");
+        }
+    });
+}
+
+
+function deleteUserAddress(addressId, identifier) {
+    $.ajax({
+        url:"../php/ajax-handlers/user-address-handler.php",
+        method: "POST",
+        data: {function: 3, addressId: addressId}
+    })
+    .done(function(result) {
+        result = JSON.parse(result);
+
+        if (result.result == 1) {
+            new Alert(true, `Address '${identifier}' deleted successfully`);
+            $("#address-root").html(result.html);
+            prepareUserAddressPage();
+        } else {
+            new Alert(false, "Failed to delete address, please refresh and try again");
+        }
     });
 }

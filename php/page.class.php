@@ -401,6 +401,10 @@ class Page {
 		return $this->getCart();
 	}
 
+	/***********
+	 * Displays any cart notifications that have been
+	 * saved to the session by the cart class
+	 *******************************/
 	public function displayCartNotifications() {
 		$html = "";
 		if (isset($_SESSION['cart-update-notification'])) {

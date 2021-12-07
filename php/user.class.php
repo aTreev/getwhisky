@@ -240,17 +240,15 @@ class User {
 
 		public function getAndDisplayAddressPage() {
 			$this->retrieveUserAddresses();
-
 			$html = "";
-			$html.="<div class='address-header'>";
-				$html.="<h3>Your delivery addresses</h3>";
-			$html.="</div>";
-
 			if ($this->getAddresses()) {
 				// display addresses
+				foreach($this->getAddresses() as $address) {
+					$html.=$address;
+				}
 			} else {
 				$html.="<p>You currently have no saved addresses.</p>";
-				$html.="<p>Click the link below to add a delivery address.</p>";
+				$html.="<p style='margin-bottom:40px;'>Click the link below to add a delivery address.</p>";
 			}
 
 			$html.="<div class='address-btn-container'>";
@@ -260,12 +258,25 @@ class User {
 			return $html;
 		}
 
+		// Adds an address to the database via the UserAddressCRUD class
 		public function addNewAddress($address_id, $identifier, $fullName, $phoneNumber, $postcode, $line1, $line2, $city, $county) {
 			$insert = new UserAddressCRUD();
 			$result = $insert->addNewAddress($address_id, $this->getUserid(), $identifier, $fullName, $phoneNumber, $postcode, $line1, $line2, $city, $county);
 			return $result;
 		}
 	
+		public function updateUserAddress($address_id, $identifier, $fullName, $phoneNumber, $postcode, $line1, $line2, $city, $county) {
+			$update = new UserAddressCRUD();
+			$result = $update->updateUserAddress($address_id, $this->getUserid(), $identifier, $fullName, $phoneNumber, $postcode, $line1, $line2, $city, $county);
+			return $result;
+		}
+
+		public function deleteUserAddress($address_id) {
+			$delete = new UserAddressCRUD();
+			$result = $delete->deleteUserAddress($address_id, $this->getUserid());
+			return $result;
+		}
+
 		// sends user menu data to the $ouput variable via the getters
 		public function __toString() {
 			$html = "";

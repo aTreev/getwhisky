@@ -367,7 +367,7 @@ header {
   box-sizing: border-box;
   background-color: white;
   padding: 25px;
-  max-width: 450px;
+  max-width: 650px;
   margin: auto;
   position: relative;     
   margin-top: 40px;
@@ -377,6 +377,7 @@ header {
 form label {
   font-weight:700;
   font-size:1.4rem;
+  width: 100%;
 }
 
 .form-header {
@@ -394,12 +395,14 @@ form label {
   opacity: 0.7;
 }
 .input-container-100 {
+  margin-bottom:10px;
   position: relative;
 }
 
 .input-container-50 {
   display: flex;
   justify-content: space-between;
+  margin-bottom:10px;
 }
 .input-icon {
   position:absolute;
@@ -413,7 +416,6 @@ form label {
 .form-item {
   width: 100%;
   padding: 15px 25px 15px 40px;
-  margin: 10px 0;
   display:block;
   box-sizing: border-box;
   font-size: 1.4rem;
@@ -427,7 +429,6 @@ form label {
   width:49%;
   display:block;
   padding: 15px 40px 15px 40px;
-  margin: 10px 0;
   box-sizing: border-box;
   font-size: 1.4rem;
   background-color: #f2f2f2;
@@ -439,17 +440,16 @@ form label {
 /*******
 * little focus animation every form element needs a span after it
 ********/
-.form-item + span::after, .form-item-50 + span::after {
+.form-main .form-item + span::after, .form-main .form-item-50 + span::after {
   content: '';
   display: block;
   margin: auto;
   height: 2px;
   width: 0px;
   transition: width 300ms ease-in-out;
-  margin-top: -12px;
 }
 
-.form-item:focus + span::after, .form-item-50:focus + span::after {
+.form-main .form-item:focus + span::after, .form-item-50:focus + span::after {
   width:100%;
   background-color: var(--bg-secondary);
 }
@@ -459,6 +459,31 @@ form label {
 .form-item-50:focus {
   border-bottom: 2px solid var(--bg-secondary);
   padding: 15px 40px 13px 40px;
+}
+
+/*********
+* More generic form type
+*********/
+.form-inline {
+  box-sizing: border-box;
+}
+.form-inline .input-container-50 label {
+  width: 100%;
+}
+.form-inline .input-container-50 label input {
+  width: 99%;
+}
+.form-inline .input-container-100:last-child {
+  margin-bottom: 10px;
+}
+.form-inline .form-item, .form-inline .form-item-50 {
+  padding: 10px;
+  background-color: white;
+  border: 1px solid lightgrey;
+}
+.form-inline .form-item:focus, .form-inline .form-item-50:focus {
+  padding: 10px;
+  border:1px solid black;
 }
 
 ::placeholder {
@@ -716,9 +741,8 @@ button[type=submit]:hover {
 *********************************************************************/
 @media screen and (max-width: 1600px) {
   main {
-    width: 95%;
-    margin-left: 2.5%;
-    margin-right: 2.5%;
+    width: 100%;
+    margin: auto;
   }
   .header-content {
     width:95%;

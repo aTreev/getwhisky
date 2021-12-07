@@ -10,7 +10,7 @@ class UserAddressCRUD {
 	}
 
     public function getUserAddresses($userid, $style=MYSQLI_ASSOC) {
-        $this->sql = "SELECT * FROM user_address_table WHERE userid = ?;";
+        $this->sql = "SELECT * FROM user_address_table WHERE userid = ? ORDER BY date_time_added ASC;";
         $this->stmt = self::$db->prepare($this->sql);
 		$this->stmt->bind_param("s",$userid);
 		$this->stmt->execute();
@@ -20,9 +20,28 @@ class UserAddressCRUD {
     }
 
     public function addNewAddress($address_id, $userid, $identifier, $fullName, $phoneNumber, $postcode, $line1, $line2, $city, $county) {
-        $this->sql = "INSERT INTO user_address_table VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ;";
+        $d = new DateTime();
+        $dateTimeAdded = $d->format("Y-m-d H:m:s");
+
+        $this->sql = "INSERT INTO user_address_table VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?);";
         $this->stmt = self::$db->prepare($this->sql);
-        $this->stmt->bind_param("ssssssssss",$address_id, $userid, $identifier, $fullName, $phoneNumber, $postcode, $line1, $line2, $city, $county);
+        $this->stmt->bind_param("sssssssssss",$address_id, $userid, $identifier, $fullName, $phoneNumber, $postcode, $line1, $line2, $city, $county, $dateTimeAdded);
+		$this->stmt->execute();
+        return $this->stmt->affected_rows;
+    }
+
+    public function updateUserAddress($address_id, $userid, $identifier, $fullName, $phoneNumber, $postcode, $line1, $line2, $city, $county) {
+        $this->sql = "UPDATE user_address_table SET identifier=?, full_name=?, telephone=?, postcode=?, line1=?, line2=?, city=?, county=? WHERE address_id=? AND userid=?;";
+        $this->stmt = self::$db->prepare($this->sql);
+        $this->stmt->bind_param("ssssssssss", $identifier, $fullName, $phoneNumber, $postcode, $line1, $line2, $city, $county, $address_id, $userid);
+		$this->stmt->execute();
+        return $this->stmt->affected_rows;
+    }
+
+    public function deleteUserAddress($address_id, $userid) {
+        $this->sql = "DELETE FROM user_address_table WHERE address_id=? AND userid=?;";
+        $this->stmt = self::$db->prepare($this->sql);
+        $this->stmt->bind_param("ss", $address_id, $userid);
 		$this->stmt->execute();
         return $this->stmt->affected_rows;
     }

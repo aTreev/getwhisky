@@ -8,7 +8,7 @@
 	<?php
 		echo $page->displayHead();
 	?>
-	<link rel="stylesheet" href="style/css/user.css">
+	<link rel="stylesheet" href="style/css/address-page.css" />
 	<title>user page</title>
 </head>
 <body>
@@ -50,6 +50,9 @@
             </form>
         </div>
 	<main>
+        <div class='address-header'>
+            <h3>Your delivery addresses</h3>
+        </div>
         <div id="address-root">
             <?php echo $page->getUser()->getAndDisplayAddressPage(); ?>
         </div>

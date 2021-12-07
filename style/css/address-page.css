@@ -1,0 +1,135 @@
+/**************************
+* Address page CSS
+**************************/
+.address-header {
+    max-width: 800px;
+    margin: auto;
+    margin-top: 40px;
+}
+#address-root {
+    margin: auto;
+    margin-top: 40px;
+    max-width: 800px;
+    background-color:white;
+    box-shadow: 2px 2px 15px grey;
+    padding: 20px;
+    margin-bottom: 40px;
+    line-height: 1.6;
+}
+.address-item {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid lightgrey;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+    min-height: 90px;
+}
+.address-identifier-container {
+    width: 100px;
+}
+.address-identifier {
+    font-weight: 700;
+    font-size: 1.4rem;
+}
+
+.address-details-container {
+    max-width: 300px;
+}
+.address-details-container p {
+    font-weight: 400;
+    text-transform: uppercase;
+    font-size: 1.4rem;
+}
+.address-options-container {
+    display: flex;
+    gap: 20px;
+}
+.address-options-container button[type=submit] {
+    background: none;
+    color: darkred;
+    width: fit-content;
+    height: fit-content;
+    padding: 0;
+    margin: 0;
+}
+.address-options-container button[type=submit]:hover {
+    text-decoration: underline;
+}
+
+.address-item-edit-form {
+    max-height: 0;
+    overflow:hidden;
+    transition: max-height 500ms ease-in-out;
+}
+.address-item-edit-form form {
+    padding: 20px;
+    border: 1px solid lightgrey;
+    margin-bottom: 40px;
+}
+.address-item-edit-form-show {
+    max-height: 4000px;
+}
+
+.address-btn-container {
+    margin-left: 20px;
+    margin-right: 20px;
+
+}
+.address-btn-container button {
+    display: block;
+    border: none;
+    background: none;
+    color: var(--bg-secondary);
+    font-size: var(--font-size-regtext);
+    padding: 0;
+    margin: 0;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+#add-address-modal {
+    position: fixed;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -30%);
+    z-index: 55;
+    display: none;
+}
+@media screen and (max-width: 1600px) {
+    
+}
+
+@media screen and (max-width: 836px) {
+    #address-root {
+        width: 90%;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .form-main {
+        width: 100%;
+    }
+    #add-address-modal {
+        width: 90%;
+    }
+}
+
+
+@media screen and (max-width: 576px) {
+    .address-header {
+        width: 90%;
+    }
+    #address-root {
+        width: 80%;
+    }
+    .address-item {
+        flex-direction: column;
+    }
+    .address-details-container {
+        max-width: 100%;
+        margin-top: 10px;
+    }
+    .address-options-container {
+        margin-top: 10px;
+    }
+}
