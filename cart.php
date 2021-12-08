@@ -16,9 +16,10 @@
         echo $page->displayCartNotifications();
     ?>
 	<main>
-        <div class="cart-heading">
-            <h3>Your shopping basket</h3>
-        </div>
+        <?php
+        echo "session: ".$_SESSION['userid'];
+        ?>
+        <div class="cart-heading"><h2>Your shopping basket</h2></div>
         <div id="cart-container">
             <?php echo $page->displayCart(); ?>
         </div>

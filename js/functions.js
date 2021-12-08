@@ -5,9 +5,8 @@
  *********/
 // TODO: chance to generalized prepareApp, move code to separate functions
 function prepareMenu() {
-    const mobileWidth = 768;
     // 834 works as pixel sizes a bit buggy between JS and CSS
-    const searchBarBreakpoint = 835; 
+    const mobileWidth = 835; 
     let searchBarMobile;
     let searchBarDesktop
 
@@ -17,7 +16,7 @@ function prepareMenu() {
     /**********
      * Initial check for mobile or desktop
      *********************/
-    if ($(window).width() <= searchBarBreakpoint) {
+    if ($(window).width() <= mobileWidth) {
         setMobileMenu();
     } else {
         setDesktopMenu();
@@ -27,7 +26,7 @@ function prepareMenu() {
     /*************
      * Initial check for ideal search bar placement
      ***********************/
-    if($(window).width() <= searchBarBreakpoint) {
+    if($(window).width() <= mobileWidth) {
         $("#product-menu-container").after($(".search-bar-container"));
         searchBarMobile = true;
         searchBarDesktop = false;
@@ -47,7 +46,7 @@ function prepareMenu() {
         $(".menu-overlay").hide();
         $("body").removeClass("prevent-scrolling");
 
-        if ($(window).width() <= searchBarBreakpoint) {
+        if ($(window).width() <= mobileWidth) {
             $("#product-menu-container").css("transform", "translateX(-100%)");
             $("#product-menu-container").css("display","none");
             setMobileMenu();
@@ -61,7 +60,7 @@ function prepareMenu() {
          * Changes the position of the search bar depending on screen size
          * Does a check prior to changing to prevent unnecessary dom manipulation
          *********************/
-        if ($(window).width() <= searchBarBreakpoint) {
+        if ($(window).width() <= mobileWidth) {
             if (!searchBarMobile) {
                 $("#product-menu-container").after($(".search-bar-container"));
                 searchBarMobile = true;
@@ -83,7 +82,7 @@ function prepareMenu() {
      ******/
     $(document).on("click", function(e){
         // Click listener for mobile menu
-        if ($(window).width() <= searchBarBreakpoint) {
+        if ($(window).width() <= mobileWidth) {
             if (e.target.classList.contains("product-menu-button")) {
                 // Menu button clicked show menus and prevent scrolling
                 $("#product-menu-container").css({"transform":"translateX(0%)"});
@@ -138,6 +137,10 @@ function setMobileMenu() {
     menu.removeClass("product-menu-list");
     menu.addClass("product-menu-list-mobile");
     menuContainer.show();
+    $(".header-logo").attr("src", "/assets/getwhisky-logo-small.png");
+    $(".header-nav-link").hide();
+    $(".header-menu ul").css("gap", "40px");
+
 }
 
 // Sets the menu layout for desktop
@@ -150,6 +153,10 @@ function setDesktopMenu() {
     menuContainer.removeClass("product-menu-container-mobile");
     menu.addClass("product-menu-list");
     menu.removeClass("product-menu-list-mobile");
+    $(".header-logo").attr("src", "/assets/getwhisky-logo-lowercase.png")
+    $(".header-nav-link").show();
+    $(".header-menu ul").css("gap", "15px");
+
 }
 
 
@@ -190,7 +197,12 @@ function prepareProductSearch() {
         });
     });
 
-    $("#product-search-bar").on()
+    $("#search-icon").on("click", function(){
+        console.log("HELLO?")
+        const searchQuery = $(this).prev().val();
+        if (searchQuery.length == 0) return;
+        window.location.href=`/product-search.php?q=${searchQuery}`;
+    });
 }
 
 

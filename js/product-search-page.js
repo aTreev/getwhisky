@@ -66,7 +66,7 @@ function displaySearchResults(searchQuery, selectedSortValue) {
             // Display no products found html
             $("#product-count").html("<p>0 products found</p>");
             $("#product-root").css("display", "block");
-            $("#product-root").html("<h2 style='text-align:center;padding:40px;'>Oops! We couldn't find anything</h2><img style='width:200px;display:block;margin:auto;' src='../assets/product-images/no-products-found.jpg'><p style='text-align:center;margin-bottom:60px;'>Please try again using a different search term or try using the menu!</p>");
+            $("#product-root").html("<h2 style='text-align:center;padding:40px;'>Oops! We couldn't find anything</h2><img style='width:200px;display:block;margin:auto;' src='../assets/product-images/no-products-found.jpg'><p style='text-align:center;margin-bottom:50vh;'>Please try again using a different search term or try using the menu!</p>");
         }
     });
 }
@@ -86,6 +86,7 @@ function displaySearchResults(searchQuery, selectedSortValue) {
 // Displays products to page allows for pagination, 
 // uses global variables and recursion to achieve functionality
 function displayProducts() {
+    if (productHtmlArray == null) return;
     for(let i = productsDisplayed; i < limit; i++) {
         $("#product-root").append(productHtmlArray[i]);
         productsDisplayed++;

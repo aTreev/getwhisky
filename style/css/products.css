@@ -77,7 +77,6 @@
 
 #products-container {
     display:flex;
-    margin-bottom: 40px;
     background-color: white;
     border: 1px solid lightgrey;
     width: 100%;
@@ -328,7 +327,7 @@
         height: 140px;
     }
     #product-root {
-        grid-template-columns: repeat(auto-fill, 33%);
+        grid-template-columns: repeat(auto-fill, 33.3%);
     }
     #category-details {
         width: 75%;

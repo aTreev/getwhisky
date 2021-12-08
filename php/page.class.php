@@ -8,7 +8,11 @@ require_once("cart.class.php");
 require_once("unique-id-generator.class.php");
 
 /****************
- * TODO: transfer cart from guest user to registered user on login
+ * TODO: 
+ * transfer cart from guest user to registered user on login.
+ * Insert guest userid's to the database temporarily to allow
+ * storing of addresses and carts with cascade functionality
+ * through a cronjob that deletes exhausted guest userids.
  */
 class Page {
 	private $user;
@@ -53,6 +57,10 @@ class Page {
 		if (!isset($_SESSION['userid'])) {
 			$_SESSION['userid'] = "guest-".md5(time(). bin2hex(random_bytes(10)));
 			$_SESSION['guest'] = true;
+			// Insert guest to database
+			// delete exhausted guest IDs weekly via cronjob?
+			// update the database every page with the activity time
+			// ensure everything requiring userids is set to cascade
 		}
 
 		if(isset($_SESSION['userid']) && $_SESSION['userid']!="") {
@@ -260,6 +268,7 @@ class Page {
 				<link href='https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap' rel='stylesheet'>
 				<link href='https://fonts.googleapis.com/css2?family=Courier+Prime&display=swap' rel='stylesheet'>
 				<link href='https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap' rel='stylesheet'>
+				<link href='https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap' rel='stylesheet'>
 				<!-- CSS -->
 				<link rel='stylesheet' href='style/css/reset.css'>
 				<link rel='stylesheet' href='style/css/style.css'>
@@ -275,34 +284,35 @@ class Page {
 			$html.="<div class='menu-overlay'></div>";
 			$html.="<div class='header-content'>";
 				$html.="<a href='/index.php' id='getwhisky-logo-link'><img class='header-logo' alt='getwhisky logo - link to homepage' src='assets/getwhisky-logo-lowercase.png' alt=''></a>";
+				$html.="<nav class='header-menu'>";
+					$html.="<ul>";					
+						if ($this->getCart()) {
+							$html.="<li><a href='/cart.php'><i class='header-nav-icon fas fa-shopping-basket'><span class='cart-count'>".$this->getCart()->getCartItemCount()."</span></i></a><a class='header-nav-link' href='/cart.php'>basket</a></li>";
+						} else {
+							$html.="<li><a href='/cart.php'><i class='header-nav-icon fas fa-shopping-basket'></i></a><a class='header-nav-link' href='/cart.php'>basket</a></li>";
+						}
+						if ($this->getUser()->getUsertype() == 0) {
+							$html.="<li><a class='header-nav-link' href='/login.php'>Sign in</a></li>";
+						}
+						if ($this->getUser()->getUsertype() == 3) {
+							$html.="<li><a class='header-nav-link' href='/admin.php'>Admin</a></li>";
+						}
+						if ($this->getUser()->getUsertype() >= 2) {
+							$html.="<li><a href='/user.php'><i class='header-nav-icon fas fa-user'></i></a><a class='header-nav-link' href='/user.php'>Account</a></li>";
+						}
+						if ($this->getUser()->getUsertype() == 1) {
+							$html.="<li><a class='header-nav-link' href='/suspended.php'>Account</a></li>";
+							$html.="<li><a class='header-nav-link' href='/logout.php'>Logout</a></li>";
+						}
+						$html.="<li><i class='fas fa-bars product-menu-button' id='product-menu-button'></i></li>";
+					$html.="</ul>";
+				$html.="</nav>";
+
 				$html.="<div class='search-bar-container'>";
 					$html.="<input type='text' placeholder='Looking for something?' id='product-search-bar' class='product-search-bar'/>";
-					$html.="<i class='fas fa-search'></i>";
+					$html.="<i class='fas fa-search' id='search-icon'></i>";
 					$html.="<div id='search-results'></div>";
-					$html.="</div>";
-					$html.="<nav class='header-menu'>";
-						$html.="<ul>";					
-							if ($this->getCart()) {
-								$html.="<li><a href='/cart.php'><i class='header-nav-icon fas fa-shopping-basket'><span class='cart-count'>".$this->getCart()->getCartItemCount()."</span></i></a><a class='header-nav-link' href='/cart.php'>basket</a></li>";
-							} else {
-								$html.="<li><a href='/cart.php'><i class='header-nav-icon fas fa-shopping-basket'></i></a><a class='header-nav-link' href='/cart.php'>basket</a></li>";
-							}
-							if ($this->getUser()->getUsertype() == 0) {
-								$html.="<li><a class='header-nav-link' href='/login.php'>Sign in</a></li>";
-							}
-							if ($this->getUser()->getUsertype() == 3) {
-								$html.="<li><a class='header-nav-link' href='/admin.php'>Admin</a></li>";
-							}
-							if ($this->getUser()->getUsertype() >= 2) {
-								$html.="<li><a href='/user.php'><i class='header-nav-icon fas fa-user'></i></a><a class='header-nav-link' href='/user.php'>Account</a></li>";
-							}
-							if ($this->getUser()->getUsertype() == 1) {
-								$html.="<li><a class='header-nav-link' href='/suspended.php'>Account</a></li>";
-								$html.="<li><a class='header-nav-link' href='/logout.php'>Logout</a></li>";
-							}
-							$html.="<li><i class='fas fa-bars product-menu-button' id='product-menu-button'></i></li>";
-						$html.="</ul>";
-				$html.="</nav>";
+				$html.="</div>";
 			$html.="</div>";
 		$html.="</header>";
 		return $html;

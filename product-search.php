@@ -31,7 +31,6 @@
             <div id='product-count'></div>
         </div>
         <div class='filter-header'>
-            <h4 id='show-filters-btn'>Show Filters</h4>
             <div class="sort-by-container">
                 <h4>Sort by: &nbsp;</h4>
                 <div class="sort-by-btn-container">

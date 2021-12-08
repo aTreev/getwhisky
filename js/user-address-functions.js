@@ -2,9 +2,8 @@
  * File functions similarly to the form-functions file except these functions
  * are specific to addresses
  *****************************************/
-let pageGlobal = "address-page";
-function prepareUserAddressPage(page=null) {
-    if(page != null) pageGlobal = page;
+
+function prepareUserAddressPage() {
     $("#address-root").show();
     $("#add-new-address-btn").click(function(){
         $(".form-feedback").remove();
@@ -16,8 +15,8 @@ function prepareUserAddressPage(page=null) {
     prepareEditAddressForms();
     prepareDeleteAddressFunctionality();
 
-
-    if(pageGlobal=="delivery-page") prepareDeliveryPage();
+    // if on delivery page call this function
+    if(window.location.href.split("/").pop() == "deliveryselection.php") prepareDeliveryPage();
 }
 
 

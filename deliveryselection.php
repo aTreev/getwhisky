@@ -79,7 +79,7 @@
 	document.onreadystatechange = function(){
         if(document.readyState=="complete") {
 			prepareMenu();
-            prepareUserAddressPage("delivery-page");
+            prepareUserAddressPage();
         }
     }
 </script>

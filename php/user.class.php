@@ -244,15 +244,17 @@ class User {
 			if ($this->getAddresses()) {
 				// display addresses
 				foreach($this->getAddresses() as $address) {
-					$html.=$address->displayAddress();
+					$html.=$address;
 				}
 			} else {
 				$html.="<p>You currently have no saved addresses.</p>";
-				$html.="<p style='margin-bottom:40px;'>Click the link below to add a delivery address.</p>";
+				$html.="<p style='margin-bottom:40px;'>Click the button below to add a delivery address.</p>";
 			}
 
 			$html.="<div class='address-btn-container'>";
-				$html.="<button id='add-new-address-btn'>Add new address</button>";
+			
+			$html.="<span class='wrapper-link' id='add-new-address-btn'></span>";
+				$html.="<button>Add new address</button>";
 			$html.="</div>";
 
 			return $html;
