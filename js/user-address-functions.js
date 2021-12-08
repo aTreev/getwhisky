@@ -2,7 +2,10 @@
  * File functions similarly to the form-functions file except these functions
  * are specific to addresses
  *****************************************/
-function prepareUserAddressPage() {
+let pageGlobal = "address-page";
+function prepareUserAddressPage(page=null) {
+    if(page != null) pageGlobal = page;
+    $("#address-root").show();
     $("#add-new-address-btn").click(function(){
         $(".form-feedback").remove();
         $("input[name=add-address]").val("");
@@ -12,6 +15,9 @@ function prepareUserAddressPage() {
     prepareNewAddressForm();
     prepareEditAddressForms();
     prepareDeleteAddressFunctionality();
+
+
+    if(pageGlobal=="delivery-page") prepareDeliveryPage();
 }
 
 
@@ -113,6 +119,27 @@ function prepareDeleteAddressFunctionality() {
     })
 }
 
+function prepareDeliveryPage() {
+    const addressItems = $(".address-item");
+    $("[name='addressId']").val("");
+
+    addressItems.each(function(){
+        const addressId = $(this).attr("id");
+        $(this).click(function(){
+            addressItems.css({"background-color":"white", "border-color":"lightgrey"});
+            $(this).css({"background-color":"lightgrey", "border-color":"black"});
+            $("[name='addressId']").val(addressId);
+        });
+    });
+
+    $("#delivery-submit").click(function(ev){
+        if ($("[name='addressId']").val() == "") {
+            ev.preventDefault();
+            new Alert(false, "Please select a delivery address");
+        }
+    });
+}
+
 // Generic valdiation for an input field
 // Takes the input field max length of the field 
 // and a feedback message as for an empty field
@@ -163,6 +190,7 @@ function addUserAddress(identifier, fullName, mobile, postcode, line1, line2, ci
         data: {function: 1, identifier: identifier, fullName: fullName, phoneNumber: mobile, postcode: postcode, line1: line1, line2: line2, city: city, county: county}
     })
     .done(function(result) {
+        console.log(result);
         result = JSON.parse(result);
 
         if (result.result == 1) {

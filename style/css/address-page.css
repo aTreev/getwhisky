@@ -11,18 +11,24 @@
     margin-top: 40px;
     max-width: 800px;
     background-color:white;
-    box-shadow: 2px 2px 15px grey;
     padding: 20px;
     margin-bottom: 40px;
     line-height: 1.6;
+    border:1px solid lightgrey;
+    border-radius: 6px;
 }
-.address-item {
+#address-root .address-item:first-child{
+    margin-top: 0;
+}
+.address-item{
+    position: relative;
     display: flex;
     justify-content: space-between;
-    border-bottom: 1px solid lightgrey;
-    padding-bottom: 20px;
-    margin-bottom: 20px;
+    padding:20px;
+    margin-top: 20px;
     min-height: 90px;
+    border:1px solid lightgrey;
+    border-radius: 6px;
 }
 .address-identifier-container {
     width: 100px;
@@ -44,26 +50,17 @@
     display: flex;
     gap: 20px;
 }
-.address-options-container button[type=submit] {
-    background: none;
-    color: darkred;
-    width: fit-content;
-    height: fit-content;
-    padding: 0;
-    margin: 0;
-}
-.address-options-container button[type=submit]:hover {
-    text-decoration: underline;
-}
 
 .address-item-edit-form {
     max-height: 0;
     overflow:hidden;
     transition: max-height 500ms ease-in-out;
+    margin-top:-1px;
 }
 .address-item-edit-form form {
     padding: 20px;
     border: 1px solid lightgrey;
+    border-radius: 6px;
     margin-bottom: 40px;
 }
 .address-item-edit-form-show {
@@ -73,6 +70,7 @@
 .address-btn-container {
     margin-left: 20px;
     margin-right: 20px;
+    margin-top: 20px;
 
 }
 .address-btn-container button {
@@ -95,12 +93,25 @@
     z-index: 55;
     display: none;
 }
+
+.delivery-selection {
+    padding: 20px;
+    max-width: 800px;
+    margin: auto;
+    background-color: white;
+    border: 1px solid lightgrey;
+    border-radius: 6px;
+}
+
 @media screen and (max-width: 1600px) {
     
 }
 
-@media screen and (max-width: 836px) {
+@media screen and (max-width: 863px) {
     #address-root {
+        width: 90%;
+    }
+    .delivery-selection {
         width: 90%;
     }
 }

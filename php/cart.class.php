@@ -264,7 +264,7 @@ class Cart {
                 }
                 $html.="<h3>Basket Summary</h3>";
                 $html.="<p>Total: £".$total."</p>";
-                $html.="<form action='php/create-checkout-session.php' method='POST'>";
+                $html.="<form action='/deliveryselection.php' method='POST'>";
                     $html.="<button type='submit'>Checkout</submit>";
                 $html.="</form>";
             $html."</div>";

@@ -244,7 +244,7 @@ class User {
 			if ($this->getAddresses()) {
 				// display addresses
 				foreach($this->getAddresses() as $address) {
-					$html.=$address;
+					$html.=$address->displayAddress();
 				}
 			} else {
 				$html.="<p>You currently have no saved addresses.</p>";

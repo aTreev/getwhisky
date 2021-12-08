@@ -20,6 +20,7 @@
     height: fit-content;
     padding: 20px;
     text-align: center;
+    line-height: 1.6;
 }
 
 .cart-item {
@@ -152,6 +153,14 @@
 .no-items a:hover {
     text-decoration: underline;
 }
+@media screen and (max-width: 1600px) {
+    
+    .cart-heading, #cart-container {
+        width: 90%;
+        margin: auto;
+        margin-top: 20px;
+    }
+}
 @media screen and (max-width: 830px) {
     #cart-container {
         flex-direction: column;
@@ -162,6 +171,8 @@
     }
     #cart-summary-root {
         width: 100%;
+        margin: auto;
+        padding: 20px 0px 20px 0px;
     }
 }
 

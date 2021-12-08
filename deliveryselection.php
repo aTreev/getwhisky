@@ -1,23 +1,22 @@
-<?php
-	require_once("php/page.class.php");
-	$page = new Page(2);
+<?php 
+    require_once("php/page.class.php");
+    $page = new Page();
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<?php
-		echo $page->displayHead();
-	?>
-	<link rel="stylesheet" href="style/css/address-page.css" />
-	<title>user page</title>
+    <?php echo $page->displayHead(); ?>
+    <link rel="stylesheet" href="style/css/address-page.css">
+
+    <title>getwhisky delivery options</title>
 </head>
 <body>
-	<?php
+    <?php 
         echo $page->displayHeader();
         echo $page->displayProductMenu();
         echo $page->displayCartNotifications();
     ?>
-	
+    
     <div id="add-address-modal">
             <form class='form-main'>
                 <div class="form-header">
@@ -51,13 +50,26 @@
             </form>
         </div>
 	<main>
-        <div class='address-header'>
-            <h3>Your delivery addresses</h3>
-        </div>
         <div id="address-root">
+            <h3>Please select the address to deliver to</h3>
             <?php echo $page->getUser()->getAndDisplayAddressPage(); ?>
         </div>
+
+
+        <div class="delivery-selection">
+            <form class='form-inline' method="POST" action="/php/create-checkout-session.php">
+                <h3>Delivery type</h3>
+                <p style='margin-bottom:10px;'>Please select your preferred delivery option</p>
+                <input type='hidden' name='addressId' value='' />
+                <select name="deliveryType" class='form-item'>
+                    <option value=1 style='font-size:1.6rem;'>£4.49 - Standard delivery</option>
+                    <option value=2 style='font-size:1.6rem;'>£5.99 - first class</option>
+                </select>
+                <button type="submit" id='delivery-submit'>Next</button>
+            </form>
+        </div>
     </main>
+
 </body>
 <script src="js/classes/alert.class.js"></script>
 <script src="js/functions.js"></script>
@@ -67,7 +79,7 @@
 	document.onreadystatechange = function(){
         if(document.readyState=="complete") {
 			prepareMenu();
-            prepareUserAddressPage();
+            prepareUserAddressPage("delivery-page");
         }
     }
 </script>
