@@ -45,4 +45,6 @@ if (util::valInt($_POST['deliveryType'], array(1,2)) && util::valStr($_POST['add
   ]);
   header("HTTP/1.1 303 See Other");
   header("Location: " . $checkout_session->url);
+} else {
+  header("Location: /deliveryselection.php");
 }
