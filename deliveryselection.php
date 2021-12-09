@@ -65,11 +65,10 @@
                     <option value=1 style='font-size:1.6rem;'>£4.49 - Standard delivery</option>
                     <option value=2 style='font-size:1.6rem;'>£5.99 - first class</option>
                 </select>
-                <button type="submit" id='delivery-submit'>Next</button>
+                <button type="submit" id='delivery-submit'>Proceed to payment</button>
             </form>
         </div>
     </main>
-
 </body>
 <script src="js/classes/alert.class.js"></script>
 <script src="js/functions.js"></script>

@@ -139,7 +139,7 @@ function setMobileMenu() {
     menuContainer.show();
     $(".header-logo").attr("src", "/assets/getwhisky-logo-small.png");
     $(".header-nav-link").hide();
-    $(".header-menu ul").css("gap", "40px");
+    $(".header-menu ul").css("gap", "25px");
 
 }
 

@@ -16,9 +16,6 @@
         echo $page->displayCartNotifications();
     ?>
 	<main>
-        <?php
-        echo "session: ".$_SESSION['userid'];
-        ?>
         <div class="cart-heading"><h2>Your shopping basket</h2></div>
         <div id="cart-container">
             <?php echo $page->displayCart(); ?>

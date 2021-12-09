@@ -85,6 +85,7 @@ main {
     /* fixes overlap error in IE7/8, 
        make sure you have an empty gif */
     background-image: url('empty.gif');
+    cursor: pointer;
 }
 
 .ignore-overlay {
@@ -316,7 +317,6 @@ header {
   display: none;
   width: 100%;
   background-color: var(--bg-primary);
-  border-bottom: 1px solid lightgrey;
 }
 
 .product-menu-container-mobile {
@@ -589,13 +589,12 @@ button[type=submit]:hover {
 
 .modal-container {
   display:none;
-  position: absolute;
+  position: fixed;
   max-width: 400px;
   background-color: white;
   font-weight: 300;
   box-shadow: 5px 5px 12px grey;
   margin: 0;
-  position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -806,7 +805,7 @@ button[type=submit]:hover {
   }
   #product-search-bar {
     border-radius: 0px;
-    padding: 17px 0px 17px 0px;
+    padding: 15px 0px 15px 0px;
     border: none;
     border-bottom: 1px solid rgb(189, 189, 189);
   }
@@ -817,7 +816,7 @@ button[type=submit]:hover {
     width: 100%;
 }
   .header-content {
-    height: 70px;
+    height: 60px;
   }
   .header-logo {
     width: 120px;
@@ -826,7 +825,7 @@ button[type=submit]:hover {
 
 @media screen and (max-width: 768px) {
   .modal-container {
-    width: 100%;
+    width: 90%;
   }
   .cart-notification {
     width: 90%;
@@ -846,7 +845,7 @@ button[type=submit]:hover {
     padding: 35px;
   }
   .modal-container {
-    max-width: 100%;
+    max-width: 90%;
   }
   .modal-container p {
     font-size: 1.6rem!important;

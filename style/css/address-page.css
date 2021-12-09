@@ -109,9 +109,12 @@
     max-width: 750px;
     margin: auto;
     background-color: white;
-    border: 1px solid lightgrey;
-    border-radius: 6px;
+    border: 1px solid #afafaf;
     line-height: 1.6;
+    margin-bottom: 60px;
+}
+.delivery-selection .form-inline {
+    padding: 20px;
 }
 
 @media screen and (max-width: 1600px) {
@@ -123,8 +126,10 @@
         width: 90%;
     }
     .delivery-selection {
+        padding: 5px 0px 5px 0px;
         width: 90%;
     }
+    
 }
 
 @media screen and (max-width: 768px) {

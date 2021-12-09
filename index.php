@@ -8,6 +8,7 @@
 <head>
     <?php echo $page->displayHead(); ?>
     <title>getwhisky homepage</title>
+    <link rel="stylesheet" href="style/css/index.css">
 </head>
 <body>
     <?php
@@ -15,6 +16,9 @@
         echo $page->displayProductMenu();
     ?>
     <main>
+        <div class="hero">
+            <img src="/assets/getwhisky-banner.png" alt="" srcset="">
+        </div>
     </main>
 </body>
 <script src="js/functions.js"></script>

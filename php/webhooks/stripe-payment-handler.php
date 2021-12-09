@@ -1,6 +1,6 @@
 <?php 
-require_once("../stripe/init.php");
-require_once("../php/page.class.php");
+require_once("../../stripe/init.php");
+require_once("../page.class.php");
 \Stripe\Stripe::setApiKey('sk_test_51Je0ufArTeMLOzQd1e4BFGLKWFOsabluGgErlDnWkmyea9G2LQQJY6PXusduRSaAXhsz6h27Owwz8n9SehfBY3a90087Gcb2ba');
 
 function print_log($val) {
@@ -27,46 +27,28 @@ try {
   http_response_code(400);
   exit();
 }
+// Handle the checkout.session.completed event
+if ($event->type == 'checkout.session.completed') {
+  $session = $event->data->object;
+  // Fulfill the purchase...
+  fulfill_order($session);
+  
+}
 
-/*********
- * FULFILL ORDERS HERE
- **************************************/
-switch ($event->type) {
-case 'checkout.session.completed':
-    $session = $event->data->object;
+/********
+ * Creates an order on the site database
+ * the userid and cartid must be passed through 
+ * the payment intent object as metadata
+ * This is due to redirecting causing a new session in this file
+ ************************************/
+function fulfill_order($session) {
+  // get id's from metadata
+  $cartid = $session->metadata->cartid;
+  $userid = $session->metadata->userid;
 
-    // Save an order in your database, marked as 'awaiting payment'
-        //create_order($session);
-        $payment_intent = $session->payment_intent; // store this alongside orderid etc to allow for refundsstr
-        print_log("PAYMENT INTENT: ".$session->payment_intent);
-
-    // Check if the order is paid (e.g., from a card payment)
-    //
-    // A delayed notification payment will have an `unpaid` status, as
-    // you're still waiting for funds to be transferred from the customer's
-    // account.
-    if ($session->payment_status == 'paid') {
-    // Fulfill the purchase
-        //fulfill_order($session);
-    }
-
-    break;
-
-case 'checkout.session.async_payment_succeeded':
-    $session = $event->data->object;
-
-    // Fulfill the purchase
-    //fulfill_order($session);
-
-    break;
-
-case 'checkout.session.async_payment_failed':
-    $session = $event->data->object;
-
-    // Send an email to the customer asking them to retry their order
-    //email_customer_about_failed_payment($session);
-
-    break;
+  // begin checkout process
+  $page = new Page();
+  $page->checkOutCart($cartid, $userid);
 }
 
 http_response_code(200);

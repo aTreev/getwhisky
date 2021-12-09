@@ -122,5 +122,17 @@ class CartCRUD {
 		$resultset=$result->fetch_all($style);
 		return $resultset;
     }
+
+    public function checkOutCart($cartId, $userid) {
+        $this->sql = "UPDATE cart SET checked_out = 1 WHERE checked_out = 0 AND id = ? AND userid = ?;";
+        $this->stmt = self::$db->prepare($this->sql);
+        $this->stmt->bind_param("ss", $cartId, $userid);
+        $this->stmt->execute();
+        if($this->stmt->affected_rows!=1) {
+			return 0;
+		} else {
+			return $this->stmt->affected_rows;
+		}
+    }
 }
 ?>

@@ -30,9 +30,9 @@ class Page {
 		$this->user = new User();
 		$this->productMenu = new ProductMenu();
 		$this->setStatus(false);
-        $this->checkUser();
-		$this->getProductsFromDatabase();
+        $this->checkUser();		
 		$this->initializeUserCart();
+		$this->getProductsFromDatabase();
 	}
 	
 	public function getProducts() { return $this->products; }
@@ -292,7 +292,7 @@ class Page {
 							$html.="<li><a href='/cart.php'><i class='header-nav-icon fas fa-shopping-basket'></i></a><a class='header-nav-link' href='/cart.php'>basket</a></li>";
 						}
 						if ($this->getUser()->getUsertype() == 0) {
-							$html.="<li><a class='header-nav-link' href='/login.php'>Sign in</a></li>";
+							$html.="<li><a href='/login.php'><i class='header-nav-icon fas fa-user'></i></a><a class='header-nav-link' href='/login.php'>Sign in</a></li>";
 						}
 						if ($this->getUser()->getUsertype() == 3) {
 							$html.="<li><a class='header-nav-link' href='/admin.php'>Admin</a></li>";
@@ -395,7 +395,6 @@ class Page {
 			$uniqueIdGenerator = new UniqueIdGenerator("cart_id");
 			$cartId = $uniqueIdGenerator->getUniqueId();
 			$newCart = $source->createNewCart($cartId, $this->getUser()->getUserid());
-			return $newCart;
 			if ($newCart) {
 				// If creating cart was successful recall function to initialize the cart
 				$this->initializeUserCart();
@@ -439,6 +438,18 @@ class Page {
 
 	public function removeFromCart($productId) {
 		$result = $this->getCart()->removeFromCart($productId);
+		return $result;
+	}
+
+	/*********
+	 * Checks out a user's cart.
+	 * SHOULD ONLY BE CALLED THROUGH THE STRIPE WEBHOOK
+	 * and the arguments should only be supplied by first retrieving
+	 * them from a page object never from a form, page etc.
+	 ****************************/
+	public function checkOutCart($cartid, $userid) {
+		$update = new CartCRUD();
+  		$result = $update->checkOutCart($cartid, $userid);
 		return $result;
 	}
 }
