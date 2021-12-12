@@ -56,7 +56,7 @@ class Cartitem {
         $this->setStock($itemDetails[0]['stock']);
     }
 
-    public function returnCorrectPriceForTotal() {
+    public function returnCorrectItemPrice() {
         if ($this->getDiscounted()) return $this->getDiscountPrice();
         return $this->getPrice();
     }

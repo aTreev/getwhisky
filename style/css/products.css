@@ -78,7 +78,7 @@
 #products-container {
     display:flex;
     background-color: white;
-    border: 1px solid lightgrey;
+    border-top: 1px solid lightgrey;
     width: 100%;
 }
 
@@ -339,7 +339,6 @@
         margin-left: 1px;
         border: none;
         border-top: 1px solid lightgrey;
-        border-bottom: 1px solid lightgrey;
 
     }
     .filter-item-option {

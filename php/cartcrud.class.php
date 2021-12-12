@@ -134,5 +134,7 @@ class CartCRUD {
 			return $this->stmt->affected_rows;
 		}
     }
+
+    
 }
 ?>

@@ -132,6 +132,14 @@ class Cart {
         return 1;
     }
 
+    public function getCartTotal() {
+        $total = 0;
+        foreach($this->getItems() as $item) {
+            $total = $total + ($item->returnCorrectItemPrice() * $item->getQuantity());
+        }
+        return $total;
+    }
+
     /**************
      * Publicly accessible method to update the quantity of an item in cart
      * Updates the item on the database, if the query was successful, updates the
@@ -244,6 +252,13 @@ class Cart {
         return $result;
     }
 
+
+    public function checkOutCart() {
+        $cartCRUD = new CartCRUD();
+        $result = $cartCRUD->checkOutCart($this->getId(), $this->getUserid());
+        return $result;
+    }
+
     public function __toString() {
         $html = "";
         if (count($this->getItems()) > 0) {
@@ -258,12 +273,8 @@ class Cart {
 
             // display cart summary
             $html.="<div id='cart-summary-root'>";
-                $total = 0;
-                foreach($this->getItems() as $item) {
-                    $total = $total + ($item->returnCorrectPriceForTotal() * $item->getQuantity());
-                }
                 $html.="<h3>Basket Summary</h3>";
-                $html.="<p>Total: £".$total."</p>";
+                $html.="<p>Total: £".$this->getCartTotal()."</p>";
                 $html.="<form action='/deliveryselection.php' method='POST'>";
                     $html.="<button type='submit'>Checkout</submit>";
                 $html.="</form>";

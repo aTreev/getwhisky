@@ -27,6 +27,8 @@ try {
   http_response_code(400);
   exit();
 }
+
+
 // Handle the checkout.session.completed event
 if ($event->type == 'checkout.session.completed') {
   $session = $event->data->object;
@@ -39,16 +41,21 @@ if ($event->type == 'checkout.session.completed') {
  * Creates an order on the site database
  * the userid and cartid must be passed through 
  * the payment intent object as metadata
- * This is due to redirecting causing a new session in this file
+ * This is due to redirecting causing a new session in this file only
  ************************************/
 function fulfill_order($session) {
   // get id's from metadata
   $cartid = $session->metadata->cartid;
   $userid = $session->metadata->userid;
+  $addressid = $session->metadata->addressid;
+  $deliveryid = $session->metadata->deliveryType;
+  $stripePaymentIntent = $session->payment_intent;
 
-  // begin checkout process
+  // begin checkout process with the metadata
+  // passed to this file
   $page = new Page();
-  $page->checkOutCart($cartid, $userid);
+  $result = $page->createOrder($cartid, $addressid, $userid, $deliveryid, $stripePaymentIntent);
+  print_log("RESULT: ".$result);
 }
 
 http_response_code(200);

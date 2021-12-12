@@ -14,8 +14,7 @@ body {
 }
 
 .product-top-container img {
-    width: 35%; 
-    position:absolute;
+    width: 80%;
     object-fit: contain;
     display: block;
     margin: auto;

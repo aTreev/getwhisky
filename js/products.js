@@ -244,7 +244,7 @@ function getProducts(categoryId, attributeValues, selectedSortValue) {
  * Calls the displayProducts() function when bottom of page is reached
  ******************/
 $(window).scroll(function(){
-    if ((window.innerHeight + window.pageYOffset) >= document.body.offsetHeight-20) {
+    if ((window.innerHeight + window.pageYOffset) >= document.body.offsetHeight-200) {
         displayProducts();
     }
 });

@@ -6,6 +6,7 @@ require_once("usercrud.class.php");
 require_once("userhash.class.php");
 require_once("user-address.class.php");
 require_once("unique-id-generator.class.php");
+require_once("order.class.php");
 
 class User {
     private $userid;
@@ -18,6 +19,7 @@ class User {
     private $vKey;
     private $verified;
 	private $addresses = [];
+	private $orders = [];
 	
 	public function __construct() {
 		$this->userid=-1;
@@ -92,6 +94,7 @@ class User {
     public function getVerifiedStatus() { return $this->verified; }
 	public function getVerificationKey() { return $this->vKey; }
 	public function getAddresses() { return $this->addresses; }
+	public function getOrders() { return $this->orders; }
 
         /*  
             UserCRUD class is used to get the data. It is checked that a single record is returned
@@ -261,22 +264,41 @@ class User {
 		}
 
 		// Adds an address to the database via the UserAddressCRUD class
-		public function addNewAddress($address_id, $identifier, $fullName, $phoneNumber, $postcode, $line1, $line2, $city, $county) {
+		public function addNewAddress($addressid, $identifier, $fullName, $phoneNumber, $postcode, $line1, $line2, $city, $county) {
 			$insert = new UserAddressCRUD();
-			$result = $insert->addNewAddress($address_id, $this->getUserid(), $identifier, $fullName, $phoneNumber, $postcode, $line1, $line2, $city, $county);
+			$result = $insert->addNewAddress($addressid, $this->getUserid(), $identifier, $fullName, $phoneNumber, $postcode, $line1, $line2, $city, $county);
 			return $result;
 		}
 	
-		public function updateUserAddress($address_id, $identifier, $fullName, $phoneNumber, $postcode, $line1, $line2, $city, $county) {
+		// Updates a user's address
+		public function updateUserAddress($addressid, $identifier, $fullName, $phoneNumber, $postcode, $line1, $line2, $city, $county) {
 			$update = new UserAddressCRUD();
-			$result = $update->updateUserAddress($address_id, $this->getUserid(), $identifier, $fullName, $phoneNumber, $postcode, $line1, $line2, $city, $county);
+			$result = $update->updateUserAddress($addressid, $this->getUserid(), $identifier, $fullName, $phoneNumber, $postcode, $line1, $line2, $city, $county);
 			return $result;
 		}
 
-		public function deleteUserAddress($address_id) {
+		// Deletes a user's address
+		public function deleteUserAddress($addressid) {
 			$delete = new UserAddressCRUD();
-			$result = $delete->deleteUserAddress($address_id, $this->getUserid());
+			$result = $delete->deleteUserAddress($addressid, $this->getUserid());
 			return $result;
+		}
+
+		private function retrieveUserOrders() {
+			$source = new OrderCRUD();
+			$orders = $source->getUserOrders($this->getUserid());
+			foreach($orders as $order) {
+				array_push($this->orders, new Order($order['order_id'], $order['userid'], $order['address_id'], $order['status_label'], $order['admin_status_label'], $order['delivery_label'], $order['delivery_cost'], $order['stripe_payment_intent'], $order['date_placed'], $order['total']));
+			}
+		}
+
+		public function getAndDisplayOrderPage() {
+			$this->retrieveUserOrders();
+			$html = "";
+			foreach($this->getOrders() as $order) {
+				$html.=var_dump($order);
+			}
+			return $html;
 		}
 
 		// sends user menu data to the $ouput variable via the getters
@@ -319,6 +341,7 @@ class User {
 					$html.="<div class='account-option-bottom'>";
 						$html.="<h4>Your Orders</h4>";
 						$html.="<p>View and manage your orders</p>";
+						$html.="<a class='wrapper-link' href='/orders.php'><span></span></a>";
 					$html.="</div>";
 				$html.="</div>";
 

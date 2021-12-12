@@ -15,6 +15,7 @@
         
         private $retrievedIds = []; // Array of retrieved Ids
         private $column;            // Column index, used for iterating through id array
+        private $length;            // Length of the uid
         private $UNIQUE_ID;         // final generated uid
 
 
@@ -25,7 +26,9 @@
          *      productid
          *      cartid
          *****************************/
-        public function __construct($idType) {
+        public function __construct($idType, $length=20) {
+            $this->setIdLength($length);
+
             switch(strtolower($idType)) {
                 case "userid":      
                     $this->column = "userid";       
@@ -51,10 +54,19 @@
                     $this->column = "address_id";
                     $this->retrieveAddressIds();
                 break;
+
+                case "order_id":
+                    $this->column = "order_id";
+                    $this->retrieveOrderIds();
+                break;
             }
             $this->generateNewUniqueId();
         }
 
+
+        private function setIdLength($length) { $this->length = $length; }
+        private function getLength() { return $this->length; }
+        
         /*****************************************************************************
          * Generates a unique id using the hexadecimal conversion of a random set of 20 bytes
          * loops through the retrievedIds array, using the column index, to check
@@ -63,7 +75,7 @@
          ****************************************************************************/
         private function generateNewUniqueId() {
             do {
-                $uniqueId = bin2hex(random_bytes(20));
+                $uniqueId = bin2hex(random_bytes($this->getLength()));
                 $unique = 1;
 
                 foreach($this->retrievedIds as $id) {
@@ -113,5 +125,10 @@
         private function retrieveAddressIds() {
             $source = new UserAddressCRUD();
             $this->retrievedIds = $source->getExistingAddressIds();
+        }
+
+        private function retrieveOrderIds() {
+            $source = new OrderCRUD();
+            $this->retrieveIds = $source->getExistingOrderIds();
         }
     }
