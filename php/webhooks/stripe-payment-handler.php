@@ -48,13 +48,15 @@ function fulfill_order($session) {
   $cartid = $session->metadata->cartid;
   $userid = $session->metadata->userid;
   $addressid = $session->metadata->addressid;
-  $deliveryid = $session->metadata->deliveryType;
+  $deliveryLabel = $session->metadata->deliveryLabel;
+  $deliveryCost = $session->metadata->deliveryCost;
+
   $stripePaymentIntent = $session->payment_intent;
 
   // begin checkout process with the metadata
   // passed to this file
   $page = new Page();
-  $result = $page->createOrder($cartid, $addressid, $userid, $deliveryid, $stripePaymentIntent);
+  $result = $page->createOrder($cartid, $addressid, $userid, $deliveryLabel, $deliveryCost, $stripePaymentIntent);
   print_log("RESULT: ".$result);
 }
 

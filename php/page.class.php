@@ -443,15 +443,15 @@ class Page {
 	}
 
 	/*********
-	 * Checks out a user's cart.
+	 * Creates an order after a payment has been received
 	 * the arguments should only be supplied by first retrieving
-	 * them from a page object never from a form, or on a webpage
-	 * validation of address takes place in the createcheckoutsession file
+	 * them from a page object on the session, never from a form, or on a webpage
+	 * validation of address takes place in the create-checkout-session file
 	 * 
 	 * THIS METHOD IS NOT ATTACHED TO THE MAIN USER SESSION	AND SHOULD
-	 * ONLY BE CALLED THROUGH THE STRIPE WEBHOOK
+	 * ONLY BE CALLED THROUGH THE STRIPE PAYMENT HANDLING WEBHOOK
 	 ****************************/
-	public function createOrder($cartid, $addressid, $userid, $deliveryTypeId, $stripePaymentIntent) {
+	public function createOrder($cartid, $addressid, $userid, $deliveryLabel, $deliveryCost, $stripePaymentIntent) {
 		$result = 0;
 		// Retrive a temporary instance of the user's cart
 		// and check out from the cart object
@@ -468,9 +468,9 @@ class Page {
 
 		$date = new DateTime();
 		$dateTimeAdded = $date->format("Y-m-d");
-		
+
 		$orderCRUD = new OrderCRUD();
-		$result = $orderCRUD->createOrder($orderid, $userid, $addressid, $deliveryTypeId, $stripePaymentIntent, $dateTimeAdded, $this->getCart()->getCartTotal());
+		$result = $orderCRUD->createOrder($orderid, $userid, $addressid, $deliveryLabel, $deliveryCost, $stripePaymentIntent, $dateTimeAdded, $this->getCart()->getCartTotal());
 
 		foreach ($this->getCart()->getItems() as $cartItem) {
 			$orderCRUD->addToOrder($orderid, $cartItem->getProductId(), $cartItem->getQuantity(), $cartItem->returnCorrectItemPrice());

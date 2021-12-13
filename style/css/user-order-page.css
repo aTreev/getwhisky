@@ -1,0 +1,57 @@
+#order-root {
+    width: 1600px;
+    margin: auto;
+    margin-bottom: 40px;
+}
+
+.order-root-header {
+    max-width: 800px;
+    margin: auto;
+    margin-top: 40px;
+}
+.order {
+    max-width: 800px;
+    margin: auto;
+    background-color: white;
+    border: 1px solid lightgrey;
+    margin-top: 40px;
+}
+
+.order-header-container {
+    background-color: var(--bg-primary);
+    color: white;
+    padding: 20px;
+}
+.order-header-container h4 {
+    font-weight: 300;
+}
+
+.order-details-container {
+    padding: 20px;
+    line-height: 2;
+    background-color: #ededed;
+}
+
+.order-details-container li, .order-details-container span {
+    font-size: 1.4rem;
+
+}
+
+.order-items {
+    padding: 20px;
+}
+
+.order-item {
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+.processing {
+    color: darkgreen;
+    font-weight: 600;
+}
+@media screen and (max-width: 1600px) {
+    #order-root {
+        width: 100%;
+    }
+}

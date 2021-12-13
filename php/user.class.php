@@ -284,19 +284,22 @@ class User {
 			return $result;
 		}
 
+		// Retrieves user orders from the database and creates order objects
 		private function retrieveUserOrders() {
 			$source = new OrderCRUD();
 			$orders = $source->getUserOrders($this->getUserid());
 			foreach($orders as $order) {
-				array_push($this->orders, new Order($order['order_id'], $order['userid'], $order['address_id'], $order['status_label'], $order['admin_status_label'], $order['delivery_label'], $order['delivery_cost'], $order['stripe_payment_intent'], $order['date_placed'], $order['total']));
+				array_push($this->orders, new Order($order['order_id'], $order['userid'], $order['address_id'], $order['status_label'], $order['admin_status_label'], $order['delivery_label'], $order['delivery_paid'], $order['stripe_payment_intent'], $order['date_placed'], $order['total']));
 			}
 		}
 
+		// Calls the function to retrieve order objects
+		// and then displays them
 		public function getAndDisplayOrderPage() {
 			$this->retrieveUserOrders();
 			$html = "";
 			foreach($this->getOrders() as $order) {
-				$html.=var_dump($order);
+				$html.=$order->displayUserOrderPage();
 			}
 			return $html;
 		}

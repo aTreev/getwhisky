@@ -8,6 +8,7 @@
     <?php 
         echo $page->displayHead();
     ?>
+    <link rel="stylesheet" href="style/css/user-order-page.css">
     <title>Order page</title>
 </head>
 <body>
@@ -18,6 +19,9 @@
     ?>
     <main>
         <div id="order-root">
+            <div class="order-root-header">
+                <h2>My orders</h2>
+            </div>
             <?php 
                 echo $page->getUser()->getAndDisplayOrderPage();
             ?>

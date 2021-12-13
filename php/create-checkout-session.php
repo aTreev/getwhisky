@@ -13,11 +13,11 @@ if (util::valInt($_POST['deliveryType'], array(1,2)) && util::valStr($_POST['add
 
   // Temporary hardcoded delivery logic
   if ($deliveryType == 1) {
-    $deliveryLabel = "Standard Delivery Fee";
+    $deliveryLabel = "Standard Delivery";
     $deliveryCost = 4.49;
   } 
   if ($deliveryType == 2) {
-    $deliveryLabel = "First Class Delivery Fee";
+    $deliveryLabel = "First Class Delivery";
     $deliveryCost = 5.99;
   } 
 
@@ -50,13 +50,13 @@ if (util::valInt($_POST['deliveryType'], array(1,2)) && util::valStr($_POST['add
   }
 
   // All good, begin checkout
-  beginStripeCheckout($line_items, $userid, $cartid, $addressid, $deliveryType);
+  beginStripeCheckout($line_items, $userid, $cartid, $addressid, $deliveryLabel, $deliveryCost);
 } else {
   header("Location: /deliveryselection.php");
 }
 
 
-function beginStripeCheckout($line_items, $userid, $cartid, $addressid, $deliveryType) {
+function beginStripeCheckout($line_items, $userid, $cartid, $addressid, $deliveryLabel, $deliveryCost) {
   // Stripe logic
   \Stripe\Stripe::setApiKey('sk_test_51Je0ufArTeMLOzQd1e4BFGLKWFOsabluGgErlDnWkmyea9G2LQQJY6PXusduRSaAXhsz6h27Owwz8n9SehfBY3a90087Gcb2ba');
   header('Content-Type: application/json');
@@ -73,7 +73,8 @@ function beginStripeCheckout($line_items, $userid, $cartid, $addressid, $deliver
       'userid' => $userid,
       'cartid' => $cartid,
       'addressid' => $addressid,
-      'deliveryType' => $deliveryType
+      'deliveryLabel' => $deliveryLabel,
+      'deliveryCost' => $deliveryCost
     ],
     'success_url' => $DOMAIN . '/success.php',
     'cancel_url' => $DOMAIN . '/cart.php',
