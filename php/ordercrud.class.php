@@ -18,7 +18,17 @@ class OrderCRUD {
 		return $resultset;
     }
 
-    public function createOrder($orderid, $userid, $addressid, $deliverylabel, $deliveryCost, $stripePaymentIntent, $dateTimeAdded, $total) {
+    public function getOrderById($orderid, $style=MYSQLI_ASSOC) {
+        $this->sql = "SELECT * FROM orders WHERE order_id = ?;";
+        $this->stmt = self::$db->prepare($this->sql);
+        $this->stmt->bind_param("s", $orderid);
+		$this->stmt->execute();
+		$result = $this->stmt->get_result();
+		$resultset=$result->fetch_all($style);
+		return $resultset;
+    }
+
+    public function createOrder($orderid, $userid, $addressid, $deliveryLabel, $deliveryCost, $stripePaymentIntent, $dateTimeAdded, $total) {
         $this->sql = "INSERT INTO orders (`order_id`, `userid`, `address_id`, `status_id`, `admin_status_id`, `delivery_label`, `delivery_paid`, `stripe_payment_intent`, `date_placed`, `total`) VALUES (?,?,?,1,1,?,?,?,?,?);";
         $this->stmt = self::$db->prepare($this->sql);
         $this->stmt->bind_param("ssssdssd", $orderid, $userid, $addressid, $deliveryLabel, $deliveryCost, $stripePaymentIntent, $dateTimeAdded, $total);
@@ -29,7 +39,6 @@ class OrderCRUD {
 			return $this->stmt->affected_rows;
 		}
     }
-
     public function addToOrder($orderid, $productid, $quantity, $priceBought) {
         $this->sql = "INSERT INTO order_items (`order_id`, `product_id`, `quantity`, `price_bought`) VALUES (?,?,?,?);";
         $this->stmt = self::$db->prepare($this->sql);

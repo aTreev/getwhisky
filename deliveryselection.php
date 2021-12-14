@@ -54,11 +54,28 @@
             <h3>Please select the address to deliver to</h3>
             <?php echo $page->getUser()->getAndDisplayAddressPage(); ?>
         </div>
+        
 
-
+        
         <div class="delivery-selection">
             <form class='form-inline' method="POST" action="/php/create-checkout-session.php">
-                <h3>Delivery type</h3>
+            <?php 
+                // If guest capture email address for email
+                if ($page->getUser()->getUsertype() == 0) {
+                    ?>
+                        <div style='margin-bottom:40px;line-height:1.6;'>
+                            <h3>Please enter your email address</h3>
+                            <p style='margin-bottom:10px;'>Your order confirmation will be sent to this email</p>
+                            <input type="email" class="form-item" name="user-email" id="user-email" placeholder='Email address' />
+                        </div>
+                    <?php
+                } else {
+                    ?>
+                    <input type="hidden" name="user-email" value="<?php echo $page->getUser()->getEmail();?>" />
+                    <?php
+                }
+            ?>
+                <h3>Delivery Type</h3>
                 <p style='margin-bottom:10px;'>Please select your preferred delivery option</p>
                 <input type='hidden' name='addressId' value='' />
                 <select name="deliveryType" class='form-item'>

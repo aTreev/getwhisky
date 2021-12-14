@@ -136,6 +136,10 @@ function prepareDeliveryPage() {
             ev.preventDefault();
             new Alert(false, "Please select a delivery address");
         }
+        if ($("#user-email").val() == "") {
+            ev.preventDefault();
+            new Alert(false, "Please provide an email address");
+        }
     });
 }
 

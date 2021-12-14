@@ -94,6 +94,7 @@ class Order {
     }
 
 
+    // Displays the user view of the order page
     public function displayUserOrderPage() {
         $html = "";
 
