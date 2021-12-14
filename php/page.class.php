@@ -569,8 +569,17 @@ class Page {
 	 * e.g. Featured products, discounted products
 	 *********************************************/
 
-	public function displayFeaturedProducts() {
+	public function displayFeaturedProductsOwl() {
+		$html = "";
+		$html.="<div class='owl-carousel owl-featured-products'>";
+			foreach($this->getProducts() as $product) {
+				if ($product->isFeatured()) {
+					$html.=$product->displayProductFeatured();
+				}
+			}
+		$html.="</div>";
 
+		return $html;
 	}
 }
 ?>

@@ -20,7 +20,7 @@ class Product {
     private $type;
     private $categoryId;
     private $attributes = [];
-    private $displayed;
+    private $featured;
 
     public function __construct($product){
         $this->setId($product['id']);
@@ -40,6 +40,7 @@ class Product {
         $this->setBottleSize($product['bottle_size']);
         $this->setType($product['type']);
         $this->setCategoryId($product['category_id']);
+        $this->setFeatured($product['featured']);
 
         // Retrieve the attribute_value ids for product filter
         $this->retrieveAttributeValueIds();
@@ -68,6 +69,7 @@ class Product {
     public function getType(){ return $this->type; }
     public function getCategoryId(){ return $this->categoryId; }
     public function getAttributes(){ return $this->attributes; }
+    public function isFeatured() { return $this->featured; }
 
     private function setId($id) { $this->id = $id; }
     private function setName($name) { $this->name = $name; }
@@ -87,6 +89,8 @@ class Product {
     private function setType($type) { $this->type = $type; }
     private function setCategoryId($categoryId) { $this->categoryId = $categoryId; }
     private function setAttributes($attributes) { $this->attributes = $attributes; }
+    public function setFeatured($featured) { $this->featured = $featured; }
+
 
 
     /***********
@@ -280,6 +284,29 @@ class Product {
         return $html;
     }
 
+    public function displayProductFeatured() {
+        $html = "";
+        $html.="<div class='featured-product'>";
+            $html.="<img  class='owl-lazy' data-src='".$this->getImage()."' src='".$this->getImage()."' />";
+            $html.="<h3>".$this->getName()."</h3>";
+            $html.="<h4 class='product-type'>".$this->getType()."</h4>";
+            $html.="<p class='product-desc-short'>".$this->getAlcoholVolume()." abv / ".$this->getBottleSize()."</p>";
+            $html.="<div class='product-price-container'>";
+                if ($this->isDiscounted()) {
+                    $html.="<p class='percentage-indicator'>-".$this->getDiscountPercentage()."%</p>";
+                    $html.="<p class='product-price-discounted'>£".$this->getPrice()."</p>";
+                    $html.="<p class='product-price'>£".$this->getDiscountPrice()."</p>";
+                } else {
+                    $html.="<p class='product-price'>£".$this->getPrice()."</p>";
+                }
+                $html.="</div>";
+                $html.="<a class='wrapper-link' href='/productpage.php?pid=".$this->getId()."'><span></span></a>";
+
+        $html.="</div>";
+
+        return $html;
+    }
+
     /************
      * __toString used to display products on the category pages
      ***********************************/
@@ -312,6 +339,7 @@ class Product {
             $html.="</div>";
         return $html;
     }
+
 }
 
 ?>
