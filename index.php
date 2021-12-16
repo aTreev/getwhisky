@@ -23,14 +23,9 @@
         </div>
 
 
-        <div class="featured-products">
-            <div class='featured-products-header'>
-                <h2>Our Favourite Picks</h2>
-            </div>
-            <?php echo $page->displayFeaturedProductsOwl();?>
-            <i class='owl-nav-left fas fa-chevron-left'></i>
-            <i class='owl-nav-right fas fa-chevron-right'></i>
-        </div>
+    
+        <?php echo $page->displayFeaturedProductsOwl();?>
+            
         
         <div class="about-section">
             <div class="about-section-content">
@@ -41,8 +36,9 @@
                     <p><a href="/about.php">Read more <i class='fas fa-chevron-right' style='font-size:1.2rem;'></i></a></p>
                 </div>
             </div>
-            
         </div>
+
+        <?php echo $page->displayFeaturedBannerSection(); ?>
     </main>
 </body>
 <script src="js/classes/alert.class.js"></script>

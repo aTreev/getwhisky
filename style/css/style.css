@@ -112,7 +112,7 @@ header {
 }
 
 .header-content {
-  width: 1600px;
+  width: 1400px;
   height: 150px;
   margin: auto;
   position: relative;
@@ -340,7 +340,7 @@ header {
 
 .product-menu-list {
   display: flex;
-  width: 1600px;
+  width: 1400px;
   margin: auto;
   justify-content: space-between;
 }
@@ -770,7 +770,7 @@ button[type=submit]:hover {
 /*********************************************************************
 *   MEDIA QUERIES
 *********************************************************************/
-@media screen and (max-width: 1600px) {
+@media screen and (max-width: 1400px) {
   main {
     width: 100%;
     margin: auto;
@@ -799,6 +799,10 @@ button[type=submit]:hover {
 *   SEARCH BAR SPECIFIC MEDIA QUERY
 ***************************************************************************/
 @media screen and (max-width: 836px) {
+  :root {
+    --font-size-heading: 2.5rem;
+    --font-size-subheading: 2rem;
+  }
   .search-bar-container {
     width: 100%;
     margin: 0px;

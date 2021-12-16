@@ -66,16 +66,19 @@
                         <div style='margin-bottom:40px;line-height:1.6;'>
                             <h3>Please enter your email address</h3>
                             <p style='margin-bottom:10px;'>Your order confirmation will be sent to this email</p>
-                            <input type="email" class="form-item" name="user-email" id="user-email" placeholder='Email address' />
+                            <div class="input-container-100">
+                                <input type="email" class="form-item" name="user-email" id="user-email" placeholder='Email address' />
+                            </div>
                         </div>
                     <?php
                 } else {
+                    // Not guest include email automatically
                     ?>
-                    <input type="hidden" name="user-email" value="<?php echo $page->getUser()->getEmail();?>" />
+                    <input type="hidden" name="user-email" id='user-email' value="<?php echo $page->getUser()->getEmail();?>" />
                     <?php
                 }
             ?>
-                <h3>Delivery Type</h3>
+                <h3>Delivery Method</h3>
                 <p style='margin-bottom:10px;'>Please select your preferred delivery option</p>
                 <input type='hidden' name='addressId' value='' />
                 <select name="deliveryType" class='form-item'>

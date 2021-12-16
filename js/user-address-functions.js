@@ -118,12 +118,25 @@ function prepareDeleteAddressFunctionality() {
     })
 }
 
+/********
+ * Adds the ability to select an address
+ * on the delivery page only
+ * works by adding address id to an invisible form field
+ * on the delivery page
+ * additionally validates an email address when a guest user
+ * is present
+ ********************************/
 function prepareDeliveryPage() {
     const addressItems = $(".address-item");
     $("[name='addressId']").val("");
 
+    // Loop through each address item
     addressItems.each(function(){
+        // Get the id of the address
         const addressId = $(this).attr("id");
+        $(this).hover(function(){$(this).css("cursor","pointer")});
+
+        // When address clicked transfer the ID to the hidden form and change CSS
         $(this).click(function(){
             addressItems.css({"background-color":"white", "border-color":"lightgrey"});
             $(this).css({"background-color":"lightgrey", "border-color":"black"});
@@ -131,14 +144,17 @@ function prepareDeliveryPage() {
         });
     });
 
+    // Check for required fields
     $("#delivery-submit").click(function(ev){
+        $(".form-feedback").remove();
+        // Hidden addressId input
         if ($("[name='addressId']").val() == "") {
             ev.preventDefault();
             new Alert(false, "Please select a delivery address");
         }
-        if ($("#user-email").val() == "") {
+        // User email input
+        if (!checkEmail($("#user-email"))) {
             ev.preventDefault();
-            new Alert(false, "Please provide an email address");
         }
     });
 }
@@ -173,6 +189,7 @@ function checkAddressMobile(mobileField) {
     return true;
 }
 
+
 // Checks that a UK postcode is valid
 function checkAddressPostcode(postcodeField) {
     const postcode = postcodeField.val();
@@ -186,6 +203,10 @@ function checkAddressPostcode(postcodeField) {
 }
 
 
+/**********
+ * Adds a user's address to the database
+ * reloads HTML on complete
+ *********************************/
 function addUserAddress(identifier, fullName, mobile, postcode, line1, line2, city, county) {
     $.ajax({
         url:"../php/ajax-handlers/user-address-handler.php",
@@ -209,6 +230,10 @@ function addUserAddress(identifier, fullName, mobile, postcode, line1, line2, ci
 }
 
 
+/*******************
+ * Updates a user's address on the database
+ * reloads HTML on complete
+ **************************/
 function updateUserAddress(addressId, identifier, fullName, mobile, postcode, line1, line2, city, county) {
     $.ajax({
         url:"../php/ajax-handlers/user-address-handler.php",
@@ -232,6 +257,10 @@ function updateUserAddress(addressId, identifier, fullName, mobile, postcode, li
 }
 
 
+/******************
+ * Deletes a user's address from the database
+ * reloads HTML on complete
+ *************************/
 function deleteUserAddress(addressId, identifier) {
     $.ajax({
         url:"../php/ajax-handlers/user-address-handler.php",

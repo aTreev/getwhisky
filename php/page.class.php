@@ -569,14 +569,49 @@ class Page {
 	 * e.g. Featured products, discounted products
 	 *********************************************/
 
+
+	 /********
+	  * Displays a carousel of featured products
+	  * Uses owl carousel
+	  *****/
 	public function displayFeaturedProductsOwl() {
 		$html = "";
-		$html.="<div class='owl-carousel owl-featured-products'>";
-			foreach($this->getProducts() as $product) {
-				if ($product->isFeatured()) {
-					$html.=$product->displayProductFeatured();
+		$html.="<div class='featured-products'>";
+			$html.="<div class='featured-products-header'>";
+				$html.="<h2>Our Favourite Picks</h2>";
+			$html.="</div>";
+			$html.="<div class='owl-carousel owl-featured-products'>";
+				foreach($this->getProducts() as $product) {
+					if ($product->isFeatured()) {
+						$html.=$product->displayProductFeatured();
+					}
 				}
-			}
+			$html.="</div>";
+			$html.="<i class='owl-nav-left fas fa-chevron-left'></i>";
+            $html.="<i class='owl-nav-right fas fa-chevron-right'></i>";
+        $html.="</div>";
+
+		return $html;
+	}
+
+	/************
+	 * Displays the static featured banner section on the homepage
+	 *******************************/
+	public function displayFeaturedBannerSection() {
+		$html = "";
+
+		$html.="<div class='featured-banner-section'>";
+			$html.="<div class='featured-banner-left'>";
+				$html.="<img src='/assets/product-images/pink-gin-hamper.jpg' alt=''>";
+			$html.="</div>";
+
+			$html.="<div class='featured-banner-right'>";
+				$html.="<div class='featured-right-text-container'>";
+					$html.="<h2>New Gin Hampers</h2>";
+					$html.="<p>Ice & Fire gin hampers now available and make for the perfect gift or treat!</p>";
+					$html.="<a href='#'>Browse Hampers</a>";
+				$html.="</div>";
+			$html.="</div>";
 		$html.="</div>";
 
 		return $html;

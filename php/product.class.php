@@ -288,7 +288,7 @@ class Product {
         $html = "";
         $html.="<div class='featured-product'>";
             $html.="<img  class='owl-lazy' data-src='".$this->getImage()."' src='".$this->getImage()."' />";
-            $html.="<h3>".$this->getName()."</h3>";
+            $html.="<div class='product-name-container'><h3>".$this->getName()."</h3></div>";
             $html.="<h4 class='product-type'>".$this->getType()."</h4>";
             $html.="<p class='product-desc-short'>".$this->getAlcoholVolume()." abv / ".$this->getBottleSize()."</p>";
             $html.="<div class='product-price-container'>";
@@ -335,7 +335,7 @@ class Product {
                     $html.="<button class='out-of-stock-btn'>Out of stock</button>";
                 }
                 */
-                $html.="<a class='product-wrapper-link' href='/productpage.php?pid=".$this->getId()."'><span></span></a>";
+                $html.="<a class='product-wrapper-link' href='/productpage.php?pid=".$this->getId()."' target='_blank'><span></span></a>";
             $html.="</div>";
         return $html;
     }

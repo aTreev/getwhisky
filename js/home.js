@@ -15,25 +15,25 @@ function prepareOwlCarousel() {
             0:{
                 items:1,
             },
-            480:{
+            576:{
                 items:2,
             },
-            600:{
+            768:{
                 items:3,
             },
-            1000:{
+            1200:{
                 items:4,
             }
         }
 
     });
+    // Using FA icons for navigation mapped to owl nav
+    // Go to the next item
     $('.owl-nav-right').click(function() {
         $(".owl-carousel").trigger('next.owl.carousel');
-    })
+    });
     // Go to the previous item
     $('.owl-nav-left').click(function() {
-        // With optional speed parameter
-        // Parameters has to be in square bracket '[]'
-        $(".owl-carousel").trigger('prev.owl.carousel', [300]);
+        $(".owl-carousel").trigger('prev.owl.carousel');
     });
 }
