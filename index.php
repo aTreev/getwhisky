@@ -16,6 +16,7 @@
     <?php
         echo $page->displayHeader();
         echo $page->displayProductMenu();
+        echo $page->displayCartNotifications();
     ?>
     <main>
         <div class="hero">

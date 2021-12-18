@@ -19,17 +19,18 @@ class UserAddress {
     private $county;
 
 
-    public function __construct($id, $userid, $identifier, $fullName, $telephone, $postcode, $line1, $line2, $city, $county){
-        $this->setId($id);
-        $this->setUserid($userid);
-        $this->setIdentifier($identifier);
-        $this->setFullName($fullName);
-        $this->setPhoneNumber($telephone);
-        $this->setPostcode($postcode);
-        $this->setLine1($line1);
-        $this->setLine2($line2);
-        $this->setCity($city);
-        $this->setCounty($county);
+    public function __construct($address){
+        //$address['address_id'], $address['userid'], $address['identifier'], $address['full_name'], $address['telephone'], $address['postcode'], $address['line1'], $address['line2'], $address['city'], $address['county']
+        $this->setId($address['address_id']);
+        $this->setUserid($address['userid']);
+        $this->setIdentifier($address['identifier']);
+        $this->setFullName($address['full_name']);
+        $this->setPhoneNumber($address['telephone']);
+        $this->setPostcode($address['postcode']);
+        $this->setLine1($address['line1']);
+        $this->setLine2($address['line2']);
+        $this->setCity($address['city']);
+        $this->setCounty($address['county']);
     }
 
     private function setId($id) { $this->id = $id; }

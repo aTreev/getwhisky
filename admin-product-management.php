@@ -6,7 +6,8 @@
 <html>
 <head>
     <?php echo $page->displayHead(); ?>
-    <title>getwhisky homepage</title>
+    <title>getwhisky product management</title>
+    <link rel="stylesheet" href="style/css/admin.css">
 </head>
 <body>
 	<?php
@@ -14,16 +15,22 @@
         echo $page->displayProductMenu();
         echo $page->displayCartNotifications();
     ?>
-	<h1>Admin Page</h1>
 	<main>
-        <?php echo $page->adminDisplayAdminPage(); ?>
+        <h1>Product Management</h1>
+        <?php 
+            echo $page->adminDisplayProductManagementPage();
+        ?>
 	</main>
 </body>
+<script src="js/classes/alert.class.js"></script>
 <script src="js/functions.js"></script>
+<script src="js/form-functions.js"></script>
+<script src="js/admin-functions.js"></script>
 <script>
     document.onreadystatechange = function() {
         if(document.readyState==="complete") {
             prepareMenu();
+            prepareProductManagementPage();
         }
     }
 </script>

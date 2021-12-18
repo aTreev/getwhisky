@@ -16,21 +16,21 @@ class Order {
     private $total;
     private $orderItems = [];
 
-    public function __construct($orderid, $userid, $addressid, $status, $adminStatus, $deliveryLabel, $deliveryCost, $stripePaymentIntent, $datePlaced, $total) {
+    public function __construct($order) {
         // get order details and set them in this class
-        $this->setId($orderid);
-        $this->setUserid($userid);
-        $this->setStatus($status);
-        $this->setAdminStatus($adminStatus);
-        $this->setDeliveryLabel($deliveryLabel);
-        $this->setDeliveryCost($deliveryCost);
-        $this->setStripePaymentIntent($stripePaymentIntent);
-        $this->setDatePlaced($datePlaced);
-        $this->setTotal($total);
+        $this->setId($order['order_id']);
+        $this->setUserid($order['userid']);
+        $this->setStatus($order['status_label']);
+        $this->setAdminStatus($order['admin_status_label']);
+        $this->setDeliveryLabel($order['delivery_label']);
+        $this->setDeliveryCost($order['delivery_paid']);
+        $this->setStripePaymentIntent($order['stripe_payment_intent']);
+        $this->setDatePlaced($order['date_placed']);
+        $this->setTotal($order['total']);
         // retrieve address create new object with it
         // retrieve order items and send them to order_item array
         $this->retrieveOrderItems();
-        $this->retrieveDeliveryAddress($addressid);
+        $this->retrieveDeliveryAddress($order['address_id']);
     }
 
 
@@ -89,7 +89,7 @@ class Order {
         $source = new UserAddressCRUD();
         $addressAssoc = $source->getUserAddressById($addressid, $this->getUserid());
         foreach($addressAssoc as $address) {
-            $this->setAddress(new UserAddress($address['address_id'], $address['userid'], $address['identifier'], $address['full_name'], $address['telephone'], $address['postcode'], $address['line1'], $address['line2'], $address['city'], $address['county']));
+            $this->setAddress(new UserAddress($address));
         }
     }
 

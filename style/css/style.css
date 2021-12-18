@@ -439,7 +439,9 @@ form label {
   outline: none;
   border: 1px solid #ebebeb;
 }
-
+.input-container-100 textarea {
+  resize: none;
+}
 .form-item-50 {
   width:49%;
   display:block;

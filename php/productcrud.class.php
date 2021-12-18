@@ -85,5 +85,30 @@ class ProductCRUD {
 			return $this->stmt->affected_rows;
 		}
     }
+
+
+    public function toggleProductActiveState($productid) {
+        $this->sql = "UPDATE `products` SET `active` = !active WHERE id = ?;";
+        $this->stmt = self::$db->prepare($this->sql);
+        $this->stmt->bind_param("i", $productid);
+        $this->stmt->execute();
+        if($this->stmt->affected_rows!=1) {
+			return 0;
+		} else {
+			return $this->stmt->affected_rows;
+		}
+    }
+
+    public function toggleProductFeaturedState($productid) {
+        $this->sql = "UPDATE `products` SET `featured` = !featured WHERE id = ?;";
+        $this->stmt = self::$db->prepare($this->sql);
+        $this->stmt->bind_param("i", $productid);
+        $this->stmt->execute();
+        if($this->stmt->affected_rows!=1) {
+			return 0;
+		} else {
+			return $this->stmt->affected_rows;
+		}
+    }
 }
 ?>

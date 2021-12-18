@@ -84,7 +84,7 @@ class User {
 	private function setVerificatinKey($vKey) {
 		$this->vKey = $vKey;
 	}
-	
+
 	public function getUserid() { return $this->userid; }
 	public function getFirstname() { return $this->firstname; }
 	public function getSurname() { return $this->surname; }
@@ -233,11 +233,15 @@ class User {
 			return $result;
 		}
 
+		/****
+		 * Retrieves user addresses from the database
+		 * and populates the addresses obj array
+		 ***********************/
 		private function retrieveUserAddresses() {
 			$source = new UserAddressCRUD();
 			$addresses = $source->getUserAddresses($this->getUserid());
 			foreach ($addresses as $address) {
-				array_push($this->addresses, new UserAddress($address['address_id'], $address['userid'], $address['identifier'], $address['full_name'], $address['telephone'], $address['postcode'], $address['line1'], $address['line2'], $address['city'], $address['county']));
+				array_push($this->addresses, new UserAddress($address));
 			}
 		}
 
@@ -284,12 +288,15 @@ class User {
 			return $result;
 		}
 
-		// Retrieves user orders from the database and creates order objects
+		/****
+		 * Retrieves user orders from the database and
+		 * populates the orders Obj array with orders
+		 *******************************/
 		private function retrieveUserOrders() {
 			$source = new OrderCRUD();
 			$orders = $source->getUserOrders($this->getUserid());
 			foreach($orders as $order) {
-				array_push($this->orders, new Order($order['order_id'], $order['userid'], $order['address_id'], $order['status_label'], $order['admin_status_label'], $order['delivery_label'], $order['delivery_paid'], $order['stripe_payment_intent'], $order['date_placed'], $order['total']));
+				array_push($this->orders, new Order($order));
 			}
 		}
 

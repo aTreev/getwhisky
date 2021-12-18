@@ -616,5 +616,48 @@ class Page {
 
 		return $html;
 	}
+
+
+
+
+	/*************************
+	 * ADMIN METHODS
+	 *****************************************/
+
+
+	 public function adminDisplayAdminPage() {
+		 $html = "";
+		 if ($this->getUser()->getUsertype() != 3) {
+			 $this->logout();
+			 return;
+			 exit;
+		 }
+		 $html.="<a href='admin-homepage-edit.php'>Homepage Management</a> <br>";
+		 $html.="<a href='admin-product-management.php'>Product Management</a>";
+
+		 return $html;
+	 }
+
+
+	 public function adminDisplayProductManagementPage() {
+		 $html = "";
+
+		 $html.="<table>";
+		 $html.="<tr>";
+		 $html.="<th>Product</th>";
+		 $html.="<th>Active</th>";
+		 $html.="<th>Featured</th>";
+		 $html.="<th>Discounted</th>";
+		 $html.="<th>Options</th>";
+		 $html.="</tr>";
+		 foreach($this->getProducts() as $product) {
+			 $html.=$product->adminDisplayProductTableItems();
+		 }
+		 return $html;
+
+		 $html.="</table>";
+
+		 return $html;
+	 }
 }
 ?>

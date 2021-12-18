@@ -108,6 +108,11 @@ class Product {
         }
     }
 
+    private function getActivePrice() {
+        if ($this->isDiscounted()) return $this->getDiscountPrice();
+        else return $this->getPrice();
+    }
+
     /**********
      * Calculates and returns the percentage discount
      ****************************/
@@ -303,6 +308,66 @@ class Product {
                 $html.="<a class='wrapper-link' href='/productpage.php?pid=".$this->getId()."'><span></span></a>";
 
         $html.="</div>";
+
+        return $html;
+    }
+
+
+    public function adminDisplayProductTableItems() {
+        $html = "";
+        $html.="<tr class='product-management-item' id='".$this->getId()."'>";
+            $html.="<td><div class='td-flex-center'><img style='width:35px;' src='".$this->getImage()."'><h5 id='product-name-".$this->getId()."'>".$this->getName()."</h5><p id='product-base-price-".$this->getId()."' price='".$this->getPrice()."'>(£".$this->getPrice().")</p></div></td>";
+
+            // Active state slider
+            $html.="<td><div class='td-flex-center'>";
+                $html.="<label class='switch'>";
+                if ($this->isActive()) {
+                    $html.="<input type='checkbox' id='active-".$this->getId()."' checked>";
+                } else {
+                    $html.="<input type='checkbox' id='active-".$this->getId()."'>";
+                }
+                    $html.="<span class='slider'></span>";
+                $html.="</label>";
+            $html.="</div></td>";
+
+            // Featured state slider
+            $html.="<td><div class='td-flex-center'>";
+            $html.="<label class='switch'>";
+                if ($this->isFeatured()) {
+                    $html.="<input type='checkbox' id='featured-".$this->getId()."' checked>";
+                } else {
+                    $html.="<input type='checkbox' id='featured-".$this->getId()."'>";
+                }
+                    $html.="<span class='slider'></span>";
+            $html.="</label>";
+            $html.="</div></td>";
+
+            // Discount management
+            $html.="<td><div class='td-flex-center'>";
+                if ($this->isDiscounted()) {
+                    $html.="<p>Yes</p>";
+                    $html.="<label>Discount price: &nbsp;";
+                    $html.="<input type='number' step='0.01' style='padding:4px;font-size:1.6rem;' id='discount-price-".$this->getId()."' value='".$this->getActivePrice()."'>";
+                    $html.="</label>";
+                    $html.="<label>End date:  &nbsp;";
+                        $html.="<input type='datetime-local' id='discount-end-datetime-".$this->getId()."' style='padding:4px;font-size:1.6rem;' value='".date('Y-m-d\TH:i',strtotime($this->getDiscountEndDatetime()))."'>";
+                    $html.="</label>";
+                    $html.="<button id='update-discount-".$this->getId()."'><i class='fas fa-wrench'></i>Update</button>";
+                    $html.="<button class='delete-action-btn' id='end-discount-".$this->getId()."'><i class='fas fa-hourglass-end'></i>End</button>";
+                    $html.="";
+                } else {
+                    $html.="<p>No</p>";
+                    $html.="<button class='add-action-btn' id='add-discount-".$this->getId()."'>Add discount</button>";
+                }
+            $html.="</div></td>";
+
+            // Options
+            $html.="<td><div class='td-flex-center td-flex-justify-between'>";
+                $html.="<button class='update-action-btn' id='edit-product-".$this->getId()."'><i class='far fa-edit'></i> Edit</button>";
+                $html.="<button class='delete-action-btn' id='delete-product-".$this->getId()."'><i class='far fa-trash-alt'></i> Delete</button>";
+            $html.="</div></td>";
+
+        $html.="</tr>";
 
         return $html;
     }

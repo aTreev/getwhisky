@@ -131,6 +131,86 @@ function checkPassword(passwordField, repeatPasswordField) {
 	return true;
 }
 
+/********
+ * Generic validation for an input field, checks that an input is not empty
+ * Takes a feedback message to display a specific message on condition fail
+ * Option max length check to ensure a max length is not hit
+ *******************************************/
+function checkFieldEmpty(field, feedbackMessage, maxLen) {
+	const fieldValue = field.val();
+
+	if (fieldValue.length == 0) {
+		doFeedback(field, feedbackMessage)
+		return false;
+	}
+	if (maxLen && fieldValue.length > maxLen) {
+		doFeedback(field, `Value must be less than ${maxLen} characters`);
+		return false;
+	}
+	return true;
+}
+
+/*****
+ * Function checks to see if a file has been uploaded,
+ * Takes a feedback message to provide a specific message on condition fail
+ * Additionally takes an array of allowed file types to ensure only the correct
+ * file types are provided
+ ****************************************/
+function checkFileField(fileField, feedbackMessage, allowedFileTypes) {
+	const file = fileField[0].files[0];
+
+	if (!file) {
+		doFeedback(fileField, feedbackMessage);
+		return false;
+	}
+
+	if (allowedFileTypes) {
+		const fileExt = file.type.split("/").pop();
+
+		if (!allowedFileTypes.includes(fileExt)) {
+			doFeedback(fileField, "File must be of one of the types ( "+ allowedFileTypes +" )");
+			return false;
+		}
+	}
+	return true;
+}
+
+function checkDatetimeField(datetimeField) {
+	const datetime = datetimeField.val();
+	const now = new Date().toISOString().split("Z")[0];
+
+	if (datetime.length == 0) {
+		doFeedback(datetimeField, "Please insert a date and time");
+		return false;
+	}
+	if (datetime < now) {
+		doFeedback(datetimeField, "Please select a time in the future");
+		return false;
+	}
+
+	return true;
+}
+
+function checkNumberField(numberField, feedbackMessage, maxInt) {
+	const number = numberField.val();
+
+	if (number.length <= 0) {
+		doFeedback(numberField, feedbackMessage);
+		return false;
+	}
+
+	if (isNaN(number)) {
+		doFeedback(numberField, "Please provide a number");
+		return false;
+	}
+
+	if (maxInt && number > maxInt) {
+		doFeedback(numberField, `Please enter a number lower than ${maxInt}`);
+		return false;
+	}
+
+	return true;
+}
 
 /**************************
  * Tests a password against regex to ensure that
