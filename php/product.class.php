@@ -348,10 +348,10 @@ class Product {
             // Discount management
             $html.="<td id='product-stock-data-".$this->getId()."'><div class='td-flex-center'>";
                 if ($this->isDiscounted()) {
-                    $html.="<label>Discount price: &nbsp;";
+                    $html.="<label class='container-label'>Discount price: &nbsp;";
                     $html.="<input type='number' step='0.01' id='discount-price-".$this->getId()."' value='".$this->getDiscountPrice()."'>";
                     $html.="</label>";
-                    $html.="<label>End date:  &nbsp;";
+                    $html.="<label class='container-label'>End date:  &nbsp;";
                         $html.="<input type='datetime-local' id='discount-end-datetime-".$this->getId()."' value='".date('Y-m-d\TH:i',strtotime($this->getDiscountEndDatetime()))."'>";
                     $html.="</label>";
                     $html.="<button id='update-discount-".$this->getId()."'><i class='fas fa-wrench'></i>Save</button>";

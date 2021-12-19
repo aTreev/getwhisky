@@ -1,63 +1,27 @@
-#create-banner-modal {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 100%;
-    display: none;
-    z-index: 50;
-}
-
-.banner-preview {
-    position: absolute;
-    top: 0;
-    left: 50%;
-    width: 100%;
-    height: 300px;
-    transform: translateX(-50%);
-}
-.banner-preview-content {
-    min-width: 1400px;
-    margin: auto;
-    display: flex;
-    justify-content: space-between;
-}
-
-.banner-preview-content-img-container img {
-    max-height: 250px;
-}
-
-.banner-preview-content-text-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    margin: auto;
-    gap: 50px;
-    color: white;
-}
-
-table {
+#product-management-table {
     font-family: arial, sans-serif;
     margin:auto;
     width: 1400px;
     margin-top: 60px;
     border-radius: 4px;
+    border-collapse: collapse;
 }
   
-th {
+#product-management-table th {
     padding: 15px;
     background-color: #3b8cc3;
     color: white;
     font-weight: 400;
 }
 
-td {
-    padding: 8px;
+#product-management-table td {
+    padding: 10px;
+    height: 75px;
 }
-tr {
+#product-management-table tr {
     background-color: white;
 }
-td, th {
+#product-management-table td, th {
     border: 1px solid #dddddd;
     text-align: left;
     font-size: 1.6rem;
@@ -71,14 +35,14 @@ td, th {
 }
 
 
-tr:nth-child(even) {
+#product-management-table tr:nth-child(even) {
     background-color: rgb(230, 230, 230);
 }
-tr:nth-child(even) img {
+#product-management-table tr:nth-child(even) img {
     border:1px solid lightgrey;
 }
 
-tr button {
+#product-management-table tr button {
     padding: 6px;
     border: none;
     color: white;
@@ -92,18 +56,18 @@ tr button {
     cursor: pointer;
     gap: 5px;
 }
-tr button:hover {
+#product-management-table tr button:hover {
     background-color: #95b0c2;
 
 }
-tr .delete-action-btn {
+#product-management-table tr .delete-action-btn {
     background-color:#db4c3c;
 }
 
-tr .add-action-btn {
+#product-management-table tr .add-action-btn {
     background-color:#3d9970;
 }
-tr input[type=number], tr input[type=datetime-local] {
+#product-management-table tr input[type=number], tr input[type=datetime-local] {
     padding:4px;
     font-size:1.6rem;
 }
@@ -166,7 +130,7 @@ input:checked + .slider:before {
 }
 
 @media screen and (max-width: 1400px) {
-    table {
+    #product-management-table {
         width: 90%;
     }
 
@@ -174,7 +138,7 @@ input:checked + .slider:before {
         flex-direction: column;
         align-items: flex-start;
     }
-    td label, td input, td button{
+    .container-label, #product-management-table td input[type=number], #product-management-table td input[type=datetime-local], #product-management-table td button{
         width: 95%;
         margin: auto;
         font-size:1.6rem;

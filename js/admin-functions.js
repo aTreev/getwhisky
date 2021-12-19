@@ -3,8 +3,6 @@ function prepareProductManagementPage() {
      * TODO:
      *  Add product search capability
      *  Add sorting option capability
-     *  Add logic for updating, ending and creating product discounts
-     *  Add logic for editing and deleting products...
      */
     // Get all product items
     const products = $(".product-management-item");
@@ -85,7 +83,7 @@ function prepareProductManagementPage() {
         addDiscountBtn.off();
         addDiscountBtn.click(function(){
             // Construct the markup to create a new discount
-            $("#product-stock-data-"+productid).html(`<div class='td-flex-center'><label>Discount price: &nbsp;<input type='number' id='discount-price-${productid}' step='0.01' /></label><label>End date: &nbsp;<input type='datetime-local' id='discount-end-datetime-${productid}' min='${new Date().toISOString().split("Z")[0]}'></label><button id='update-discount-${productid}'><i class='fas fa-wrench'></i>Save</button><button class='delete-action-btn' id='end-discount-${productid}'><i class='fas fa-hourglass-end'></i>End</button></div>`);
+            $("#product-stock-data-"+productid).html(`<div class='td-flex-center'><label class='container-label'>Discount price: &nbsp;<input type='number' id='discount-price-${productid}' step='0.01' /></label><label class='container-label'>End date: &nbsp;<input type='datetime-local' id='discount-end-datetime-${productid}' min='${new Date().toISOString().split("Z")[0]}'></label><button id='update-discount-${productid}'><i class='fas fa-wrench'></i>Save</button><button class='delete-action-btn' id='end-discount-${productid}'><i class='fas fa-hourglass-end'></i>End</button></div>`);
             // Recall function to refresh event listeners
             prepareProductManagementPage();
         });
@@ -168,4 +166,52 @@ function endProductDiscount(productid, productName) {
         if (!result) return new Alert(false, `Failed to remove product discount, please refresh and try again.`);
 
     })
+}
+
+
+function prepareProductManagementSearch() {
+    const searchbar = $("#product-management-search");
+    searchbar.keyup(function(){
+        if ($(this).val().length > 0) {
+            getProductsBySearch($(this).val());
+        } else {
+            getBaseProductManagementHtml();
+        }
+        
+    })
+}
+
+
+function getProductsBySearch(str) {
+    $.ajax({
+        url: "../php/ajax-handlers/product-management-handler.php",
+        method: "POST",
+        data:{function: 5, searchString: str}
+    })
+    .done(function(result){
+        result = JSON.parse(result);
+        
+        if (result.result == 1) {
+            $("#product-management-table-body").html(result.html);
+            prepareProductManagementPage();
+        }
+        if (result.result == 0) {
+            $("#product-management-table-body").html("<p>No products found</p>");
+            prepareProductManagementPage();
+        }
+    });
+}
+
+function getBaseProductManagementHtml() {
+    $.ajax({
+        url: "../php/ajax-handlers/product-management-handler.php",
+        method: "POST",
+        data: {function: 6}
+    })
+    .done(function(result){
+        $("#product-management-table").html(JSON.parse(result));
+        prepareProductManagementPage();
+        prepareProductManagementSearch();
+        $("#product-management-search").focus();
+    });
 }

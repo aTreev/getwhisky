@@ -31,6 +31,7 @@
         if(document.readyState==="complete") {
             prepareMenu();
             prepareProductManagementPage();
+            prepareProductManagementSearch();
         }
     }
 </script>

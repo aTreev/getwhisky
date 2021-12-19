@@ -17,6 +17,12 @@ if (isset($_POST['function']) && util::valInt($_POST['function'])) {
         case 4:
             endProductDiscount();
         break;
+        case 5:
+            getProductsFromSearch();
+        break;
+        case 6:
+            getBaseProductManagementHtml();
+        break;
     }
 }
 
@@ -64,5 +70,32 @@ function endProductDiscount() {
         $result = $productCRUD->endProductDiscount($productid);
         echo json_encode($result);
     }
+}
+
+function getProductsFromSearch() {
+    if (util::valStr($_POST['searchString'])) {
+        $searchStr = util::sanStr($_POST['searchString']);
+        $page = new Page();
+
+        $products = $page->getProducts();
+        $returnHtml = "";
+        $result = 0;
+
+        foreach($products as $product) {
+            if (preg_match("/{$searchStr}/i", $product->getName())) {
+                $returnHtml.=$product->adminDisplayProductTableItems();
+            }
+        }
+
+        if ($returnHtml) $result = 1;
+
+        $result = ['result' => $result, 'html' => $returnHtml];
+        echo json_encode($result);
+    }
+}
+
+function getBaseProductManagementHtml() {
+    $page = new Page();
+    echo json_encode($page->adminDisplayProductManagementPage());
 }
 ?>

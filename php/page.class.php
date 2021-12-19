@@ -632,7 +632,6 @@ class Page {
 			 return;
 			 exit;
 		 }
-		 $html.="<a href='admin-homepage-edit.php'>Homepage Management</a> <br>";
 		 $html.="<a href='admin-product-management.php'>Product Management</a>";
 
 		 return $html;
@@ -642,7 +641,7 @@ class Page {
 	 public function adminDisplayProductManagementPage() {
 		 $html = "";
 
-		 $html.="<table>";
+		 $html.="<table id='product-management-table'>";
 		 $html.="<tr>";
 		 $html.="<th>Product</th>";
 		 $html.="<th>Active</th>";
@@ -650,11 +649,18 @@ class Page {
 		 $html.="<th>Discount status</th>";
 		 $html.="<th>Options</th>";
 		 $html.="</tr>";
+		 $html.="<tr>";
+		 $html.="<td><div class='td-flex-center' style='width:100%;'>";
+		 	$html.="<label class='container-label' style='width:100%;' >Product search<input type='text' placeholder='Type to search for a product' id='product-management-search' style='width:90%;padding:8px 0px 8px 8px;'></label>";
+		$html.="</div></td>";
+		$html.="<td colspan='4'><div class='td-flex-center'>";
+		$html.="</div></td>"; 
+		$html.="</tr>";
+		$html.="<tbody id='product-management-table-body'>";
 		 foreach($this->getProducts() as $product) {
 			 $html.=$product->adminDisplayProductTableItems();
 		 }
-		 return $html;
-
+		 $html.="</tbody>";
 		 $html.="</table>";
 
 		 return $html;
