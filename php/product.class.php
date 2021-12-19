@@ -315,7 +315,10 @@ class Product {
 
     public function adminDisplayProductTableItems() {
         $html = "";
+
+        // Product item row
         $html.="<tr class='product-management-item' id='".$this->getId()."'>";
+            // Img, Name and Price
             $html.="<td><div class='td-flex-center'><img style='width:35px;' src='".$this->getImage()."'><h5 id='product-name-".$this->getId()."'>".$this->getName()."</h5><p id='product-base-price-".$this->getId()."' price='".$this->getPrice()."'>(£".$this->getPrice().")</p></div></td>";
 
             // Active state slider
@@ -343,20 +346,18 @@ class Product {
             $html.="</div></td>";
 
             // Discount management
-            $html.="<td><div class='td-flex-center'>";
+            $html.="<td id='product-stock-data-".$this->getId()."'><div class='td-flex-center'>";
                 if ($this->isDiscounted()) {
-                    $html.="<p>Yes</p>";
                     $html.="<label>Discount price: &nbsp;";
-                    $html.="<input type='number' step='0.01' style='padding:4px;font-size:1.6rem;' id='discount-price-".$this->getId()."' value='".$this->getActivePrice()."'>";
+                    $html.="<input type='number' step='0.01' id='discount-price-".$this->getId()."' value='".$this->getDiscountPrice()."'>";
                     $html.="</label>";
                     $html.="<label>End date:  &nbsp;";
-                        $html.="<input type='datetime-local' id='discount-end-datetime-".$this->getId()."' style='padding:4px;font-size:1.6rem;' value='".date('Y-m-d\TH:i',strtotime($this->getDiscountEndDatetime()))."'>";
+                        $html.="<input type='datetime-local' id='discount-end-datetime-".$this->getId()."' value='".date('Y-m-d\TH:i',strtotime($this->getDiscountEndDatetime()))."'>";
                     $html.="</label>";
-                    $html.="<button id='update-discount-".$this->getId()."'><i class='fas fa-wrench'></i>Update</button>";
+                    $html.="<button id='update-discount-".$this->getId()."'><i class='fas fa-wrench'></i>Save</button>";
                     $html.="<button class='delete-action-btn' id='end-discount-".$this->getId()."'><i class='fas fa-hourglass-end'></i>End</button>";
                     $html.="";
                 } else {
-                    $html.="<p>No</p>";
                     $html.="<button class='add-action-btn' id='add-discount-".$this->getId()."'>Add discount</button>";
                 }
             $html.="</div></td>";
@@ -364,7 +365,6 @@ class Product {
             // Options
             $html.="<td><div class='td-flex-center td-flex-justify-between'>";
                 $html.="<button class='update-action-btn' id='edit-product-".$this->getId()."'><i class='far fa-edit'></i> Edit</button>";
-                $html.="<button class='delete-action-btn' id='delete-product-".$this->getId()."'><i class='far fa-trash-alt'></i> Delete</button>";
             $html.="</div></td>";
 
         $html.="</tr>";

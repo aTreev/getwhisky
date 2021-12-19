@@ -40,10 +40,15 @@ table {
     font-family: arial, sans-serif;
     margin:auto;
     width: 1400px;
+    margin-top: 60px;
+    border-radius: 4px;
 }
   
 th {
     padding: 15px;
+    background-color: #3b8cc3;
+    color: white;
+    font-weight: 400;
 }
 
 td {
@@ -98,6 +103,10 @@ tr .delete-action-btn {
 tr .add-action-btn {
     background-color:#3d9970;
 }
+tr input[type=number], tr input[type=datetime-local] {
+    padding:4px;
+    font-size:1.6rem;
+}
 
 /*****
 * CSS for a slider switch on a checkbox
@@ -143,11 +152,11 @@ tr .add-action-btn {
 }
 
 input:checked + .slider {
-    background-color: #2196F3;
+    background-color: #3b8cc3;
 }
 
 input:focus + .slider {
-    box-shadow: 0 0 1px #2196F3;
+    box-shadow: 0 0 1px #3b8cc3;
 }
 
 input:checked + .slider:before {

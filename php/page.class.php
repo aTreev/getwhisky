@@ -647,7 +647,7 @@ class Page {
 		 $html.="<th>Product</th>";
 		 $html.="<th>Active</th>";
 		 $html.="<th>Featured</th>";
-		 $html.="<th>Discounted</th>";
+		 $html.="<th>Discount status</th>";
 		 $html.="<th>Options</th>";
 		 $html.="</tr>";
 		 foreach($this->getProducts() as $product) {

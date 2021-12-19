@@ -17,27 +17,27 @@ class ProductCRUD {
 		return $resultset;
     }
 
-    public function getProductById($productId, $style=MYSQLI_ASSOC) {
+    public function getProductById($productid, $style=MYSQLI_ASSOC) {
         $this->sql = "SELECT * FROM products WHERE id = ?";
 		$this->stmt = self::$db->prepare($this->sql);
-        $this->stmt->bind_param("i",$productId);
+        $this->stmt->bind_param("i",$productid);
 		$this->stmt->execute();
 		$result = $this->stmt->get_result();
 		$resultset=$result->fetch_all($style);
 		return $resultset;
     }
 
-    public function getProductAttributeValueIds($productId, $style=MYSQLI_ASSOC) {
+    public function getProductAttributeValueIds($productid, $style=MYSQLI_ASSOC) {
         $this->sql = "SELECT attribute_value_id FROM entity_value WHERE product_id = ?;";
         $this->stmt = self::$db->prepare($this->sql);
-        $this->stmt->bind_param("i",$productId);
+        $this->stmt->bind_param("i",$productid);
         $this->stmt->execute();
         $result = $this->stmt->get_result();
         $resultset=$result->fetch_all($style);
         return $resultset;
     }
 
-    public function getProductAttributesFull($productId, $style=MYSQLI_ASSOC) {
+    public function getProductAttributesFull($productid, $style=MYSQLI_ASSOC) {
         $this->sql = "  SELECT attribute.title, attribute_value.value  FROM attribute_value
                         JOIN entity_value
                         ON entity_value.attribute_value_id = attribute_value.id
@@ -45,27 +45,39 @@ class ProductCRUD {
                         ON attribute_value.attribute_id = attribute.id
                         WHERE entity_value.product_id = ?;";
         $this->stmt = self::$db->prepare($this->sql);
-        $this->stmt->bind_param("i",$productId);
+        $this->stmt->bind_param("i",$productid);
         $this->stmt->execute();
         $result = $this->stmt->get_result();
         $resultset=$result->fetch_all($style);
         return $resultset;
     }   
 
-    public function getProductOverviews($productId, $style=MYSQLI_ASSOC) {
+    public function getProductOverviews($productid, $style=MYSQLI_ASSOC) {
         $this->sql = "SELECT image, heading, text_body FROM product_overviews WHERE product_id = ?;";
         $this->stmt = self::$db->prepare($this->sql);
-        $this->stmt->bind_param("i", $productId);
+        $this->stmt->bind_param("i", $productid);
         $this->stmt->execute();
         $result = $this->stmt->get_result();
         $resultset=$result->fetch_all($style);
         return $resultset;
     }
 
-    public function endProductDiscount($productId) {
+    public function createProductDiscount($productid, $price, $endDatetime) {
+        $this->sql = "UPDATE `products` SET `discounted`= 1,`discount_price`= ?,`discount_end_datetime`= ? where id = ?;";
+        $this->stmt = self::$db->prepare($this->sql);
+        $this->stmt->bind_param("dsi",$price, $endDatetime, $productid);
+        $this->stmt->execute();
+        if($this->stmt->affected_rows!=1) {
+			return 0;
+		} else {
+			return $this->stmt->affected_rows;
+		}
+    }
+
+    public function endProductDiscount($productid) {
         $this->sql = "UPDATE `products` SET `discounted`=0,`discount_price`=null,`discount_end_datetime`=null where id = ?;";
         $this->stmt = self::$db->prepare($this->sql);
-        $this->stmt->bind_param("i",$productId);
+        $this->stmt->bind_param("i",$productid);
         $this->stmt->execute();
         if($this->stmt->affected_rows!=1) {
 			return 0;

@@ -12,8 +12,10 @@ if (isset($_POST['function']) && util::valInt($_POST['function'])) {
             toggleProductFeaturedState();
         break;
         case 3:
+            addProductDiscount();
         break;
         case 4:
+            endProductDiscount();
         break;
     }
 }
@@ -41,4 +43,26 @@ function toggleProductFeaturedState() {
     }
 }
 
+function addProductDiscount() {
+    if ( (util::valInt($_POST['productid'])) && (util::valFloat($_POST['price'])) && util::valStr($_POST['endDatetime']) ) {
+        $productCRUD = new ProductCRUD();
+        $productid = util::sanInt($_POST['productid']);
+        $price = $_POST['price'];
+        $endDatetime = util::sanStr($_POST['endDatetime']);
+
+        $result = $productCRUD->createProductDiscount($productid, $price, $endDatetime);
+        echo json_encode($result);
+        //echo json_encode($price);
+    }
+}
+
+function endProductDiscount() {
+    if (util::valInt($_POST['productid'])) {
+        $productCRUD = new ProductCRUD();
+        $productid = util::sanInt($_POST['productid']);
+
+        $result = $productCRUD->endProductDiscount($productid);
+        echo json_encode($result);
+    }
+}
 ?>
