@@ -23,6 +23,9 @@ if (isset($_POST['function']) && util::valInt($_POST['function'])) {
         case 6:
             getBaseProductManagementHtml();
         break;
+        case 7:
+            updateProductStock();
+        break;
     }
 }
 
@@ -97,5 +100,17 @@ function getProductsFromSearch() {
 function getBaseProductManagementHtml() {
     $page = new Page();
     echo json_encode($page->adminDisplayProductManagementPage());
+}
+
+function updateProductStock() {
+    if (util::valInt($_POST['productid']) && util::valInt($_POST['quantity'])) {
+        $productid = util::sanInt($_POST['productid']);
+        $quantity = util::sanInt($_POST['quantity']);
+        $productCRUD = new ProductCRUD();
+
+        $result = $productCRUD->updateProductStockB($productid, $quantity);
+
+        echo json_encode($result);
+    }
 }
 ?>

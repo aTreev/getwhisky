@@ -175,6 +175,11 @@ function checkFileField(fileField, feedbackMessage, allowedFileTypes) {
 	return true;
 }
 
+/*************
+ * Validates a datetime input type to ensure
+ * it isn't null and also to ensure that it is
+ * a date in the future
+ **************************/
 function checkDatetimeField(datetimeField) {
 	const datetime = datetimeField.val();
 	const now = new Date().toISOString().split("Z")[0];
@@ -191,8 +196,15 @@ function checkDatetimeField(datetimeField) {
 	return true;
 }
 
-function checkNumberField(numberField, feedbackMessage, maxInt) {
+/*****
+ * Validates a number Int or Float
+ * Takes a feedback message to provide on empty value
+ * Optional minmax array allows for setting value bounds
+ ********************/
+function checkNumberField(numberField, feedbackMessage, minMax = [null, null]) {
 	const number = numberField.val();
+	const minVal = minMax[0];
+	const maxVal = minMax[1]; 
 
 	if (number.length <= 0) {
 		doFeedback(numberField, feedbackMessage);
@@ -204,8 +216,13 @@ function checkNumberField(numberField, feedbackMessage, maxInt) {
 		return false;
 	}
 
-	if (maxInt && number > maxInt) {
-		doFeedback(numberField, `Please enter a number lower than ${maxInt}`);
+	if (minVal != null && number <= minVal) {
+		doFeedback(numberField, `Please enter a number greater than ${minVal}`);
+		return false;
+	}
+
+	if (maxVal != null && number >= maxVal) {
+		doFeedback(numberField, `Please enter a number lower than ${maxVal}`);
 		return false;
 	}
 

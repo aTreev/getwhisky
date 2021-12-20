@@ -98,6 +98,17 @@ class ProductCRUD {
 		}
     }
 
+    public function updateProductStockB($productid, $quantity) {
+        $this->sql = "UPDATE `products` SET `stock` = (stock + ?) WHERE id = ?;";
+        $this->stmt = self::$db->prepare($this->sql);
+        $this->stmt->bind_param("ii", $quantity, $productid);
+        $this->stmt->execute();
+        if($this->stmt->affected_rows!=1) {
+			return 0;
+		} else {
+			return $this->stmt->affected_rows;
+		}
+    }
 
     public function toggleProductActiveState($productid) {
         $this->sql = "UPDATE `products` SET `active` = !active WHERE id = ?;";

@@ -8,6 +8,7 @@ function prepareProductManagementPage() {
     const products = $(".product-management-item");
 
     // iterate through each and apply logic
+    products.off();
     products.each(function(){
         // Local variables
         const productid = $(this).attr("id");
@@ -21,6 +22,10 @@ function prepareProductManagementPage() {
         discountEndDatetime.attr("min", new Date().toISOString().split("Z")[0])
         const endDiscountBtn = $("#end-discount-"+productid);
         const addDiscountBtn = $("#add-discount-"+productid);
+        const addStockBtn = $("#add-stock-"+productid);
+        const removeStockBtn = $("#remove-stock-"+productid);
+        const stockInput = $("#product-stock-"+productid);
+        const currentStock = parseInt($("#current-stock-"+productid).text());
 
         // active checkbox toggle logic
         activeCheckbox.off();
@@ -57,11 +62,12 @@ function prepareProductManagementPage() {
     
             // validate fields
             let dv, dev = false;
-            dv = checkNumberField(discountPrice, "Please provide a discount price");
+            dv = checkNumberField(discountPrice, "Please provide a discount price", [0,null]);
             dev = checkDatetimeField(discountEndDatetime);
 
             if (dv && dev) {
-                if (confirm(`Are you sure you wish to set a ${Math.floor(((basePrice.attr("price") - discountPrice.val()) / basePrice.attr("price")) * 100)}% discount for ${productName}`)) {
+                const discountPercentage = Math.floor(((basePrice.attr("price") - discountPrice.val()) / basePrice.attr("price")) * 100);
+                if (confirm(`Are you sure you wish to set a ${discountPercentage}% discount for ${productName}`)) {
                     addProductDiscount(productid, discountPrice.val(), discountEndDatetime.val(), productName);
                 }
             }
@@ -83,11 +89,72 @@ function prepareProductManagementPage() {
         addDiscountBtn.off();
         addDiscountBtn.click(function(){
             // Construct the markup to create a new discount
-            $("#product-stock-data-"+productid).html(`<div class='td-flex-center'><label class='container-label'>Discount price: &nbsp;<input type='number' id='discount-price-${productid}' step='0.01' /></label><label class='container-label'>End date: &nbsp;<input type='datetime-local' id='discount-end-datetime-${productid}' min='${new Date().toISOString().split("Z")[0]}'></label><button id='update-discount-${productid}'><i class='fas fa-wrench'></i>Save</button><button class='delete-action-btn' id='end-discount-${productid}'><i class='fas fa-hourglass-end'></i>End</button></div>`);
+            $("#product-stock-data-"+productid).html(`<div class='td-flex-center'><div><label class='container-label'>Discount price: &nbsp;<input type='number' id='discount-price-${productid}' step='0.01' /></label></div><div><label class='container-label'>End date: &nbsp;<input type='datetime-local' id='discount-end-datetime-${productid}' min='${new Date().toISOString().split("Z")[0]}'></label></div><button id='update-discount-${productid}'><i class='fas fa-wrench'></i>Save</button><button class='delete-action-btn' id='end-discount-${productid}'><i class='fas fa-hourglass-end'></i>End</button></div>`);
             // Recall function to refresh event listeners
             prepareProductManagementPage();
         });
+
+        // Add stock button logic
+        addStockBtn.off();
+        addStockBtn.click(function(){
+            $(".form-feedback").remove();
+            let stockValid = false;
+            stockValid = checkNumberField(stockInput, "Please provide a number", [0, null]);
+
+            if (stockValid) {
+                let quantityToAdd = parseInt(stockInput.val());
+                // AJAX promise to allow for page values updating after ajax request
+                increaseProductStock(productid, quantityToAdd, productName).then(function(result){
+                    if (result) {
+                        console.log($("#current-stock-"+productid).text());
+                        $("#current-stock-"+productid).text(parseInt(currentStock+(quantityToAdd)));
+                        prepareProductManagementPage();
+                    }
+                });
+            }
+        });
+
+        // remove stock button logic
+        removeStockBtn.off();
+        removeStockBtn.click(function(){
+            $(".form-feedback").remove();
+            let stockValid = false;
+            stockValid = checkNumberField(stockInput, "Please provide a number", [0, null]);
+
+            if (stockValid) {
+                let quantityToRemove = parseInt(stockInput.val());
+                // Cap quantity to remove at the current stock - to prevent negative integers
+                if (currentStock - quantityToRemove <= 0) quantityToRemove = currentStock;
+                // AJAX promise to allow for page values updating after ajax request
+                reduceProductStock(productid, quantityToRemove, productName).then(function(result){
+                    if (result) {
+                        console.log(currentStock+(quantityToRemove*-1))
+                        $("#current-stock-"+productid).text(parseInt(currentStock+(quantityToRemove*-1)));
+                        prepareProductManagementPage();
+                    }
+
+                });
+            }
+        });
     });
+}
+
+/*****
+ * Prepares the product search bar for the
+ * product management page
+ */
+ function prepareProductManagementSearch() {
+    const searchbar = $("#product-management-search");
+
+    searchbar.keyup(function(){
+        if ($(this).val().length > 0) {
+            getProductsBySearch($(this).val());
+        } else {
+            // Reset to base page html (all products)
+            getBaseProductManagementHtml();
+        }
+        
+    })
 }
 
 
@@ -169,19 +236,6 @@ function endProductDiscount(productid, productName) {
 }
 
 
-function prepareProductManagementSearch() {
-    const searchbar = $("#product-management-search");
-    searchbar.keyup(function(){
-        if ($(this).val().length > 0) {
-            getProductsBySearch($(this).val());
-        } else {
-            getBaseProductManagementHtml();
-        }
-        
-    })
-}
-
-
 function getProductsBySearch(str) {
     $.ajax({
         url: "../php/ajax-handlers/product-management-handler.php",
@@ -214,4 +268,39 @@ function getBaseProductManagementHtml() {
         prepareProductManagementSearch();
         $("#product-management-search").focus();
     });
+}
+
+// needs to be promise based
+function increaseProductStock(productid, quantity, productName) {
+
+    return new Promise(function(resolve) {
+        $.ajax({
+            url: "../php/ajax-handlers/product-management-handler.php",
+            method: "POST",
+            data: {function: 7, productid: productid, quantity: quantity}
+        })
+        .done(function(result){
+            result = JSON.parse(result);
+            if (result) new Alert(true, `${quantity} added to <b>${productName}</b> stock.`);            
+            if (!result) new Alert(false, `Failed to add to <b>${productName}</b> stock, please refresh and try again.`);
+            resolve(result);
+        });
+    });
+}
+
+// needs to be promise based
+function reduceProductStock(productid, quantity, productName) {
+    return new Promise(function(resolve) {
+        $.ajax({
+            url: "../php/ajax-handlers/product-management-handler.php",
+            method: "POST",
+            data: {function: 7, productid: productid, quantity: quantity*-1}
+        })
+        .done(function(result){
+            result = JSON.parse(result);
+            if (result) new Alert(true, `${quantity} removed from <b>${productName}</b> stock.`);
+            if (!result) new Alert(false, `Failed to remove from <b>${productName}</b> stock, please refresh and try again.`);
+            resolve(result);
+        });
+    });    
 }

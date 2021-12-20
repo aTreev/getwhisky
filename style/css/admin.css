@@ -7,6 +7,11 @@
     border-collapse: collapse;
 }
   
+#product-management-table input[type=text] {
+    width: 95%;
+    margin: auto;
+    font-size: var(--font-size-regtext);
+}
 #product-management-table th {
     padding: 15px;
     background-color: #3b8cc3;

@@ -642,25 +642,31 @@ class Page {
 		 $html = "";
 
 		 $html.="<table id='product-management-table'>";
-		 $html.="<tr>";
-		 $html.="<th>Product</th>";
-		 $html.="<th>Active</th>";
-		 $html.="<th>Featured</th>";
-		 $html.="<th>Discount status</th>";
-		 $html.="<th>Options</th>";
-		 $html.="</tr>";
-		 $html.="<tr>";
-		 $html.="<td><div class='td-flex-center' style='width:100%;'>";
-		 	$html.="<label class='container-label' style='width:100%;' >Product search<input type='text' placeholder='Type to search for a product' id='product-management-search' style='width:90%;padding:8px 0px 8px 8px;'></label>";
-		$html.="</div></td>";
-		$html.="<td colspan='4'><div class='td-flex-center'>";
-		$html.="</div></td>"; 
-		$html.="</tr>";
-		$html.="<tbody id='product-management-table-body'>";
-		 foreach($this->getProducts() as $product) {
-			 $html.=$product->adminDisplayProductTableItems();
-		 }
-		 $html.="</tbody>";
+			$html.="<tr>";
+				// Table headings
+				$html.="<th>Product</th>";
+				$html.="<th>Active</th>";
+				$html.="<th>Featured</th>";
+				$html.="<th>Discount status</th>";
+				$html.="<th>Stock</th>";
+				$html.="<th>Options</th>";
+			$html.="</tr>";
+
+			// Search / filter options
+			$html.="<tr>";
+				$html.="<td><div class='td-flex-center' style='width:100%;'>";
+					$html.="<label class='container-label' style='width:100%;' >Product search<input type='text' placeholder='Type to search for a product' id='product-management-search' style='width:90%;padding:8px 0px 8px 8px;'></label>";
+				$html.="</div></td>";
+				$html.="<td colspan='5'><div class='td-flex-center'>";
+				$html.="</div></td>"; 
+			$html.="</tr>";
+
+			// Product management items
+			$html.="<tbody id='product-management-table-body'>";
+			foreach($this->getProducts() as $product) {
+				$html.=$product->adminDisplayProductTableItems();
+			}
+			$html.="</tbody>";
 		 $html.="</table>";
 
 		 return $html;

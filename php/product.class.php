@@ -348,12 +348,12 @@ class Product {
             // Discount management
             $html.="<td id='product-stock-data-".$this->getId()."'><div class='td-flex-center'>";
                 if ($this->isDiscounted()) {
-                    $html.="<label class='container-label'>Discount price: &nbsp;";
+                    $html.="<div><label class='container-label'>Discount price: &nbsp;";
                     $html.="<input type='number' step='0.01' id='discount-price-".$this->getId()."' value='".$this->getDiscountPrice()."'>";
-                    $html.="</label>";
-                    $html.="<label class='container-label'>End date:  &nbsp;";
+                    $html.="</label></div>";
+                    $html.="<div><label class='container-label'>End date:  &nbsp;";
                         $html.="<input type='datetime-local' id='discount-end-datetime-".$this->getId()."' value='".date('Y-m-d\TH:i',strtotime($this->getDiscountEndDatetime()))."'>";
-                    $html.="</label>";
+                    $html.="</label></div>";
                     $html.="<button id='update-discount-".$this->getId()."'><i class='fas fa-wrench'></i>Save</button>";
                     $html.="<button class='delete-action-btn' id='end-discount-".$this->getId()."'><i class='fas fa-hourglass-end'></i>End</button>";
                     $html.="";
@@ -362,11 +362,20 @@ class Product {
                 }
             $html.="</div></td>";
 
+            // Stock management
+            $html.="<td style='max-width:100px;'><div class='td-flex-center' style='flex-direction:column;align-items:flex-start;'>";
+                $html.="<p>Current stock: <span id='current-stock-".$this->getId()."' style='font-weight:500;'>".$this->getStock()."</span></p>";
+                $html.="<div><label class='container-label'>Qty to add/remove: &nbsp;";
+                    $html.="<input type='number' style='width:90%;' id='product-stock-".$this->getId()."'>";
+                $html.="</label></div>";
+                $html.="<button class='update-action-btn' style='width:100%;' id='add-stock-".$this->getId()."'><i class='fas fa-plus'></i> Add</button>";
+                $html.="<button class='delete-action-btn' style='width:100%;' id='remove-stock-".$this->getId()."'><i class='fas fa-minus'></i> Remove</button>";
+            $html.="</div></td>";
+
             // Options
             $html.="<td><div class='td-flex-center td-flex-justify-between'>";
                 $html.="<button class='update-action-btn' id='edit-product-".$this->getId()."'><i class='far fa-edit'></i> Edit</button>";
             $html.="</div></td>";
-
         $html.="</tr>";
 
         return $html;
