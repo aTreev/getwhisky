@@ -639,8 +639,8 @@ class Page {
 
 
 	 public function adminDisplayProductManagementPage() {
-		 $html = "";
-
+		$html = "";
+		$html.="<p><a href='admin-create-product.php'>Create new product</a></p>";
 		 $html.="<table id='product-management-table'>";
 			$html.="<tr>";
 				// Table headings

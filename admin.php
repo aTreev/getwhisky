@@ -6,7 +6,7 @@
 <html>
 <head>
     <?php echo $page->displayHead(); ?>
-    <title>getwhisky homepage</title>
+    <title>getwhisky Admin page</title>
 </head>
 <body>
 	<?php
@@ -19,6 +19,7 @@
         <?php echo $page->adminDisplayAdminPage(); ?>
 	</main>
 </body>
+<script src="js/classes/alert.class.js"></script>
 <script src="js/functions.js"></script>
 <script>
     document.onreadystatechange = function() {

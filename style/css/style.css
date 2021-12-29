@@ -18,6 +18,8 @@ p, li, a, span, time, label { font-size:var(--font-size-regtext) }
  --font-size-subheading-small: 1.8rem;
  --font-size-regtext: 1.6rem;
  --icon-size-small:1.9rem;
+ --btn-save-green: #3d9970;
+ --btn-hover-colour: #95b0c2;
 }
 i {
   cursor: pointer;
@@ -454,6 +456,10 @@ form label {
   border: 1px solid #ebebeb;
 
 }
+
+.form-divider {
+  padding: 40px 0px;
+}
 /*******
 * little focus animation every form element needs a span after it
 ********/
@@ -600,6 +606,7 @@ button[type=submit]:hover {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  z-index: 99;
 
 }
 .modal-container i {
@@ -621,6 +628,8 @@ button[type=submit]:hover {
 
 .modal-content {
   padding: 15px;
+  text-align: center;
+  margin: auto;
 }
 
 

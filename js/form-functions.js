@@ -43,6 +43,8 @@ function prepareRegistrationForm() {
 
 function doFeedback(inputField, feedbackStr) {
 	inputField.parent().after("<div class='form-feedback'><i class='fas fa-exclamation-circle'></i><p>"+feedbackStr+"</p></div>");
+	inputField.get(0).scrollIntoView({block: "center"});
+
 }
 
 
@@ -140,7 +142,7 @@ function checkFieldEmpty(field, feedbackMessage, maxLen) {
 	const fieldValue = field.val();
 
 	if (fieldValue.length == 0) {
-		doFeedback(field, feedbackMessage)
+		doFeedback(field, feedbackMessage);
 		return false;
 	}
 	if (maxLen && fieldValue.length > maxLen) {
@@ -226,6 +228,17 @@ function checkNumberField(numberField, feedbackMessage, minMax = [null, null]) {
 		return false;
 	}
 
+	return true;
+}
+
+
+function checkSelectField(selectField, feedbackStr) {
+	const selectValue = selectField.val();
+
+	if (selectValue == -1) {
+		doFeedback(selectField, feedbackStr);
+		return false;
+	}
 	return true;
 }
 

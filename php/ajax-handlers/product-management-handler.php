@@ -1,4 +1,9 @@
 <?php 
+/***********
+ * File for calling PHP scripts through AJAX on the product management page
+ * Functions should be self explanitory as they're fairly simple and mainly
+ * calling methods through a page or CRUD object
+ ********/
 require_once("../page.class.php");
 
 if (isset($_POST['function']) && util::valInt($_POST['function'])) {

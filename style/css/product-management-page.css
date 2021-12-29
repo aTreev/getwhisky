@@ -76,7 +76,26 @@
     padding:4px;
     font-size:1.6rem;
 }
-
+.edit-product-btn {
+    display: block;
+    background-color: #3b8cc3;
+    color: white;
+    padding: 10px;
+    width: 100%;
+    border-radius: 4px;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    text-decoration: none;
+}
+.edit-product-btn i {
+    margin-top: -2px;
+}
+.edit-product-btn:hover {
+    background-color:#95b0c2;
+}
 /*****
 * CSS for a slider switch on a checkbox
 * Taken from w3schools https://www.w3schools.com/howto/tryit.asp?filename=tryhow_css_switch

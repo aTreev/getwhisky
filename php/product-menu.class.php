@@ -15,7 +15,7 @@ class ProductMenu {
 	
 	private function setMenuItems() {
 		$source=new MenuCRUD();
-		$this->categories=$source->getProductMenu();
+		$this->categories=$source->getProductCategories();
 	}
 
 	public function getMenuItems() {

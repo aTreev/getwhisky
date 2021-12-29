@@ -1,13 +1,19 @@
+/*************F
+ * Function prepares the product management page, adding event listeners
+ * to required buttons and input fields. 
+ * Validates fields on front-end using form-functions.js file
+ *********************************/
 function prepareProductManagementPage() {
     /****
      * TODO:
-     *  Add product search capability
      *  Add sorting option capability
      */
     // Get all product items
     const products = $(".product-management-item");
 
-    // iterate through each and apply logic
+
+    // iterate through each management product item and
+    // apply logic
     products.off();
     products.each(function(){
         // Local variables
@@ -67,7 +73,7 @@ function prepareProductManagementPage() {
 
             if (dv && dev) {
                 const discountPercentage = Math.floor(((basePrice.attr("price") - discountPrice.val()) / basePrice.attr("price")) * 100);
-                if (confirm(`Are you sure you wish to set a ${discountPercentage}% discount for ${productName}`)) {
+                if (confirm(`Are you sure you want to set a ${discountPercentage}% discount for ${productName}`)) {
                     addProductDiscount(productid, discountPrice.val(), discountEndDatetime.val(), productName);
                 }
             }
@@ -76,7 +82,7 @@ function prepareProductManagementPage() {
         // End discount button logic
         endDiscountBtn.off();
         endDiscountBtn.click(function(){
-            if (confirm(`Are you sure you wish to end the discount for ${productName}?`)) {
+            if (confirm(`Are you sure you want to end the discount for ${productName}?`)) {
                 endProductDiscount(productid, productName);
                 // Construct the button to add a discount
                 $("#product-stock-data-"+productid).html(`<div class='td-flex-center'><button class='add-action-btn' id='add-discount-${productid}'>Add discount</button></div>`);
@@ -99,14 +105,14 @@ function prepareProductManagementPage() {
         addStockBtn.click(function(){
             $(".form-feedback").remove();
             let stockValid = false;
-            stockValid = checkNumberField(stockInput, "Please provide a number", [0, null]);
+            stockValid = checkNumberField(stockInput, "Please provide a number", [0, 100]);
 
             if (stockValid) {
                 let quantityToAdd = parseInt(stockInput.val());
+
                 // AJAX promise to allow for page values updating after ajax request
                 increaseProductStock(productid, quantityToAdd, productName).then(function(result){
                     if (result) {
-                        console.log($("#current-stock-"+productid).text());
                         $("#current-stock-"+productid).text(parseInt(currentStock+(quantityToAdd)));
                         prepareProductManagementPage();
                     }
@@ -123,8 +129,10 @@ function prepareProductManagementPage() {
 
             if (stockValid) {
                 let quantityToRemove = parseInt(stockInput.val());
+
                 // Cap quantity to remove at the current stock - to prevent negative integers
                 if (currentStock - quantityToRemove <= 0) quantityToRemove = currentStock;
+
                 // AJAX promise to allow for page values updating after ajax request
                 reduceProductStock(productid, quantityToRemove, productName).then(function(result){
                     if (result) {
@@ -142,23 +150,36 @@ function prepareProductManagementPage() {
 /*****
  * Prepares the product search bar for the
  * product management page
- */
+ ***********/
  function prepareProductManagementSearch() {
     const searchbar = $("#product-management-search");
 
+    // add logic to search bar
     searchbar.keyup(function(){
-        if ($(this).val().length > 0) {
-            getProductsBySearch($(this).val());
+        const searchString = searchbar.val()
+        // Length > 0 get returned products
+        if (searchString.length > 0) {
+            // Get products and render from promise
+            getProductsBySearch(searchString).then(function(result){
+                if (result.result == 1) $("#product-management-table-body").html(result.html);
+                if (result.result == 0) $("#product-management-table-body").html("<p>No products found</p>");
+                prepareProductManagementPage(); 
+            });
         } else {
             // Reset to base page html (all products)
-            getBaseProductManagementHtml();
-        }
-        
-    })
+            getBaseProductManagementHtml().then(function(result){
+                $("#product-management-table").html(result);
+                prepareProductManagementPage();
+                prepareProductManagementSearch();
+                $("#product-management-search").focus();
+            });
+        } 
+    });
 }
 
 
-/****
+
+/***********
  * Updates the active state of a product via the
  * product management ajax handler
  *********************/
@@ -172,8 +193,8 @@ function toggleProductActiveState(productid, productName, state) {
         console.log(result);
         result = JSON.parse(result);
         if (result) {
-            if (state == true) return new Alert(true, `<b>${productName}</b> activated.`);
-            if (state == false) return new Alert(true, `<b>${productName}</b> deactivated.`);
+            if (state == true) return new Alert(true, `<b>${productName}</b> activated and will now be listed for sale.`);
+            if (state == false) return new Alert(true, `<b>${productName}</b> deactivated and will not be listed for sale.`);
         }
         if (!result) return new Alert(true, "Failed to update product active state, please refresh and retry.");
     });
@@ -213,7 +234,7 @@ function addProductDiscount(productid, price, endDatetime, productName) {
     .done(function(result){
         result = JSON.parse(result);
 
-        if (result) return new Alert(true, `Discount set successfully for <b>${productName}</b>.`)
+        if (result) return new Alert(true, `Discount set for <b>${productName}</b>.`)
         if (!result) return new Alert(false, `Failed to set product discount, please refresh and try again.`)
     });
 }
@@ -235,44 +256,44 @@ function endProductDiscount(productid, productName) {
     })
 }
 
-
+/****
+ * Retrieves a list of products that match the search string
+ * returns the result as a promise
+ ******/
 function getProductsBySearch(str) {
-    $.ajax({
-        url: "../php/ajax-handlers/product-management-handler.php",
-        method: "POST",
-        data:{function: 5, searchString: str}
-    })
-    .done(function(result){
-        result = JSON.parse(result);
-        
-        if (result.result == 1) {
-            $("#product-management-table-body").html(result.html);
-            prepareProductManagementPage();
-        }
-        if (result.result == 0) {
-            $("#product-management-table-body").html("<p>No products found</p>");
-            prepareProductManagementPage();
-        }
+    return new Promise(function(resolve) {
+        $.ajax({
+            url: "../php/ajax-handlers/product-management-handler.php",
+            method: "POST",
+            data:{function: 5, searchString: str}
+        })
+        .done(function(result){
+            result = JSON.parse(result);
+            resolve(result);
+        });
     });
 }
 
+/*********
+ * Retrieves the base page html and returns the result
+ * as a promise
+ *****************/
 function getBaseProductManagementHtml() {
-    $.ajax({
-        url: "../php/ajax-handlers/product-management-handler.php",
-        method: "POST",
-        data: {function: 6}
-    })
-    .done(function(result){
-        $("#product-management-table").html(JSON.parse(result));
-        prepareProductManagementPage();
-        prepareProductManagementSearch();
-        $("#product-management-search").focus();
+    return new Promise(function(resolve) {
+        $.ajax({
+            url: "../php/ajax-handlers/product-management-handler.php",
+            method: "POST",
+            data: {function: 6}
+        })
+        .done(function(result){
+            result = JSON.parse(result);
+            resolve(result);
+        });
     });
 }
 
-// needs to be promise based
+// needs to be promise based for updating page content correctly
 function increaseProductStock(productid, quantity, productName) {
-
     return new Promise(function(resolve) {
         $.ajax({
             url: "../php/ajax-handlers/product-management-handler.php",
@@ -288,7 +309,7 @@ function increaseProductStock(productid, quantity, productName) {
     });
 }
 
-// needs to be promise based
+// needs to be promise based for updating page content correctly
 function reduceProductStock(productid, quantity, productName) {
     return new Promise(function(resolve) {
         $.ajax({

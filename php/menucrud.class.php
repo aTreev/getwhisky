@@ -8,7 +8,7 @@ class MenuCRUD {
 		self::$db = db::getInstance();
 	}
 	
-	public function getProductMenu($style=MYSQLI_ASSOC) {
+	public function getProductCategories($style=MYSQLI_ASSOC) {
 		$this->sql = "SELECT `id`, `name`, `description` FROM categories;";
 		$this->stmt = self::$db->prepare($this->sql);
 		$this->stmt->execute();
@@ -31,6 +31,16 @@ class MenuCRUD {
 		$this->sql = "SELECT * FROM attribute WHERE category_id = ?;";
 		$this->stmt = self::$db->prepare($this->sql);
 		$this->stmt->bind_param("i", $categoryId);
+		$this->stmt->execute();
+		$result = $this->stmt->get_result();
+		$resultset=$result->fetch_all($style);
+		return $resultset;
+	}
+
+	public function getAttributeValuesByAttributeId($attributeId, $style=MYSQLI_ASSOC) {
+		$this->sql = "SELECT * FROM attribute_value WHERE attribute_id = ?;";
+		$this->stmt = self::$db->prepare($this->sql);
+		$this->stmt->bind_param("i", $attributeId);
 		$this->stmt->execute();
 		$result = $this->stmt->get_result();
 		$resultset=$result->fetch_all($style);

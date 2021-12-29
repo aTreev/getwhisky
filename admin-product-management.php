@@ -7,7 +7,7 @@
 <head>
     <?php echo $page->displayHead(); ?>
     <title>getwhisky product management</title>
-    <link rel="stylesheet" href="style/css/admin.css">
+    <link rel="stylesheet" href="style/css/product-management-page.css">
 </head>
 <body>
 	<?php
@@ -25,7 +25,7 @@
 <script src="js/classes/alert.class.js"></script>
 <script src="js/functions.js"></script>
 <script src="js/form-functions.js"></script>
-<script src="js/admin-functions.js"></script>
+<script src="js/product-management-page.js"></script>
 <script>
     document.onreadystatechange = function() {
         if(document.readyState==="complete") {
