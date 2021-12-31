@@ -74,8 +74,21 @@
                         <div class="input-container-100">
                             <textarea id="product-desc" id="" class="form-item"></textarea>
                         </div>
-                        
                     </div>
+
+                    <!-- Product Price & Stock -->
+                    <div class="product-creation-input-container" style='border:1px solid lightgrey;padding:15px;border-radius:3px;'>
+                        <p style='margin-bottom:20px;'>Optional Values (Fill if applicable)</p>
+                        <label for="product-alc-volume">Alchohol Volume <i style='cursor:default;font-size:1.4rem;'>(Example: 40%)</i></label>
+                        <div class='input-container-100'>
+                            <input type="text" id="product-alc-volume" id="" class="form-item">
+                        </div>
+                        <label for="product-bottle-size">Bottle Size <i style='cursor:default;font-size:1.4rem;'>(Example: 70cl / 2 x 20cl)</i></label>
+                        <div class='input-container-100'>
+                            <input type="text" id="product-bottle-size" id="" class="form-item">
+                        </div>
+                    </div>
+
                 </div>
             </div>
 
@@ -107,16 +120,6 @@
         </div>
         <button id='save-product'>Save</button>
 
-
-        <div class='modal-container' id='product-success-modal'>
-            <div class="modal-header">
-                <h3>Product created!</h3>
-            </div>
-            <div class="modal-content">
-                <p>You are now being redirected to the product management page</p>
-                <img src="/assets/loader.gif" alt="">
-            </div>
-        </div>
 	</main>
 </body>
 <script src="js/classes/alert.class.js"></script>

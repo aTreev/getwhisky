@@ -44,8 +44,9 @@
     ?>
 </main>
 </body>
-<script src='js/functions.js'></script>
 <script src='js/classes/alert.class.js'></script>
+<script src='js/functions.js'></script>
+<script src="js/form-functions.js"></script>
 <script src='js/product-page.js'></script>
 <script>
     document.onreadystatechange = function() {

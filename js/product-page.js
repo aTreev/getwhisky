@@ -2,10 +2,17 @@ function prepareProductPage() {
     prepareProductTabs();
 
     $("[name='add-to-cart").on("click", function(){
-        let productId = $("#product-id").val();
-        let quantity = $("[name='product-quantity']").val();
+        $(".form-feedback").remove();
+        const productId = $("#product-id").val();
+        const quantityField = $("[name='product-quantity']");
+        
+        let quantityValid = false;
 
-        addToCart(productId, quantity);
+        quantityValid = checkNumberField(quantityField, "Please enter a quantity", [-15,15]);
+        
+        if (quantityValid) {
+            addToCart(productId, quantityField.val());
+        }
     });
 }
 
@@ -42,6 +49,9 @@ function addToCart(productId, quantity) {
     }).done(function(result){
         result = JSON.parse(result);
         // added to cart
+        if (result.result == 0) {
+            new Alert(false, "Unable to add product to cart, Please refresh and try again")
+        }
         if (result.result == 1) {
             $(".cart-count").html(result.cartCount);
             new Alert(true, "Item added to basket <a href='/cart.php'>view basket</a>");

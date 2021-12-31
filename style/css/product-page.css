@@ -104,17 +104,18 @@ body {
 
 input[type=number] {
     display:inline;
-    width: 30px;
+    width: 75px;
     text-align: center;
     border: 1px solid #ccc;
-    padding: 10px 15px 10px 15px;
+    padding: 17px 15px 17px 5px;
 }
 
 input[type=number]::-webkit-inner-spin-button {
-    padding: 20px 10px;
+    height:95%;
+    padding: 0px 10px;
     position: absolute;
-    right: 0;
-    top: 0;
+    right: 1px;
+    top: 1px;
 }
 .add-to-cart-btn {
     position: relative;

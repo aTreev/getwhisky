@@ -133,5 +133,38 @@ class ProductCRUD {
 			return $this->stmt->affected_rows;
 		}
     }
+
+    public function createProduct($name, $description, $image, $price, $stock, $date, $alcoholVolume, $bottleSize, $type, $categoryid) {
+        $this->sql = "INSERT INTO `products`(`name`, `description`, `image`, `price`,  `stock`, `date_added`, `alcohol_volume`, `bottle_size`, `type`, `category_id`) VALUES (?,?,?,?,?,?,?,?,?,?);";
+        $this->stmt = self::$db->prepare($this->sql);
+        $this->stmt->bind_param("sssdissssi", $name, $description, $image, $price, $stock, $date, $alcoholVolume, $bottleSize, $type, $categoryid);
+        $this->stmt->execute();
+        if($this->stmt->affected_rows!=1) {
+			return 0;
+		} else {
+			return $this->stmt->affected_rows;
+		}
+    }
+    
+    public function getLastCreatedProductId($style=MYSQLI_ASSOC) {
+        $this->sql = "SELECT id FROM products ORDER BY date_added DESC LIMIT 1";
+        $this->stmt = self::$db->prepare($this->sql);
+        $this->stmt->execute();
+        $result = $this->stmt->get_result();
+        $resultset=$result->fetch_all($style);
+        return $resultset;
+    }
+
+    public function createProductAttribute($attributeValueId, $productid) {
+        $this->sql = "INSERT INTO `entity_value` (attribute_value_id, product_id) VALUES (?,?);";
+        $this->stmt = self::$db->prepare($this->sql);
+        $this->stmt->bind_param("ii", $attributeValueId, $productid);
+        $this->stmt->execute();
+        if($this->stmt->affected_rows!=1) {
+			return 0;
+		} else {
+			return $this->stmt->affected_rows;
+		}
+    }
 }
 ?>
