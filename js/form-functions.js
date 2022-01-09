@@ -161,12 +161,12 @@ function checkFieldEmpty(field, feedbackMessage, maxLen) {
 function checkFileField(fileField, feedbackMessage, allowedFileTypes) {
 	const file = fileField[0].files[0];
 
-	if (!file) {
+	if (feedbackMessage != null && !file) {
 		doFeedback(fileField, feedbackMessage);
 		return false;
 	}
 
-	if (allowedFileTypes) {
+	if (file && allowedFileTypes) {
 		const fileExt = file.type.split("/").pop();
 
 		if (!allowedFileTypes.includes(fileExt)) {

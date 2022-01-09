@@ -8,6 +8,7 @@
     <?php echo $page->displayHead(); ?>
     <title>getwhisky product management</title>
     <link rel="stylesheet" href="style/css/product-management-page.css">
+    <link rel="stylesheet" href="style/css/admin.css">
 </head>
 <body>
 	<?php
@@ -16,7 +17,12 @@
         echo $page->displayCartNotifications();
     ?>
 	<main>
-        <h1>Product Management</h1>
+        <div class='admin-page-header'>
+            <div class="admin-header-text-container">
+                <h1>Getwhisky Product Management</h1>
+                <p><a href='/admin.php'>Back to admin page</a></p>
+            </div>
+        </div>
         <?php 
             echo $page->adminDisplayProductManagementPage();
         ?>

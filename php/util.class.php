@@ -155,23 +155,23 @@ class util {
 	/********
 	 * Validates a $_FILES image. Checks for filetype using image mime type which is supposedly best practice.
 	 * Taken from: https://stackoverflow.com/questions/13096881/how-to-verify-mime-type-provided-by-filesuserfiletype Amit Garg
-	 * @param (File) $input
+	 * @param (File) $input['tmp_name']
 	 * @return Boolean
 	 ******************************************/
-	public static function valImage($input) {		
+	public static function valImage($inputTmpName) {		
 		$finfo = new finfo(FILEINFO_MIME);
-        $type = $finfo->file($input['tmp_name']);
+        $type = $finfo->file($inputTmpName);
         $mime = substr($type, 0, strpos($type, ';'));
 
 		if(stristr($mime,'image')) return true;
 		return false;
 	}
 
-	
-	public static function valFileSize($input) {
+
+	public static function valFileSize($inputSize) {
 		$phpMaxUploadSize = (int)ini_get("upload_max_filesize")*1024*1024;
 
-		if ($input['size'] > $phpMaxUploadSize) return false;
+		if ($inputSize > $phpMaxUploadSize) return false;
 		return true;
 	}
 }

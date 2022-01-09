@@ -166,5 +166,17 @@ class ProductCRUD {
 			return $this->stmt->affected_rows;
 		}
     }
+
+    public function createProductOverview($productid, $overviewImage, $overviewTitle, $overviewText) {
+        $this->sql = "INSERT INTO product_overviews (`product_id`, `image`, `heading`, `text_body`) VALUES(?,?,?,?);";
+        $this->stmt = self::$db->prepare($this->sql);
+        $this->stmt->bind_param("isss", $productid, $overviewImage, $overviewTitle, $overviewText);
+        $this->stmt->execute();
+        if($this->stmt->affected_rows!=1) {
+			return 0;
+		} else {
+			return $this->stmt->affected_rows;
+		}
+    }
 }
 ?>

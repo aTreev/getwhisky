@@ -175,11 +175,11 @@ class Product {
             $html = "";
             foreach($overviews as $overview) {
                 $html.="<div class='overview-item'>";
+                    $html.="<h3>".$overview['heading']."</h3>";
+                    $html.="<p>".$overview['text_body']."</p>";
                     if ($overview['image']) {
                         $html.="<img src='".$overview['image']."'>";
                     }
-                    $html.="<h3>".$overview['heading']."</h3>";
-                    $html.="<p>".$overview['text_body']."</p>";
                 $html.="</div>";
             }
         }
@@ -249,7 +249,7 @@ class Product {
 
                 // Quantity input and add to cart button
                 $html.="<label for='product-quantity'>Quantity: <input type='number' name='product-quantity' value='1'></label>";
-                if ($this->getSTock() > 0) {
+                if ($this->getStock() > 0) {
                     $html.="<input type='hidden' id='product-id' value='".$this->getId()."'>";
                     $html.="<button name='add-to-cart' class='add-to-cart-btn'>Add to cart</button>";
                 } else {

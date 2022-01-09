@@ -10,7 +10,9 @@
     <title>getwhisky Product Creation Page</title>
     <link rel="stylesheet" href="style/css/product-page.css">
     <link rel="stylesheet" href="style/css/product-creation-page.css">
-</head>
+    <link rel="stylesheet" href="style/css/admin.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/standalone/selectize.min.js" integrity="sha256-+C0A5Ilqmu4QcSPxrlGpaZxJ04VjsRjKu+G82kl5UJk=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/css/selectize.bootstrap3.min.css" integrity="sha256-ze/OEYGcFbPRmvCnrSeKbRTtjG4vGLHXgOqsyLFTRjg=" crossorigin="anonymous" /></head>
 <body>
 	<?php
         echo $page->displayHeader();
@@ -25,6 +27,13 @@
             Have a blanked out save button until every required field
             has been filled
         -->
+
+        <div class='admin-page-header'>
+            <div class="admin-header-text-container">
+                <h1>Getwhisky Product Creation</h1>
+                <p><a href="/admin-product-management.php">Back to Product Management</a></p>
+            </div>
+        </div>
         <div id='product-root'>
             <div class="product-top-container">
 
@@ -32,7 +41,7 @@
                     <div class="product-creation-input-container">
                         <label for="product-image">Product Image Upload</label>
                         <div class="input-container-100">
-                            <input type="file" id="product-image" id="" class="form-item">
+                            <input type="file" id="product-image" id="" class="form-item" autocomplete="off">
                         </div>
                     </div>
                     <img src="" alt="" id='product-image-preview'>
@@ -43,7 +52,7 @@
                     <div class="product-creation-input-container">
                         <label for="product-name">Product Name</label>
                         <div class='input-container-100'>
-                            <input type="text" id="product-name" id="" class="form-item">
+                            <input type="text" id="product-name" id="" class="form-item" autocomplete="off">
                         </div>
                         
                     </div>
@@ -52,7 +61,7 @@
                     <div class="product-creation-input-container">
                         <label for="product-type">Product Type</label>
                         <div class='input-container-100'>
-                            <input type="text" id="product-type" id="" class="form-item">
+                            <input type="text" id="product-type" id="" class="form-item" autocomplete="off">
                         </div>
                     </div>
 
@@ -60,11 +69,11 @@
                     <div class="product-creation-input-container">
                         <label for="product-price">Price</label>
                         <div class='input-container-100'>
-                            <input type="number" step="0.01" id="product-price" id="" class="form-item">
+                            <input type="number" step="0.01" id="product-price" id="" class="form-item" autocomplete="off">
                         </div>
                         <label for="product-Stock">Initial Stock</label>
                         <div class='input-container-100'>
-                            <input type="number" id="product-stock" id="" class="form-item">
+                            <input type="number" id="product-stock" id="" class="form-item" autocomplete="off">
                         </div>
                     </div>
 
@@ -76,19 +85,21 @@
                         </div>
                     </div>
 
-                    <!-- Product Price & Stock -->
-                    <div class="product-creation-input-container" style='border:1px solid lightgrey;padding:15px;border-radius:3px;'>
-                        <p style='margin-bottom:20px;'>Optional Values (Fill if applicable)</p>
+                    <!-- Optional values -->
+                    <div class="product-creation-input-container bg-white" style='margin-top:40px;border:1px solid lightgrey;padding:20px;border-radius:3px;'>
+                        <div class="section-header">
+                        <h3>Additional Details<span style='font-style:italic;font-size:1.4rem;font-weight:400;opacity:0.8;'> (Fill if applicable)</span></h3>
+
+                        </div>
                         <label for="product-alc-volume">Alchohol Volume <i style='cursor:default;font-size:1.4rem;'>(Example: 40%)</i></label>
                         <div class='input-container-100'>
-                            <input type="text" id="product-alc-volume" id="" class="form-item">
+                            <input type="text" id="product-alc-volume" id="" class="form-item" autocomplete="off">
                         </div>
                         <label for="product-bottle-size">Bottle Size <i style='cursor:default;font-size:1.4rem;'>(Example: 70cl / 2 x 20cl)</i></label>
                         <div class='input-container-100'>
-                            <input type="text" id="product-bottle-size" id="" class="form-item">
+                            <input type="text" id="product-bottle-size" id="" class="form-item" autocomplete="off">
                         </div>
                     </div>
-
                 </div>
             </div>
 
@@ -96,10 +107,11 @@
                 <div class="product-bottom-left"></div>
 
                 <div class="product-bottom-right">
-                    <div class='category-options-header'>
-                        <h3>Category Options</h3>
-                    </div>
-                    <div>
+                    
+                    <div class='product-category-options-container'>
+                        <div class='section-header'>
+                            <h3>Category Specific Details</h3>
+                        </div>
                         <?php 
                             $categoryList = new ProductCategoryList();
                             echo $categoryList;
@@ -109,14 +121,18 @@
                         </div>
                     </div>
 
-                    <div class="product-overview-creation">
-                        <div class='category-options-header'>
-                            <h3>Product Overview Creation</h3>
+                    <div class="product-overview-creation-container">
+                        <div class='section-header'>
+                            <h3>Product Overviews <span style='font-style:italic;font-size:1.4rem;font-weight:400;opacity:0.8;'> Extra Details & Info</span></h3>
                         </div>
-                        <button>Add Product Overview</button>
+                        <input type="hidden" id='count-overview' value='0'>
+                        <button id='create-overview'>Add Product Overview</button>
                     </div>
+
                 </div>
+
             </div>
+            
         </div>
         <button id='save-product'>Save</button>
 

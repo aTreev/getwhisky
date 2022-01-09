@@ -19,10 +19,15 @@ p, li, a, span, time, label { font-size:var(--font-size-regtext) }
  --font-size-regtext: 1.6rem;
  --icon-size-small:1.9rem;
  --btn-save-green: #3d9970;
+ --btn-action-blue: #3b8cc3;
  --btn-hover-colour: #95b0c2;
+ --btn-delete-red: #db4c3c;
 }
 i {
   cursor: pointer;
+}
+.bg-white {
+  background-color: white;
 }
 html, * {
   font-family: var(--font-default);
@@ -429,7 +434,7 @@ form label {
   pointer-events: none;
   color: #8e8e8e;
 }
-
+input { font-size: 1.4rem;}
 .form-item {
   width: 100%;
   padding: 15px 25px 15px 40px;
@@ -584,6 +589,13 @@ button[type=submit] {
 }
 button[type=submit]:hover {
   background-color: var(--bg-secondary-light);
+}
+
+.optional {
+  font-size: 1.4rem;
+  font-weight: 400;
+  font-style: italic;
+  opacity: 0.8;
 }
 
 @media screen and (max-width: 768px) {
@@ -811,6 +823,7 @@ button[type=submit]:hover {
 ***************************************************************************/
 @media screen and (max-width: 836px) {
   :root {
+    --font-size-huge: 3.5rem;
     --font-size-heading: 2.5rem;
     --font-size-subheading: 2rem;
   }

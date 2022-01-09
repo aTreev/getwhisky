@@ -1,3 +1,6 @@
+main {
+    background-color: #f7f7f7;
+}
 .product-creation-input-container {
     width: 80%;
 }
@@ -41,17 +44,38 @@ textarea {
     resize:none;
     min-height: 200px;
 }
+input, textarea {
+    border-color: #ccc!important;
+}
+input:focus, textarea:focus {
+    box-shadow:1px 1px 15px rgb(134, 202, 224)!important;
+    border-color:rgb(134, 202, 224)!important;
+}
 input[type=number] {
     appearance: auto;
     width: 30%;
     padding:15px 25px 15px 5px;
 }
-
-.category-options-header {
-    margin-top: 60px;
+.product-category-options-container {
+    border: 1px solid lightgrey;
+    padding: 25px;
+    border-radius: 4px;
+    background-color: white;
+    margin-top: 20px;
+}
+.section-header {
+    margin-top: 20px;
     margin-bottom: 30px;
     padding-bottom: 10px;
     border-bottom: 1px solid lightgrey;
+}
+.product-overview-creation-container {
+    margin-top: 60px;
+    border: 1px solid lightgrey;
+    padding: 25px;
+    border-radius: 4px;
+    background-color: white;
+
 }
 select, option {
     padding-left: 10px !important;
@@ -60,11 +84,16 @@ select {
     position: relative;
     z-index: 5;
 }
-option {
-    font-size: var(--font-size-regtext);
+
+.select-text {
+    font-size: 1.4rem;
 }
+.selectize-input {
+    padding: 12px!important;
+}
+
 #product-attribute-selection {
-    margin-top:-1px;
+    margin-top: -5px;
     padding: 0px 15px;
     border: 1px solid lightgrey;
 }
@@ -72,6 +101,45 @@ option {
     margin-bottom: 40px;
 }
 
+.product-overview-item {
+    border: 1px solid lightgrey;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+.product-overview-item  .input-container-100 {
+    margin-bottom: 30px;
+}
+
+[name=remove-overview-section] {
+    width: 100%;
+    padding: 12px;
+    background-color: var(--btn-delete-red);
+    color: white;
+    font-size: 1.6rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+[name=remove-overview-section]:hover, #create-overview {
+    background-color: var(--btn-hover-colour);
+}
+
+#create-overview {
+    width: 200px;
+    padding: 12px;
+    background-color: var(--btn-action-blue);
+    color: white;
+    font-size: 1.6rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+@media screen and (max-width: 1400px) {
+    
+}
 
 @media screen and (max-width: 836px) {
     .product-creation-input-container {

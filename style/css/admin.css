@@ -1,0 +1,39 @@
+.admin-page-header {
+    padding: 80px;
+    background-color: var(--btn-action-blue);
+    color: white;
+    font-family: monospace;
+    background: linear-gradient(120deg, var(--bg-primary-gradient) 0%, var(--bg-primary-gradient) 21%, hsl(0, 0%, 32%) 57.05%, hsl(0, 0%, 42%) 83.05%, hsl(0, 0%, 52%) 100%);
+}
+
+.admin-header-text-container {
+    width: 1400px;
+    margin: auto;   
+}
+
+.admin-header-text-container p {
+    margin-top: 40px;
+}
+.admin-header-text-container p a {
+    color: white;
+    opacity: 0.8;
+    user-select: none;
+}
+.admin-header-text-container p a:hover {
+    opacity: 1;
+}
+
+@media screen and (max-width:1400px) {
+    .admin-page-header {
+        padding: 80px 0px 80px 40px;
+    }
+    .admin-header-text-container {
+        width: 100%;
+    }
+}
+
+@media screen and (max-width: 836px) {
+    .admin-page-header {
+        padding: 80px 0px 80px 20px;
+    }
+}

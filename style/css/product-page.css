@@ -76,7 +76,7 @@ body {
     font-size:1.4rem;
     color:white;
     background-color:rgba(239, 68, 68, 1);
-    padding:7px 9px 7px 9px;
+    padding:12px 12px 12px 12px;
     border-radius:4px;
     font-weight: 400;
 }
@@ -192,19 +192,33 @@ input[type=number]::-webkit-inner-spin-button {
     width: 50%;
     font-weight: 400;
 }
-
 .overview-item {
     margin-top: 20px;
-    margin-bottom: 40px;
+    padding-bottom: 40px;
+    border-bottom: 1px solid lightgrey;
+}
+.overviews .overview-item:last-child {
+    border-color: transparent;
+}
+.overview-item img {
+    display: block;
+    margin: auto;
+    max-height: 300px;
+    max-width: 100%;
+    margin: 30px auto;
 }
 
 .overview-item h3 {
     font-weight: 400;
-    margin-bottom: 10px;
+    font-size: 2.6rem;
+    text-align: center;
+    margin: 10px 0px;
+    padding: 20px;
 }
 .overview-item p {
     opacity: 0.9;
     line-height: 1.8;
+    text-align: center;
 }
 
 @media screen and (max-width: 1600px) {
