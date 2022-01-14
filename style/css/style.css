@@ -448,6 +448,8 @@ input { font-size: 1.4rem;}
 }
 .input-container-100 textarea {
   resize: none;
+  line-height: 1.8;
+  padding: 15px 15px 15px 15px;
 }
 .form-item-50 {
   width:49%;

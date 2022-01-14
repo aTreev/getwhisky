@@ -1,9 +1,9 @@
 .admin-page-header {
-    padding: 80px;
+    padding: 80px 0px;
     background-color: var(--btn-action-blue);
     color: white;
     font-family: monospace;
-    background: linear-gradient(120deg, var(--bg-primary-gradient) 0%, var(--bg-primary-gradient) 21%, hsl(0, 0%, 32%) 57.05%, hsl(0, 0%, 42%) 83.05%, hsl(0, 0%, 52%) 100%);
+    background: linear-gradient(120deg, var(--bg-primary-gradient) 0%, var(--bg-primary-gradient) 12%, hsl(0, 0%, 32%) 57.05%, hsl(0, 0%, 42%) 88.05%, hsl(0, 0%, 52%) 100%);
 }
 
 .admin-header-text-container {
@@ -18,22 +18,47 @@
     color: white;
     opacity: 0.8;
     user-select: none;
+    padding: 10px;
+    font-weight: 500;
 }
 .admin-header-text-container p a:hover {
     opacity: 1;
+    font-weight: 700;
+}
+
+.admin-header-link {
+    width: 100%;
+    background: white;
+    padding: 20px 0px;
+    border-bottom: 1px solid lightgrey;
+}
+
+.admin-header-link-text {
+    width: 1400px;
+    margin: auto;
+}
+
+.admin-header-link-text a {
+    display: block;
+    background-color: var(--btn-save-green);
+    width: fit-content;
+    border-radius: 4px;
+    color: white;
+    text-decoration: none;
+    padding: 10px 60px;
+}
+.admin-header-link-text a:hover {
+    background-color: var(--btn-hover-colour);
 }
 
 @media screen and (max-width:1400px) {
-    .admin-page-header {
-        padding: 80px 0px 80px 40px;
-    }
     .admin-header-text-container {
-        width: 100%;
+        width: 90%;
+    }
+    .admin-header-link-text {
+        width: 90%;
     }
 }
 
 @media screen and (max-width: 836px) {
-    .admin-page-header {
-        padding: 80px 0px 80px 20px;
-    }
 }

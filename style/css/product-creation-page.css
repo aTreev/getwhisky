@@ -27,7 +27,7 @@ img {
     margin-bottom: 20px;
     position: relative;
 }
-.input-btn-container button {
+.update-button {
     padding: 0px 20px;
     font-size: 1.4rem;
     border: none;
@@ -37,7 +37,7 @@ img {
     background-color: var(--btn-save-green);
     cursor: pointer;
 }
-.input-btn-container button:hover {
+.update-button:hover {
     background-color: var(--btn-hover-colour);
 }
 textarea {
@@ -106,13 +106,12 @@ select {
     padding: 20px;
     margin-bottom: 20px;
 }
-.product-overview-item  .input-container-100 {
-    margin-bottom: 30px;
+.product-overview-item  .input-container-100:not(:first-child) {
+    margin-top: 40px;
 }
 
 [name=remove-overview-section] {
-    width: 100%;
-    padding: 12px;
+    padding: 12px 30px;
     background-color: var(--btn-delete-red);
     color: white;
     font-size: 1.6rem;
@@ -121,7 +120,18 @@ select {
     cursor: pointer;
 }
 
-[name=remove-overview-section]:hover, #create-overview {
+[name=update-overview-section] {
+    padding: 12px 30px;
+    background-color: var(--btn-save-green);
+    color: white;
+    font-size: 1.6rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-left: 15px;
+}
+
+[name=remove-overview-section]:hover, [name=update-overview-section]:hover, #create-overview:hover {
     background-color: var(--btn-hover-colour);
 }
 
@@ -136,7 +146,23 @@ select {
     cursor: pointer;
     margin-top: 20px;
 }
+#create-overview:hover {
+    background-color: var(--btn-hover-colour);
+}
 
+#save-product, #update-product-attributes {
+    width: 100%;
+    margin-top: 60px;
+    padding: 15px 0px;
+    background-color: var(--btn-save-green);
+    border: none;
+    color: white;
+    font-size: 1.6rem;
+    cursor: pointer;
+}
+#save-product:hover, #update-product-attributes:hover {
+    background-color: var(--btn-hover-colour);
+}
 @media screen and (max-width: 1400px) {
     
 }

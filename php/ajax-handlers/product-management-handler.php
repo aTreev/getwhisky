@@ -104,7 +104,7 @@ function getProductsFromSearch() {
 
 function getBaseProductManagementHtml() {
     $page = new Page();
-    echo json_encode($page->adminDisplayProductManagementPage());
+    echo json_encode($page->adminDisplayProductManagementTable());
 }
 
 function updateProductStock() {
@@ -113,7 +113,7 @@ function updateProductStock() {
         $quantity = util::sanInt($_POST['quantity']);
         $productCRUD = new ProductCRUD();
 
-        $result = $productCRUD->updateProductStockB($productid, $quantity);
+        $result = $productCRUD->increaseStockByQuantity($productid, $quantity);
 
         echo json_encode($result);
     }

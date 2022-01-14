@@ -20,6 +20,7 @@ class Product {
     private $type;
     private $categoryId;
     private $attributes = [];
+    private $overviews = [];
     private $featured;
 
     public function __construct($product){
@@ -45,6 +46,9 @@ class Product {
         // Retrieve the attribute_value ids for product filter
         $this->retrieveAttributeValueIds();
 
+        // Retrieve product's overviews
+        $this->retrieveProductOverviews();
+
         // If a discount is active check when it ends
         if ($this->isDiscounted()) {
             $this->checkDiscountEnded();
@@ -69,6 +73,7 @@ class Product {
     public function getType(){ return $this->type; }
     public function getCategoryId(){ return $this->categoryId; }
     public function getAttributes(){ return $this->attributes; }
+    public function getOverviews() { return $this->overviews; }
     public function isFeatured() { return $this->featured; }
 
     private function setId($id) { $this->id = $id; }
@@ -166,14 +171,17 @@ class Product {
      * Does this on the fly instead of using instance variables
      * as these are only needed on the product page
      *********************/
-    private function getProductOverviews() {
+    private function retrieveProductOverviews() {
         $source = new ProductCRUD();
-        $html = "<p style='padding:20px;cursor:default;padding-bottom:200px;'><i>Product description currently unavailable</i></p>";
-        $overviews = $source->getProductOverviews($this->getId());
+        $this->overviews = $source->getProductOverviews($this->getId());
+    }
 
-        if ($overviews) {
+
+    private function displayProductOverviews() {
+        $html = "<p style='padding:20px;cursor:default;padding-bottom:200px;'><i>Product description currently unavailable</i></p>";
+        if ($this->getOverviews()) {
             $html = "";
-            foreach($overviews as $overview) {
+            foreach($this->getOverviews() as $overview) {
                 $html.="<div class='overview-item'>";
                     $html.="<h3>".$overview['heading']."</h3>";
                     $html.="<p>".$overview['text_body']."</p>";
@@ -280,7 +288,7 @@ class Product {
                 $html.="</div>";
                 // Second tab - product overviews
                 $html.="<div class='overviews tab' id='overviews'>";
-                    $html.=$this->getProductOverviews();
+                    $html.=$this->displayProductOverviews();
                 $html.="</div>";
                 // Third tab - reviews?
             $html.="</div>";
@@ -409,7 +417,7 @@ class Product {
                     $html.="<button class='out-of-stock-btn'>Out of stock</button>";
                 }
                 */
-                $html.="<a class='product-wrapper-link' href='/productpage.php?pid=".$this->getId()."' target='_blank'><span></span></a>";
+                $html.="<a class='product-wrapper-link' href='/productpage.php?pid=".$this->getId()."'><span></span></a>";
             $html.="</div>";
         return $html;
     }

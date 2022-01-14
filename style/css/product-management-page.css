@@ -72,6 +72,8 @@
 
 #product-management-table tr .add-action-btn {
     background-color:#3d9970;
+    font-size: 1.4rem;
+    padding: 10px 40px;
 }
 #product-management-table tr input[type=number], tr input[type=datetime-local] {
     padding:4px;

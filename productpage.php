@@ -25,7 +25,7 @@
     <?php 
     if (isset($_GET['pid']) && util::valInt($_GET['pid'])) {
         $productId = util::sanInt($_GET['pid']);
-        $productFound = $page->retrieveProductPageProduct($productId);
+        $productFound = $page->setPageProductById($productId);
         if ($productFound) {
         ?>
         <title><?php echo $page->getProduct()->getName(); ?></title>

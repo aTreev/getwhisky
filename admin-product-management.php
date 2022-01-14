@@ -23,8 +23,13 @@
                 <p><a href='/admin.php'>Back to admin page</a></p>
             </div>
         </div>
+        <div class='admin-header-link'>
+            <div class="admin-header-link-text">
+                <a href='admin-create-product.php'>Create new product</a>
+            </div>
+        </div>
         <?php 
-            echo $page->adminDisplayProductManagementPage();
+            echo $page->adminDisplayProductManagementTable();
         ?>
 	</main>
 </body>

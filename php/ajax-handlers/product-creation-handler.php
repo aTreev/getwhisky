@@ -1,12 +1,12 @@
 <?php 
 require_once("../page.class.php");
-require_once("../menucrud.class.php");
+require_once("../category-attribute-list.class.php");
 if (isset($_POST['function']) && util::valInt($_POST['function'])) {
     $functionToCall = util::sanInt($_POST['function']);
 
     switch($functionToCall) {
         case 1:
-            createProductAttributeSelection();
+            getCategoryAttributeList();
         break;
         case 2:
             uploadCreatedProduct();
@@ -16,38 +16,17 @@ if (isset($_POST['function']) && util::valInt($_POST['function'])) {
 
 
 /***********
- * Creates a select field of the current attributes/(filters) of a category
- * using the MenuCRUD class.
- * Constructs and returns html.
+ * Takes a posted categoryid and retrieves the attribute list for that category
+ * using the ProductAttributeList class
+ * returns an assoc array ['result', 'html']
  ******/
-function createProductAttributeSelection() {
+function getCategoryAttributeList() {
     if (isset($_POST['categoryid']) && util::valInt($_POST['categoryid'])) {
-        $categoryId = util::sanInt($_POST['categoryid']);
-        $source = new MenuCRUD();
-        $html = "";
-        $result = 0;
-        $attributeList = $source->getProductFiltersByCategoryId($categoryId);
+        $categoryid = util::sanInt($_POST['categoryid']);
+        $attributeList = new CategoryAttributeList($categoryid);
+        $attributeList = $attributeList->displayCategoryAttributeList();
 
-        
-        if (!empty($attributeList)) {
-            $result = 1;
-            $html.="<div class='form-header' style='margin-top:20px;'><h4>Product Attribute selection</h4><p>The attributes selected below will be displayed on the product page as product details and will also be used for selection through product filters</p></div>";
-            $html.="";
-            foreach($attributeList as $attribute) {
-                $attrValues = $source->getAttributeValuesByAttributeId($attribute['id']);
-                $html.="<div class='input-container-100'>";
-                    $html.="<label for='product-attribute'>".$attribute['title']."</label>";
-                    $html.="<select class='select-text' attribute-id='".$attribute['id']."' name='product-attribute'>";
-                        $html.="<option value='-1' style='font-size:1.4rem;'>Please select an option</option>";
-                        foreach($attrValues as $attrValue) {
-                            $html.="<option value='".$attrValue['id']."' >".$attrValue['value']."</option>";
-                        }
-                    $html.="</select>";
-                $html.="</div>";
-            }
-        }
-        $result = ['result' => $result, 'html' => $html];
-        echo json_encode($result);
+        echo json_encode($attributeList);
     }
 }
 

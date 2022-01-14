@@ -322,7 +322,7 @@ class Page {
 	
 	/***************************************************************************************************************************************************
 	 * Product methods
-	 ***********************************************************/
+	 **************************************************************************************************************************************************/
 	public function displayProductMenu() {
 		$html = "";
 		$html.="<nav id='product-menu-container' class='product-menu-container'>";
@@ -343,7 +343,7 @@ class Page {
 		} 
 	}
 
-	public function retrieveProductPageProduct($productId) {
+	public function setPageProductById($productId) {
 		$found = 0;
 		foreach($this->getProducts() as $product) {
 			if ($product->getId() == $productId) {
@@ -481,7 +481,7 @@ class Page {
 		$productCRUD = new ProductCRUD();
 		foreach ($this->getCart()->getItems() as $cartItem) {
 			$orderCRUD->addToOrder($orderid, $cartItem->getProductId(), $cartItem->getQuantity(), $cartItem->returnCorrectItemPrice());
-			$productCRUD->updateProductStock($cartItem->getProductId(), $cartItem->getQuantity());
+			$productCRUD->decreaseStockByQuantity($cartItem->getProductId(), $cartItem->getQuantity());
 		}		
 		
 		// Checkout cart
@@ -564,10 +564,13 @@ class Page {
 	}
 
 
-	/******************************
-	 * Product highlighting methods
+
+
+
+	/*****************************************************************************************************************************************
+	 * PRODUCT PROMOTION METHODS
 	 * e.g. Featured products, discounted products
-	 *********************************************/
+	 *****************************************************************************************************************************************/
 
 
 	 /********
@@ -638,9 +641,8 @@ class Page {
 	 }
 
 
-	 public function adminDisplayProductManagementPage() {
+	 public function adminDisplayProductManagementTable() {
 		$html = "";
-		$html.="<p><a href='admin-create-product.php'>Create new product</a></p>";
 		 $html.="<table id='product-management-table'>";
 			$html.="<tr>";
 				// Table headings
@@ -655,7 +657,7 @@ class Page {
 			// Search / filter options
 			$html.="<tr>";
 				$html.="<td><div class='td-flex-center' style='width:100%;'>";
-					$html.="<label class='container-label' style='width:100%;' >Product search<input type='text' placeholder='Type to search for a product' id='product-management-search' style='width:90%;padding:8px 0px 8px 8px;'></label>";
+					$html.="<input type='text' placeholder='Product search' id='product-management-search' style='width:90%;padding:8px 0px 8px 8px;'>";
 				$html.="</div></td>";
 				$html.="<td colspan='5'><div class='td-flex-center'>";
 				$html.="</div></td>"; 
