@@ -4,7 +4,9 @@ function prepareCategoryManagementPage() {
 
     categorySelect.change(function(){
         if ($(this).val() == -1) return;
+
         const categoryid = $(this).val();
+    
         getAttributeListForManagement(categoryid).then(function(result){
             $(".category-attributes").html(result.html);
             $(".category-attributes").css({"display": "block"});
@@ -14,10 +16,14 @@ function prepareCategoryManagementPage() {
     });
 }
 
+/******************
+ * Prepares the add and remove functionality for a category's attributes
+ * Uses values and data-attributes to select elements and perform actions
+ ******************/
 function prepareAttributeFunctionality(categoryid, categorySelect) {
     $("#new-attribute").click(function(){
         // add text input and button to save
-        $(".category-options").html("<div class='new-attribute-container'><input type='text' class='form-item' id='new-attribute-input'><button class='save-btn' id='save-new-attribute'>save</button></div>");
+        $(".category-options").html("<div class='new-attribute-container'><input type='text' placeholder='New filter name' class='form-item' id='new-attribute-input'><button class='save-btn' id='save-new-attribute'>save</button></div>");
 
         // add logic to save button
         $("#new-attribute-input").focus();
@@ -67,12 +73,12 @@ function prepareAttributeFunctionality(categoryid, categorySelect) {
     $("[name='manage-attribute']").each(function(){
         $(this).click(function(){
             const attributeid = $(this).attr("attribute-id");
-            $(`.attribute-item-values[attribute-id='${attributeid}']`).toggle();
+            $(`.attribute-item-values[attribute-id='${attributeid}']`).toggleClass("attribute-item-values-show");
 
-            if ($(`.attribute-item-values[attribute-id='${attributeid}']`).css("display") == "block") {
+            if ($(`.attribute-item-values[attribute-id='${attributeid}']`).css("maxHeight") == "0px") {
                 $(this).text("Close filter values");
             } 
-            if ($(`.attribute-item-values[attribute-id='${attributeid}']`).css("display") == "none") {
+            if ($(`.attribute-item-values[attribute-id='${attributeid}']`).css("maxHeight") == "1000px") {
                 $(this).text("Manage filter values");
             }
         })
@@ -80,6 +86,10 @@ function prepareAttributeFunctionality(categoryid, categorySelect) {
 
 }
 
+/***************
+ * Prepares the add and remove value functionality to an attribute
+ * uses data-attributes on the markup to select specific items and provide logic
+ **************************/
 function prepareAttributeValueFunctionality(categoryid, categorySelect) {
     // remove attribute value button
     $("[name='remove-attribute-val']").each(function(){
@@ -94,7 +104,10 @@ function prepareAttributeValueFunctionality(categoryid, categorySelect) {
                         // Force select change on success to reload html
                         categorySelect.val(categoryid.toString());
                         categorySelect.trigger("change");
-                        setTimeout(() => {$(`.attribute-item-values[attribute-id='${attributeid}']`).show();}, 50);
+                        setTimeout(() => {
+                            $(`[attribute-id='${attributeid}'][name="manage-attribute"]`).text("Close filter values");
+                            $(`.attribute-item-values[attribute-id='${attributeid}']`).addClass("attribute-item-values-show")();
+                        }, 50);
                     }
                 })
             }
@@ -105,7 +118,7 @@ function prepareAttributeValueFunctionality(categoryid, categorySelect) {
     $("[name='add-new-attribute-value']").each(function(){
         $(this).click(function(){
             const attributeid = $(this).attr("attribute-id");
-            $(`.filter-options[attribute-id='${attributeid}']`).html(`<div class='new-attribute-container'><input type='text' class='form-item' id='new-attribute-value-input-${attributeid}'><button class='save-btn' id='save-new-attribute-value-${attributeid}'>save</button></div>`);
+            $(`.filter-options[attribute-id='${attributeid}']`).html(`<div class='new-attribute-container'><input type='text' placeholder='new option name' class='form-item' id='new-attribute-value-input-${attributeid}'><button class='save-btn' id='save-new-attribute-value-${attributeid}'>save</button></div>`);
             
             // Add click logic to save new attribute value button
             $(`#new-attribute-value-input-${attributeid}`).focus();
@@ -123,7 +136,10 @@ function prepareAttributeValueFunctionality(categoryid, categorySelect) {
                             // Force select change on success to reload html
                             categorySelect.val(categoryid.toString());
                             categorySelect.trigger("change");
-                            setTimeout(() => {$(`.attribute-item-values[attribute-id='${attributeid}']`).show();}, 50);
+                            setTimeout(() => {
+                                $(`[attribute-id='${attributeid}'][name="manage-attribute"]`).text("Close filter values");
+                                $(`.attribute-item-values[attribute-id="${attributeid}"]`).addClass("attribute-item-values-show")();
+                            }, 50);
                         }
                     });
                 }
@@ -133,7 +149,11 @@ function prepareAttributeValueFunctionality(categoryid, categorySelect) {
 }
 
 
-
+/**************
+ * Retrieves management markup for a category's attribute list
+ * with all the required values and data attributes to manipulate
+ * the data.
+ ********************************************************/
 function getAttributeListForManagement(categoryid) {
     return new Promise(function(resolve){
         $.ajax({

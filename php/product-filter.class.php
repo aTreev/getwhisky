@@ -42,10 +42,13 @@ class ProductFilter {
     public function __toString() {
         $html = "";
         foreach ($this->getFilterTitles() as $filter) {
+            // Filter group index - used to group filters together in JS
+            $filterGroupIndex = 0;
+
             // display filter option headings
             $html.="<div class='filter-item'>";
                 $html.="<div class='filter-item-header'>";
-                    $html.="<h4>".$filter['title']."</h4>";
+                    $html.="<h4>".htmlentities($filter['title'])."</h4>";
                     $html.="<i style='font-size:1.8rem;' class='fas fa-plus'></i>";
                 $html.="</div>";
                 // display filter options if they contain any products
@@ -53,13 +56,14 @@ class ProductFilter {
                 foreach($this->getFilterValues() as $value) {
                     if (($value['count_products_with_value'] > 0) &&($value['attribute_id'] == $filter['id'])) {
                             $html.="<div class='filter-item-option'>";
-                            $html.="<input id='".$value['value']."'type='checkbox' name='attribute_value".$filter['id']."' attribute_id='".$filter['id']."' value='".$value['id']."'>";
-                            $html.="<label for='".$value['value']."'>".$value['value']."</label>";
+                            $html.="<input id='".htmlentities($value['value'], ENT_QUOTES)."' type='checkbox' name='attribute-value-".$filterGroupIndex."' attribute_id='".htmlentities($filter['id'])."' value='".htmlentities($value['id'])."'>";
+                            $html.="<label for='".htmlentities($value['value'], ENT_QUOTES)."'>".htmlentities($value['value'], ENT_QUOTES)."</label>";
                             $html.="</div>";
                     }
                 }
                 $html.="</div>";
             $html.="</div>";
+            $filterGroupIndex++;
         }
         return $html;
     }

@@ -41,7 +41,7 @@ class MenuCRUD {
 	}
 
 	public function getAttributeValuesByAttributeId($attributeId, $style=MYSQLI_ASSOC) {
-		$this->sql = "SELECT * FROM attribute_value WHERE attribute_id = ?;";
+		$this->sql = "SELECT * FROM attribute_value WHERE attribute_id = ? ORDER BY `value` ASC;";
 		$this->stmt = self::$db->prepare($this->sql);
 		$this->stmt->bind_param("i", $attributeId);
 		$this->stmt->execute();

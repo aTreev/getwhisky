@@ -325,17 +325,17 @@ class Product {
         $html = "";
 
         // Product item row
-        $html.="<tr class='product-management-item' id='".$this->getId()."'>";
+        $html.="<tr class='product-management-item' id='".htmlentities($this->getId())."'>";
             // Img, Name and Price
-            $html.="<td><div class='td-flex-center'><img style='width:35px;' src='".$this->getImage()."'><h5 id='product-name-".$this->getId()."'>".$this->getName()."</h5><p id='product-base-price-".$this->getId()."' price='".$this->getPrice()."'>(£".$this->getPrice().")</p></div></td>";
+            $html.="<td><div class='td-flex-center'><img style='width:35px;' src='".htmlentities($this->getImage(), ENT_QUOTES)."'><h5 id='product-name-".htmlentities($this->getId())."'>".htmlentities($this->getName())."</h5><p id='product-base-price-".htmlentities($this->getId())."' price='".htmlentities($this->getPrice())."'>(£".htmlentities($this->getPrice()).")</p></div></td>";
 
             // Active state slider
             $html.="<td><div class='td-flex-center'>";
                 $html.="<label class='switch'>";
                 if ($this->isActive()) {
-                    $html.="<input type='checkbox' id='active-".$this->getId()."' checked>";
+                    $html.="<input type='checkbox' id='active-".htmlentities($this->getId())."' checked>";
                 } else {
-                    $html.="<input type='checkbox' id='active-".$this->getId()."'>";
+                    $html.="<input type='checkbox' id='active-".htmlentities($this->getId())."'>";
                 }
                     $html.="<span class='slider'></span>";
                 $html.="</label>";
@@ -345,44 +345,44 @@ class Product {
             $html.="<td><div class='td-flex-center'>";
             $html.="<label class='switch'>";
                 if ($this->isFeatured()) {
-                    $html.="<input type='checkbox' id='featured-".$this->getId()."' checked>";
+                    $html.="<input type='checkbox' id='featured-".htmlentities($this->getId(), ENT_QUOTES)."' checked>";
                 } else {
-                    $html.="<input type='checkbox' id='featured-".$this->getId()."'>";
+                    $html.="<input type='checkbox' id='featured-".htmlentities($this->getId(), ENT_QUOTES)."'>";
                 }
                     $html.="<span class='slider'></span>";
             $html.="</label>";
             $html.="</div></td>";
 
             // Discount management
-            $html.="<td id='product-stock-data-".$this->getId()."'><div class='td-flex-center'>";
+            $html.="<td id='product-stock-data-".htmlentities($this->getId(), ENT_QUOTES)."'><div class='td-flex-center'>";
                 if ($this->isDiscounted()) {
                     $html.="<div><label class='container-label'>Discount price: &nbsp;";
-                    $html.="<input type='number' step='0.01' id='discount-price-".$this->getId()."' value='".$this->getDiscountPrice()."'>";
+                    $html.="<input type='number' step='0.01' id='discount-price-".htmlentities($this->getId())."' value='".htmlentities($this->getDiscountPrice())."'>";
                     $html.="</label></div>";
                     $html.="<div><label class='container-label'>End date:  &nbsp;";
-                        $html.="<input type='datetime-local' id='discount-end-datetime-".$this->getId()."' value='".date('Y-m-d\TH:i',strtotime($this->getDiscountEndDatetime()))."'>";
+                        $html.="<input type='datetime-local' id='discount-end-datetime-".htmlentities($this->getId())."' value='".date('Y-m-d\TH:i',strtotime($this->getDiscountEndDatetime()))."'>";
                     $html.="</label></div>";
-                    $html.="<button id='update-discount-".$this->getId()."'><i class='fas fa-wrench'></i>Save</button>";
-                    $html.="<button class='delete-action-btn' id='end-discount-".$this->getId()."'><i class='fas fa-hourglass-end'></i>End</button>";
+                    $html.="<button id='update-discount-".htmlentities($this->getId())."'><i class='fas fa-wrench'></i>Save</button>";
+                    $html.="<button class='delete-action-btn' id='end-discount-".htmlentities($this->getId())."'><i class='fas fa-hourglass-end'></i>End</button>";
                     $html.="";
                 } else {
-                    $html.="<button class='add-action-btn' id='add-discount-".$this->getId()."'>Add discount</button>";
+                    $html.="<button class='add-action-btn' id='add-discount-".htmlentities($this->getId())."'>Add discount</button>";
                 }
             $html.="</div></td>";
 
             // Stock management
             $html.="<td style='max-width:100px;'><div class='td-flex-center' style='flex-direction:column;align-items:flex-start;'>";
-                $html.="<p>Stock: <span id='current-stock-".$this->getId()."' style='font-weight:500;'>".$this->getStock()."</span></p>";
+                $html.="<p>Stock: <span id='current-stock-".htmlentities($this->getId())."' style='font-weight:500;'>".$this->getStock()."</span></p>";
                 $html.="<div><label class='container-label'>Qty to add/remove: &nbsp;";
-                    $html.="<input type='number' style='width:90%;' id='product-stock-".$this->getId()."'>";
+                    $html.="<input type='number' style='width:90%;' id='product-stock-".htmlentities($this->getId())."'>";
                 $html.="</label></div>";
-                $html.="<button class='update-action-btn' style='width:100%;' id='add-stock-".$this->getId()."'><i class='fas fa-plus'></i> Add</button>";
-                $html.="<button class='delete-action-btn' style='width:100%;' id='remove-stock-".$this->getId()."'><i class='fas fa-minus'></i> Remove</button>";
+                $html.="<button class='update-action-btn' style='width:100%;' id='add-stock-".htmlentities($this->getId())."'><i class='fas fa-plus'></i> Add</button>";
+                $html.="<button class='delete-action-btn' style='width:100%;' id='remove-stock-".htmlentities($this->getId())."'><i class='fas fa-minus'></i> Remove</button>";
             $html.="</div></td>";
 
             // Options
             $html.="<td><div class='td-flex-center td-flex-justify-between'>";
-                $html.="<a class='edit-product-btn' id='edit-product-".$this->getId()."' href='admin-edit-product.php?pid=".$this->getId()."'>Edit <i class='far fa-edit'></a>";
+                $html.="<a class='edit-product-btn' id='edit-product-".htmlentities($this->getId())."' href='admin-edit-product.php?pid=".htmlentities($this->getId())."'>Edit <i class='far fa-edit'></a>";
             $html.="</div></td>";
         $html.="</tr>";
 
@@ -395,18 +395,18 @@ class Product {
     public function __toString() {
         $html = "";
             $html.="<div class='product'>";
-                $html.="<img src='".$this->getImage()."' loading='lazy'>";
-                $html.="<h3 class='product-name'>".$this->getName()."</h3>";
-                $html.="<h4 class='product-type'>".$this->getType()."</h4>";
-                $html.="<p class='product-desc-short'>".$this->getAlcoholVolume()." abv / ".$this->getBottleSize()."</p>";
-                $html.="<input type='hidden' name='product_id' value='".$this->getId()."'>";
+                $html.="<img src='".htmlentities($this->getImage(), ENT_QUOTES)."' loading='lazy'>";
+                $html.="<h3 class='product-name'>".htmlentities($this->getName())."</h3>";
+                $html.="<h4 class='product-type'>".htmlentities($this->getType())."</h4>";
+                $html.="<p class='product-desc-short'>".htmlentities($this->getAlcoholVolume())." abv / ".htmlentities($this->getBottleSize())."</p>";
+                $html.="<input type='hidden' name='product_id' value='".htmlentities($this->getId())."'>";
                 $html.="<div class='product-price-container'>";
                 if ($this->isDiscounted()) {
-                    $html.="<p class='percentage-indicator'>-".$this->getDiscountPercentage()."%</p>";
-                    $html.="<p class='product-price-discounted'>£".$this->getPrice()."</p>";
-                    $html.="<p class='product-price'>£".$this->getDiscountPrice()."</p>";
+                    $html.="<p class='percentage-indicator'>-".htmlentities($this->getDiscountPercentage())."%</p>";
+                    $html.="<p class='product-price-discounted'>£".htmlentities($this->getPrice())."</p>";
+                    $html.="<p class='product-price'>£".htmlentities($this->getDiscountPrice())."</p>";
                 } else {
-                    $html.="<p class='product-price'>£".$this->getPrice()."</p>";
+                    $html.="<p class='product-price'>£".htmlentities($this->getPrice())."</p>";
                 }
                 $html.="</div>";
                 /*
@@ -417,7 +417,7 @@ class Product {
                     $html.="<button class='out-of-stock-btn'>Out of stock</button>";
                 }
                 */
-                $html.="<a class='product-wrapper-link' href='/productpage.php?pid=".$this->getId()."'><span></span></a>";
+                $html.="<a class='product-wrapper-link' href='/productpage.php?pid=".htmlentities($this->getId())."'><span></span></a>";
             $html.="</div>";
         return $html;
     }

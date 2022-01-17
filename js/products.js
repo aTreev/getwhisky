@@ -57,7 +57,6 @@ function prepareProductsPage() {
     prepareProductFilters();
     prepareProductSortOptions();
     makeFilterSectionInteractive();
-    
 }
 
 /****************
@@ -132,12 +131,12 @@ function prepareProductFilters() {
     for(let i = 0; i <= numAttributesOnPage; i++) {
         // Checkbox code graciously taken from bPratik at https://stackoverflow.com/questions/9709209/html-select-only-one-checkbox-in-a-group
         // I don't fully understand the code but I understand how it works... so it stays.
-        $("[name=attribute_value"+i+"]").click(function(){
+        $("[name='attribute-value-"+i+"']").click(function(){
             const currentClick = $(this);
             // if checkbox item is checked
             if (currentClick.is(":checked")) {
                 // get the group of attribute_value+number
-                const group = $("[name=attribute_value"+i+"]");
+                const group = $("[name=attribute-value-"+i+"]");
                 // set all checkboxes in group to unchecked
                 group.prop("checked", false);
                 // set specific checkbox to checked
