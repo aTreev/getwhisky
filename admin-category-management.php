@@ -9,6 +9,7 @@
     <?php echo $page->displayHead(); ?>
     <title>getwhisky Category Management Page</title>
     <link rel="stylesheet" href="style/css/admin.css">
+    <link rel="stylesheet" href="style/css/category-management-page.css">
 </head>
 <body>
     <?php
@@ -25,16 +26,23 @@
             </div>
         </div>
 
-        <h3>Select a category to begin editing</h3>
-        <?php 
-            $categoryList = new ProductCategoryList();
-            echo $categoryList
-        ?>
+        <div class='category-management-content-container'>
+            <h3 style='font-style:italic;opacity:0.8;margin-bottom:20px;'>Select a category to begin managing its filters</h3>
+            <?php 
+                $categoryList = new ProductCategoryList();
+                echo $categoryList
+            ?>
+            <div class="category-attributes">
+
+            </div>
+        </div>
+        
     </main> 
 
 </body>
 <script src="js/classes/alert.class.js"></script>
 <script src="js/functions.js"></script>
+<script src="js/form-functions.js"></script>
 <script src="js/category-management-page.js"></script>
 <script>
     document.onreadystatechange = function() {

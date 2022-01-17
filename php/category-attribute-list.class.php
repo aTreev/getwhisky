@@ -24,13 +24,60 @@ class CategoryAttributeList {
         $this->setAttributeList($this->menuCRUD->getProductFiltersByCategoryId($this->getCategoryId()));
     }
 
+
+
+    /********************
+     * Displays attribute list on the category management page
+     ****************************/
     public function displayAttributeListCategoryManagementPage() {
-        $html = "";
+        $html = "<p style='font-style:italic;opacity:0.8;'>This category currently has no Filters</p>";
         $result = 0;
         if ($this->getAttributeList()) {
             $result = 1;
+            $html="<h3 style='font-style:italic;opacity:0.8;font-weight:400;'>Current Filters</h3>";
+
+            foreach($this->getAttributeList() as $attribute) {
+                $html.="<div class='attribute-item'>";
+                    $html.="<p>".$attribute['title']."</p>";
+                    $html.="<div class='attribute-item-options'>";
+                        $html.="<button class='remove-btn' attribute-id='".$attribute['id']."' name='remove-attribute'>Delete</button>";
+                        $html.="<button class='action-btn' attribute-id='".$attribute['id']."' name='manage-attribute'>Manage filter values</button>";
+                    $html.="</div>";
+                $html.="</div>";
+
+                // Attribute values
+                $html.="<div class='attribute-item-values' attribute-id='".$attribute['id']."'>";
+                    // Get attribute's values
+                    $attrValues = $this->menuCRUD->getAttributeValuesByAttributeId($attribute['id']);
+
+                    // If current values display them
+                    if ($attrValues) {
+                    $html.="<h3 style='opacity:0.8;font-style:italic;font-weight:400;'>Current Filter Values for '".$attribute['title']."'</h3>";
+                        foreach($attrValues as $attrValue) {
+                            $html.="<div class='attribute-value-item'>";
+                                $html.="<p>".$attrValue['value']."</p>";
+                                $html.="<button class='remove-btn' attribute-id='".$attribute['id']."' attribute-value-id='".$attrValue['id']."' name='remove-attribute-val'>Delete</button>";
+                            $html.="</div>";
+                        }
+                    } else {
+                        $html.="<p style='font-style:italic;opacity:0.8;'>This filter currently has no options</p>";
+                    }
+                    // Button to add new attribute value
+                    $html.="<div class='filter-options' attribute-id='".$attribute['id']."'>";
+                            $html.="<button class='action-btn' name='add-new-attribute-value' attribute-id='".$attribute['id']."'>Add new value</button>";
+                    $html.="</div>";
+                $html.="</div>";
+            }
+            
         }
+        // Button to add new attribute
+        $html.="<div class='category-options'>";
+                $html.="<button class='action-btn' id='new-attribute'>Add new filter</button>";
+        $html.="</div>";
+        return ['result' => $result, 'html' => $html];
     }
+
+
     public function displayCategoryAttributeList() {
         $html = "";
         $result = 0;

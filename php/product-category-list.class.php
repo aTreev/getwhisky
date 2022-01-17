@@ -36,7 +36,6 @@ class ProductCategoryList {
 
     public function __toString() {
         $html = "";
-        $html.="<label for='product-category'>Product Category</label>";
         $html.="<select id='product-category' class='select-text'>";
         $html.="<option value='-1'>Please select a product category</option>";
         foreach($this->categoryList as $category) {

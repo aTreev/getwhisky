@@ -64,5 +64,61 @@ class MenuCRUD {
 		$resultset=$result->fetch_all($style);
 		return $resultset;
 	}
+
+
+	/***********
+	 * Insert methods
+	 *********/
+	public function createCategoryAttribute($categoryid, $attributeTitle) {
+		$this->sql = "INSERT INTO attribute (`category_id`, `title`) VALUES (?,?);";
+		$this->stmt = self::$db->prepare($this->sql);
+		$this->stmt->bind_param("is", $categoryid, $attributeTitle);
+		$this->stmt->execute();
+		if($this->stmt->affected_rows!=1) {
+			return 0;
+		} else {
+			return $this->stmt->affected_rows;
+		}
+	}
+
+	public function createAttributeValue($attributeid, $attributeValue) {
+		$this->sql = "INSERT INTO attribute_value (`attribute_id`, `value`) VALUES (?,?);";
+		$this->stmt = self::$db->prepare($this->sql);
+		$this->stmt->bind_param("is", $attributeid, $attributeValue);
+		$this->stmt->execute();
+		if($this->stmt->affected_rows!=1) {
+			return 0;
+		} else {
+			return $this->stmt->affected_rows;
+		}
+	}
+
+
+	/**********
+	 * Delete methods
+	 ******/
+	public function deleteCategoryAttribute($categoryid, $attributeid) {
+		$this->sql = "DELETE FROM attribute WHERE (category_id = ? AND id = ?);";
+		$this->stmt = self::$db->prepare($this->sql);
+		$this->stmt->bind_param("ii", $categoryid, $attributeid);
+		$this->stmt->execute();
+		if($this->stmt->affected_rows!=1) {
+			return 0;
+		} else {
+			return $this->stmt->affected_rows;
+		}
+	}
+
+	public function deleteAttributeValue($attributeid, $attributevalueid) {
+		$this->sql = "DELETE FROM attribute_value WHERE (attribute_id = ? AND id = ?);";
+		$this->stmt = self::$db->prepare($this->sql);
+		$this->stmt->bind_param("ii", $attributeid, $attributevalueid);
+		$this->stmt->execute();
+		if($this->stmt->affected_rows!=1) {
+			return 0;
+		} else {
+			return $this->stmt->affected_rows;
+		}
+	}
 }
 ?>

@@ -602,6 +602,26 @@ option {
   font-size: 1.4rem;
 }
 
+.remove-btn, .action-btn, .save-btn {
+  padding: 12px 20px;
+  font-size: 1.6rem;
+  border: none;
+  color: white;
+  cursor: pointer;
+  border-radius: 4px;
+}
+.remove-btn {
+  background-color: var(--btn-delete-red);
+}
+.action-btn {
+  background-color: var(--btn-action-blue);
+}
+.save-btn {
+  background-color: var(--btn-save-green);
+}
+.remove-btn:hover, .action-btn:hover, .save-btn:hover {
+  background-color: var(--btn-hover-colour);
+}
 
 .optional {
   font-size: 1.4rem;
