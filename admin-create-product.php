@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="style/css/product-page.css">
     <link rel="stylesheet" href="style/css/product-creation-page.css">
     <link rel="stylesheet" href="style/css/admin.css">
+    <!-- Selectize -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/standalone/selectize.min.js" integrity="sha256-+C0A5Ilqmu4QcSPxrlGpaZxJ04VjsRjKu+G82kl5UJk=" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/css/selectize.bootstrap3.min.css" integrity="sha256-ze/OEYGcFbPRmvCnrSeKbRTtjG4vGLHXgOqsyLFTRjg=" crossorigin="anonymous" />
 </head>
@@ -87,18 +88,20 @@
                     </div>
 
                     <!-- Optional values -->
-                    <div class="product-creation-input-container bg-white" style='margin-top:40px;border:1px solid lightgrey;padding:20px;border-radius:3px;'>
-                        <div class="section-header">
-                        <h3>Additional Details<span style='font-style:italic;font-size:1.4rem;font-weight:400;opacity:0.8;'> (Fill if applicable)</span></h3>
-
-                        </div>
-                        <label for="product-alc-volume">Alchohol Volume <i style='cursor:default;font-size:1.4rem;'>(Example: 40%)</i></label>
-                        <div class='input-container-100'>
-                            <input type="text" id="product-alc-volume" id="" class="form-item" autocomplete="off">
-                        </div>
-                        <label for="product-bottle-size">Bottle Size <i style='cursor:default;font-size:1.4rem;'>(Example: 70cl / 2 x 20cl)</i></label>
-                        <div class='input-container-100'>
-                            <input type="text" id="product-bottle-size" id="" class="form-item" autocomplete="off">
+                    <div class="product-creation-input-container bg-white" style='margin-top:40px;border:1px solid lightgrey;border-radius:3px;'>
+                        <div style='padding: 20px;'>
+                            <div class="section-header">
+                                <h3>Additional Details<span style='font-style:italic;font-size:1.4rem;font-weight:400;opacity:0.8;'> (Fill if applicable)</span></h3>
+                            </div>
+                            
+                            <label for="product-alc-volume">Alchohol Volume <i style='cursor:default;font-size:1.4rem;'>(Example: 40%)</i></label>
+                            <div class='input-container-100'>
+                                <input type="text" id="product-alc-volume" id="" class="form-item" autocomplete="off">
+                            </div>
+                            <label for="product-bottle-size">Bottle Size <i style='cursor:default;font-size:1.4rem;'>(Example: 70cl / 2 x 20cl)</i></label>
+                            <div class='input-container-100'>
+                                <input type="text" id="product-bottle-size" id="" class="form-item" autocomplete="off">
+                            </div>
                         </div>
                     </div>
                 </div>

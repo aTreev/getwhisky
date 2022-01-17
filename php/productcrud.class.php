@@ -207,6 +207,18 @@ class ProductCRUD {
     /****************************************************
      * Product Update Methods
      ***************************************************/
+    public function updateProductImage($image, $productid) {
+        $this->sql = "UPDATE products SET image = ? WHERE id = ?;";
+        $this->stmt = self::$db->prepare($this->sql);
+        $this->stmt->bind_param("si", $image, $productid);
+        $this->stmt->execute();
+        if($this->stmt->affected_rows!=1) {
+			return 0;
+		} else {
+			return $this->stmt->affected_rows;
+		}
+    }
+
     public function updateProductName($name, $productid) {
         $this->sql = "UPDATE products SET name = ? WHERE id = ?;";
         $this->stmt = self::$db->prepare($this->sql);

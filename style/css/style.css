@@ -592,6 +592,16 @@ button[type=submit] {
 button[type=submit]:hover {
   background-color: var(--bg-secondary-light);
 }
+.generic-select {
+  padding: 15px;
+  width: 100%;
+  font-size: 1.4rem;
+  opacity: 0.8;
+}
+option {
+  font-size: 1.4rem;
+}
+
 
 .optional {
   font-size: 1.4rem;

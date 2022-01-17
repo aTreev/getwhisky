@@ -3,12 +3,12 @@ function prepareProductEditPage() {
     prepareSingleFieldUpdateBtns();
     prepareCategoryOptions();
     prepareOverviewFunctionality();
-
-
-
 }
 
 
+/******
+ * Adds functionality to all of the single update fields
+ *******************************************/
 function prepareSingleFieldUpdateBtns() {
     $("#product-name").keypress(function(e){ if(e.which == 13){ $("#update-product-name").click();}});
     $("#product-type").keypress(function(e){ if(e.which == 13){ $("#update-product-type").click();}});
@@ -17,17 +17,23 @@ function prepareSingleFieldUpdateBtns() {
     $("#product-desc").keypress(function(e){ if(e.which == 13){ $("#update-product-desc").click();}});
     $("#product-alc-volume").keypress(function(e){ if(e.which == 13){ $("#update-product-alc-volume").click();}});
     $("#product-bottle-size").keypress(function(e){ if(e.which == 13){ $("#update-product-bottle-size").click();}});
-
+    $("#product-image").change(function(){ const image = $(this)[0].files[0]; if(image) { $("#product-image-preview").attr("src", URL.createObjectURL(image))}})
 
     $("#update-product-image").click(function(){
-        const image = $("#product-image")[0].files[0];
-        console.log(image);
+        $(".form-feedback").remove();
+        if (checkFileField($("#product-image"), "Please provide a product image", ["png", "jpg", "jpeg", "webp"])) {
+            const image = $("#product-image")[0].files[0];
+            updateProductImage(image).then(function(result){
+                new Alert(result.result, result.message);
+            });
+        }
+
     });
 
     $("#update-product-name").click(function(){
         $(".form-feedback").remove();
         if (checkFieldEmpty($("#product-name"),"Please provide a product name", 90)) {
-            const name = $("#product-name").val();;
+            const name = $("#product-name").val();
             updateProductName(name).then(function(result){
                 if (result == 1) {
                     new Alert(result, `Product name updated to ${name}`);
@@ -139,6 +145,7 @@ function prepareCategoryOptions() {
     $("#product-category").val($("#current-product-category").val()).trigger("change");
     $("#product-category").selectize();
 
+    // Click functionality to update
     $("#update-product-attributes").click(function(){
         if(confirm("Are you sure you want to change the product's category / attributes?")) {
             const categoryid = $("#product-category").val();
@@ -240,7 +247,7 @@ function prepareOverviewFunctionality() {
  * Adds event listeners to the newly created section based on name.
  * Once it has been uploaded successfully the name tags are removed and the data attributes
  * required to update / remove it are applied with the ID of the newly created overview section
- */
+ *******************************************/
 function createNewProductOverviewSection() {
     // Guard clause to prevent multiple empty overviews from being created
     if (document.querySelector("[name='new-product-overview-item']")) return new Alert(false, "Please complete the current new overview section before creating another");
@@ -296,6 +303,7 @@ function createNewProductOverviewSection() {
                     $("#add-new-overview-section").attr("overview-id", id);
                     $("#add-new-overview-section").text("Update");
                     $("#add-new-overview-section").attr("id", "");
+                    // Reapply event listeners
                     prepareOverviewFunctionality();
                 }
             });
@@ -312,6 +320,25 @@ function createNewProductOverviewSection() {
 /*********************
  * AJAX FUNCTIONS
  *********************/
+ function updateProductImage(image) {
+    return new Promise(function(resolve){
+        let formData = new FormData();
+        formData.append("function", 4);
+        formData.append("productImage", image);
+        formData.append("productid", $("#product-id").val());
+
+        $.ajax({
+            url: "../php/ajax-handlers/product-edit-handler.php",
+            method: "POST",
+            data: formData,
+            processData: false,
+            contentType: false
+        })
+        .done(function(result){
+            resolve(JSON.parse(result));
+        });
+    });
+}
 function updateProductName(name) {
     return new Promise(function(resolve){
         $.ajax({
@@ -320,7 +347,6 @@ function updateProductName(name) {
             data: {function: 5, productName: name, productid: productid}
         })
         .done(function(result){
-            console.log(result);
             resolve(result);
         });
     });
@@ -460,6 +486,11 @@ function updateProductCategoryAndAttributes(categoryid, attributeValueIds) {
     });
 }
 
+/***********
+ * Updates a product overview via the handler
+ * Takes all the required fields and also the src of the
+ * original image
+ ***********************************/
 function updateProductOverviewSection(image, title, text, overviewid, currentImgSrc) {
     return new Promise(function(resolve){
         let formData = new FormData();
@@ -501,6 +532,11 @@ function deleteProductOverviewSection(overviewid) {
     });
 }
 
+/*********
+ * Uploads a new product overview for the product
+ * Retrieves a result, message and the ID of the newly created
+ * overview
+ *****************************************/
 function uploadProductOverviewSection(image, title, text) {
     return new Promise(function(resolve){
         let formData = new FormData();

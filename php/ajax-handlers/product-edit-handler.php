@@ -20,10 +20,10 @@ if (isset($_POST['function'])) {
         break;
 
         case 3:
-            getLastOverviewId();
         break;
 
         case 4:
+            updateProductImage();
         break;
 
         case 5:
@@ -108,11 +108,39 @@ function getProductAttributeData(){
     }
 }
 
-function getLastOverviewId() {
-    $source = new ProductCRUD();
-    echo json_encode($source->getLastOverviewId()[0]);
-}
 
+function updateProductImage() {
+    if (isset($_FILES['productImage']) && util::valInt($_POST['productid'])) {
+        $update = new ProductCRUD();
+        $image = $_FILES['productImage'];
+        $productid = util::sanInt($_POST['productid']);
+        $messages = "";
+        $result = 0;
+
+        if (!util::valImage($image['tmp_name'])) {
+            $messages = "Please ensure an image has been uploaded";
+        }
+        if (!util::valFileSize($image['size'])) {
+            $messages = "Please upload a file smaller than the maximum of ".ini_get('upload_max_filesize')."";
+        }
+
+        if ($messages == "") {
+            $imageDest = "../../assets/product-images/" .time().basename($image["name"]);
+            if (move_uploaded_file($image['tmp_name'],$imageDest)){
+                $result = $update->updateProductImage($imageDest, $productid);
+                if ($result == 1) {
+                    $messages = "Product Image updated";
+                } else {
+                    $messages = "There was an error updating the product image, please try again";
+                }
+            } else {
+                $messages = "There was an error uploading the file, please try again";
+            }
+        }
+
+        echo json_encode(['result' => $result, 'message' => $messages]);
+    }
+}
 function updateProductName() {
     if (util::valInt($_POST['productid']) && util::valStr($_POST['productName'])) {
         $update = new ProductCRUD();

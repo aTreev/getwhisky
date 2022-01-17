@@ -20,6 +20,20 @@ class ProductCategoryList {
         $this->categoryList = $source->getProductCategories();
     }
 
+
+    public function displayListProductManagementPage() {
+        $html = "";
+        $html.="<select id='product-category' class='generic-select'>";
+        $html.="<option value='-1'>Filter by category</option>";
+        $html.="<option value='null'>All</option>";
+        foreach($this->categoryList as $category) {
+            $html.="<option value='".$category['id']."'>".$category['name']."</option>";
+        }
+        $html.="</select>";
+
+        return $html;
+    }
+
     public function __toString() {
         $html = "";
         $html.="<label for='product-category'>Product Category</label>";

@@ -23,14 +23,11 @@ if (isset($_POST['function']) && util::valInt($_POST['function'])) {
             endProductDiscount();
         break;
         case 5:
-            getProductsFromSearch();
-        break;
-        case 6:
-            getBaseProductManagementHtml();
-        break;
-        case 7:
             updateProductStock();
         break;
+        case 6:
+            getAndDisplayTableProducts();
+        break; 
     }
 }
 
@@ -58,7 +55,7 @@ function toggleProductFeaturedState() {
 }
 
 function addProductDiscount() {
-    if ( (util::valInt($_POST['productid'])) && (util::valFloat($_POST['price'])) && util::valStr($_POST['endDatetime']) ) {
+    if ((util::valInt($_POST['productid'])) && (util::valFloat($_POST['price'])) && util::valStr($_POST['endDatetime'])) {
         $productCRUD = new ProductCRUD();
         $productid = util::sanInt($_POST['productid']);
         $price = $_POST['price'];
@@ -80,33 +77,6 @@ function endProductDiscount() {
     }
 }
 
-function getProductsFromSearch() {
-    if (util::valStr($_POST['searchString'])) {
-        $searchStr = util::sanStr($_POST['searchString']);
-        $page = new Page();
-
-        $products = $page->getProducts();
-        $returnHtml = "";
-        $result = 0;
-
-        foreach($products as $product) {
-            if (preg_match("/{$searchStr}/i", $product->getName())) {
-                $returnHtml.=$product->adminDisplayProductTableItems();
-            }
-        }
-
-        if ($returnHtml) $result = 1;
-
-        $result = ['result' => $result, 'html' => $returnHtml];
-        echo json_encode($result);
-    }
-}
-
-function getBaseProductManagementHtml() {
-    $page = new Page();
-    echo json_encode($page->adminDisplayProductManagementTable());
-}
-
 function updateProductStock() {
     if (util::valInt($_POST['productid']) && util::valInt($_POST['quantity'])) {
         $productid = util::sanInt($_POST['productid']);
@@ -117,5 +87,61 @@ function updateProductStock() {
 
         echo json_encode($result);
     }
+}
+
+/********
+ * Retrieves the products html for the admin product management page
+ * Iterates through products adding their html to the return array.
+ * Checks for optional filters and filters the products if neccessary
+ * Returns an associative array containing result and html array
+ * @returns 
+ *      {$result} number: 1 if product html returned 0 if nothing returned
+ *      {$productHtmlArray} array: An array of the retrieved products html
+ * 
+ ********************/
+function getAndDisplayTableProducts() {
+    $page = new Page();
+    $products = $page->getProducts();
+    $result = 0;
+    $filterByCategory = false;
+    $filterByQuery = false;
+    
+    if (util::valInt($_POST['categoryid'])) {
+        $categoryid = util::sanInt($_POST['categoryid']);
+        $filterByCategory = true;
+    }
+    if (util::valStr($_POST['searchString'])) {
+        $searchString = util::sanStr($_POST['searchString']);
+        $filterByQuery = true;
+    }
+
+    if ($filterByCategory) {
+        $filteredProducts = [];
+        foreach($products as $product) {
+            if ($product->getCategoryId() == $categoryid) {
+                array_push($filteredProducts, $product);
+            }
+        }
+        $products = $filteredProducts;
+    }
+
+    if ($filterByQuery) {
+        $filteredProducts = [];
+        foreach($products as $product) {
+            if (preg_match("/{$searchString}/i", $product->getName())) {
+                array_push($filteredProducts, $product);
+            }
+        }
+        $products = $filteredProducts;
+    }
+
+    $productHtmlArray = [];
+    foreach($products as $product) {
+        array_push($productHtmlArray, $product->adminDisplayProductTableItems());
+    }
+    if (!empty($productHtmlArray)) $result = 1;
+
+    echo json_encode(['result' => $result, 'html' => $productHtmlArray]); 
+    
 }
 ?>

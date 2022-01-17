@@ -82,7 +82,7 @@ $page = new Page(3);
                             <input type="number" step="0.01" id="product-price" id="" class="form-item" autocomplete="off" value="<?php echo $product->getPrice(); ?>">
                             <button id="update-product-price" class='update-button'>Update</button>
                         </div>
-                        <label for="product-Stock">Initial Stock</label>
+                        <label for="product-Stock">Stock</label>
                         <div class='input-container-100 input-btn-container'>
                             <input type="number" id="product-stock" id="" class="form-item" autocomplete="off" value="<?php echo $product->getStock(); ?>">
                             <button id="update-product-stock" class='update-button'>Update</button>
@@ -99,21 +99,23 @@ $page = new Page(3);
                     </div>
 
                     <!-- Optional values -->
-                    <div class="product-creation-input-container bg-white" style='margin-top:40px;border:1px solid lightgrey;padding:20px;border-radius:3px;'>
-                        <div class="section-header">
-                        <h3>Additional Details<span style='font-style:italic;font-size:1.4rem;font-weight:400;opacity:0.8;'> (Fill if applicable)</span></h3>
-
+                    <div class="product-creation-input-container bg-white" style='margin-top:40px;border:1px solid lightgrey;border-radius:3px;'>
+                        <div style='padding: 20px;'>
+                            <div class="section-header">
+                                <h3>Additional Details<span style='font-style:italic;font-size:1.4rem;font-weight:400;opacity:0.8;'> (Fill if applicable)</span></h3>
+                            </div>
+                            <label for="product-alc-volume">Alchohol Volume <i style='cursor:default;font-size:1.4rem;'>(Example: 40%)</i></label>
+                            <div class='input-container-100 input-btn-container'>
+                                <input type="text" id="product-alc-volume" id="" class="form-item" autocomplete="off" value="<?php echo htmlentities($product->getAlcoholVolume(), ENT_QUOTES); ?>">
+                                <button id="update-product-alc-volume" class='update-button'>Update</button>
+                            </div>
+                            <label for="product-bottle-size">Bottle Size <i style='cursor:default;font-size:1.4rem;'>(Example: 70cl / 2 x 20cl)</i></label>
+                            <div class='input-container-100 input-btn-container'>
+                                <input type="text" id="product-bottle-size" id="" class="form-item" autocomplete="off" value="<?php echo htmlentities($product->getBottleSize(), ENT_QUOTES); ?>">
+                                <button id="update-product-bottle-size" class='update-button'>Update</button>
+                            </div>
                         </div>
-                        <label for="product-alc-volume">Alchohol Volume <i style='cursor:default;font-size:1.4rem;'>(Example: 40%)</i></label>
-                        <div class='input-container-100 input-btn-container'>
-                            <input type="text" id="product-alc-volume" id="" class="form-item" autocomplete="off" value="<?php echo htmlentities($product->getAlcoholVolume(), ENT_QUOTES); ?>">
-                            <button id="update-product-alc-volume" class='update-button'>Update</button>
-                        </div>
-                        <label for="product-bottle-size">Bottle Size <i style='cursor:default;font-size:1.4rem;'>(Example: 70cl / 2 x 20cl)</i></label>
-                        <div class='input-container-100 input-btn-container'>
-                            <input type="text" id="product-bottle-size" id="" class="form-item" autocomplete="off" value="<?php echo htmlentities($product->getBottleSize(), ENT_QUOTES); ?>">
-                            <button id="update-product-bottle-size" class='update-button'>Update</button>
-                        </div>
+                        
                     </div>
                 </div>
             </div>
@@ -171,7 +173,6 @@ $page = new Page(3);
                         <button id='create-overview'>Add New Overview</button>
                     </div>
 
-                    <button id='save-product'>Upload Product</button>
                 </div>
 
             </div>

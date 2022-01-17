@@ -1,13 +1,40 @@
-/*************F
+/****************
+ * GLOBAL VARIABLES
+ * These variables are used to enabled
+ * pagination of retrieved products
+ * Defaults are set in the getProduct() function
+ *********/
+
+let retrievedProducts = [];
+/*********
+ * @retrievedProducts array
+ * An array of the returned product html from php
+ */
+
+let productsToShow;
+/********
+ * @productsToShow integer
+ * Number that determines how many products to show
+ * this number is increased by clicking the show more button
+ * on the page.
+ */
+
+let productsShown;
+/********
+ * @productsShown integer
+ * Number used as an index to track how many products
+ * are currently shown on the page
+ *******************/
+
+
+
+/*************
  * Function prepares the product management page, adding event listeners
  * to required buttons and input fields. 
  * Validates fields on front-end using form-functions.js file
  *********************************/
 function prepareProductManagementPage() {
-    /****
-     * TODO:
-     *  Add sorting option capability
-     */
+
     // Get all product items
     const products = $(".product-management-item");
 
@@ -147,6 +174,21 @@ function prepareProductManagementPage() {
     });
 }
 
+function prepareProductCategorySelect() {
+    const categorySelect = $("#product-category");
+    
+    categorySelect.change(function(){
+        // Reset product search value
+        $("#product-management-search").val("");
+        const categoryid = $(this).val();
+        
+        getProducts(categoryid).then(function(result){
+            if (result.result == 0) $("#product-management-table-body").html("<tr><td colspan='100%'><p style='padding-left:15px;font-style:italic;opacity:0.8;'>No products in selected category</p></td></tr>");
+            handlePagination();
+        });
+    });
+}
+
 /*****
  * Prepares the product search bar for the
  * product management page
@@ -156,23 +198,20 @@ function prepareProductManagementPage() {
 
     // add logic to search bar
     searchbar.keyup(function(){
-        const searchString = searchbar.val()
-        // Length > 0 get returned products
+        // Reset category select value
+        $("#product-category").val(-1);
+
+        const searchString = searchbar.val();
         if (searchString.length > 0) {
-            // Get products and render from promise
-            getProductsBySearch(searchString).then(function(result){
-                if (result.result == 1) $("#product-management-table-body").html(result.html);
-                if (result.result == 0) $("#product-management-table-body").html("<p>No products found</p>");
-                prepareProductManagementPage(); 
+            getProducts(null, searchString).then(function(result){
+                if (result.result == 0) $("#product-management-table-body").html("<tr><td colspan='100%'><p style='padding-left:15px;font-style:italic;opacity:0.8;'>No products found</p></td></tr>");
+                handlePagination();
             });
         } else {
-            // Reset to base page html (all products)
-            getBaseProductManagementHtml().then(function(result){
-                $("#product-management-table").html(result);
-                prepareProductManagementPage();
-                prepareProductManagementSearch();
-                $("#product-management-search").focus();
-            });
+            $("#product-management-table-body").html("<tr><td colspan='100%'><p style='font-style:italic;padding-left:15px;opacity:0.8;'>Use the search bar or select from the category list to retrieve products</p></td></tr>");
+            // Hacky workaround
+            retrievedProducts = [];
+            handlePagination();
         } 
     });
 }
@@ -256,49 +295,13 @@ function endProductDiscount(productid, productName) {
     })
 }
 
-/****
- * Retrieves a list of products that match the search string
- * returns the result as a promise
- ******/
-function getProductsBySearch(str) {
-    return new Promise(function(resolve) {
-        $.ajax({
-            url: "../php/ajax-handlers/product-management-handler.php",
-            method: "POST",
-            data:{function: 5, searchString: str}
-        })
-        .done(function(result){
-            result = JSON.parse(result);
-            resolve(result);
-        });
-    });
-}
-
-/*********
- * Retrieves the base page html and returns the result
- * as a promise
- *****************/
-function getBaseProductManagementHtml() {
-    return new Promise(function(resolve) {
-        $.ajax({
-            url: "../php/ajax-handlers/product-management-handler.php",
-            method: "POST",
-            data: {function: 6}
-        })
-        .done(function(result){
-            result = JSON.parse(result);
-            resolve(result);
-        });
-    });
-}
-
 // needs to be promise based for updating page content correctly
 function increaseProductStock(productid, quantity, productName) {
     return new Promise(function(resolve) {
         $.ajax({
             url: "../php/ajax-handlers/product-management-handler.php",
             method: "POST",
-            data: {function: 7, productid: productid, quantity: quantity}
+            data: {function: 5, productid: productid, quantity: quantity}
         })
         .done(function(result){
             result = JSON.parse(result);
@@ -315,7 +318,7 @@ function reduceProductStock(productid, quantity, productName) {
         $.ajax({
             url: "../php/ajax-handlers/product-management-handler.php",
             method: "POST",
-            data: {function: 7, productid: productid, quantity: quantity*-1}
+            data: {function: 5, productid: productid, quantity: quantity*-1}
         })
         .done(function(result){
             result = JSON.parse(result);
@@ -324,4 +327,53 @@ function reduceProductStock(productid, quantity, productName) {
             resolve(result);
         });
     });    
+}
+
+function getProducts(categoryid=null, searchString = null) {
+    return new Promise(function(resolve) {
+        $.ajax({
+            url: "../php/ajax-handlers/product-management-handler.php",
+            method: "POST",
+            data:{function: 6, categoryid: categoryid, searchString: searchString}
+        })
+        .done(function(result){
+            result = JSON.parse(result);
+            // global variable set
+            productsToShow = 20;
+            productsShown = 0;
+            retrievedProducts = result.html;
+            resolve(result);
+        });
+    });
+}
+
+
+/*********
+ * Handles the page pagination
+ * uses the global variables to retrieve products,
+ * display products, track the number of products displayed
+ * and the number of products to display
+ * Adds a show more button to the page which calls the function
+ * recursively to display more products
+ ********************************/
+function handlePagination() {
+    $("#show-more").remove();
+    if (retrievedProducts.length == 0) return;
+
+    $("#product-management-table-body").html("");
+    for(let i = 0; i < productsToShow; i++) {
+        $("#product-management-table-body").append(retrievedProducts[i]);
+        productsShown++;
+    }
+
+    if ((!document.querySelector("#show-more")) && (productsShown < retrievedProducts.length)) {
+        $("#product-management-table-body").after("<button id='show-more' style='margin:30px 0px;padding:12px 20px;width:200px;font-size:1.4rem;'>Show more</button>");
+        $("#show-more").click(function(){
+            productsToShow += 20;
+            handlePagination();
+            $(this).remove();
+        });
+    }
+    prepareProductManagementPage(); 
+
 }

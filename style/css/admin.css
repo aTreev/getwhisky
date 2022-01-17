@@ -9,6 +9,7 @@
 .admin-header-text-container {
     width: 1400px;
     margin: auto;   
+    line-height: 1.4;
 }
 
 .admin-header-text-container p {
@@ -51,6 +52,58 @@
     background-color: var(--btn-hover-colour);
 }
 
+.admin-content-container {
+    width: 1400px;
+    margin: auto;
+    margin-top: 60px;
+    margin-bottom: 60px;
+}
+
+.admin-card:not(:first-child) {
+    margin-top: 60px;
+}
+.admin-card {
+    position: relative;
+    width: 600px;
+    margin: auto;
+    background-color: white;
+    box-shadow: 2px 2px 15px 0 rgb(0 0 0 / 20%);
+}
+.card-top {
+    padding: 45px;
+    margin: 0px 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 1px solid lightgrey;
+}
+.circle {
+    background-color:var(--bg-primary-gradient);
+    border-radius: 128px;
+    height: 48px;
+    width: 48px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.circle i {
+    font-size: 24px;
+    color: white;
+}
+.card-bot {
+    text-align: center;
+    padding: 45px;
+}
+.card-bot p {
+    margin-top: 15px;
+    line-height: 1.4;
+    opacity: 0.8;
+    font-style: italic;
+}
+.admin-card .wrapper-link:hover {
+    box-shadow: 1px 1px 15px var(--bg-primary-gradient);
+}
+
 @media screen and (max-width:1400px) {
     .admin-header-text-container {
         width: 90%;
@@ -58,7 +111,15 @@
     .admin-header-link-text {
         width: 90%;
     }
+    .admin-content-container {
+        width: 90%;
+    }
 }
 
 @media screen and (max-width: 836px) {
+}
+@media screen and (max-width: 768px) {
+    .admin-card {
+        width: 100%;
+    }
 }

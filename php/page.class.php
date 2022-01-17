@@ -29,6 +29,7 @@ class Page {
 		session_start();
 		$this->setPagetype($pagetype);
 		$this->user = new User();
+		
 		$this->productMenu = new ProductMenu();
 		$this->setStatus(false);
         $this->checkUser();		
@@ -626,52 +627,6 @@ class Page {
 	/*************************
 	 * ADMIN METHODS
 	 *****************************************/
-
-
-	 public function adminDisplayAdminPage() {
-		 $html = "";
-		 if ($this->getUser()->getUsertype() != 3) {
-			 $this->logout();
-			 return;
-			 exit;
-		 }
-		 $html.="<a href='admin-product-management.php'>Product Management</a>";
-
-		 return $html;
-	 }
-
-
-	 public function adminDisplayProductManagementTable() {
-		$html = "";
-		 $html.="<table id='product-management-table'>";
-			$html.="<tr>";
-				// Table headings
-				$html.="<th>Product</th>";
-				$html.="<th>Active</th>";
-				$html.="<th>Featured</th>";
-				$html.="<th>Discount status</th>";
-				$html.="<th>Stock</th>";
-				$html.="<th>Options</th>";
-			$html.="</tr>";
-
-			// Search / filter options
-			$html.="<tr>";
-				$html.="<td><div class='td-flex-center' style='width:100%;'>";
-					$html.="<input type='text' placeholder='Product search' id='product-management-search' style='width:90%;padding:8px 0px 8px 8px;'>";
-				$html.="</div></td>";
-				$html.="<td colspan='5'><div class='td-flex-center'>";
-				$html.="</div></td>"; 
-			$html.="</tr>";
-
-			// Product management items
-			$html.="<tbody id='product-management-table-body'>";
-			foreach($this->getProducts() as $product) {
-				$html.=$product->adminDisplayProductTableItems();
-			}
-			$html.="</tbody>";
-		 $html.="</table>";
-
-		 return $html;
-	 }
+	 
 }
 ?>

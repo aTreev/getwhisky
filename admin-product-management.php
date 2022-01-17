@@ -1,5 +1,6 @@
 <?php
     require_once("php/page.class.php");
+    require_once("php/product-category-list.class.php");
     $page = new Page(3);
 ?>
 <!DOCTYPE html>
@@ -9,6 +10,7 @@
     <title>getwhisky product management</title>
     <link rel="stylesheet" href="style/css/product-management-page.css">
     <link rel="stylesheet" href="style/css/admin.css">
+    
 </head>
 <body>
 	<?php
@@ -28,9 +30,40 @@
                 <a href='admin-create-product.php'>Create new product</a>
             </div>
         </div>
-        <?php 
-            echo $page->adminDisplayProductManagementTable();
-        ?>
+        <table id="product-management-table">
+            <tr>
+                <th>Product</th>
+                <th>Active</th>
+                <th>Featured</th>
+                <th>Discount status</th>
+                <th>Stock</th>
+                <th>Options</th>
+            </tr>
+            <tr>
+                <td colspan='3'>
+                    <div class="td-flex-ccenter" style='width:100%'>
+                        <input type='text' placeholder='Product search' id='product-management-search' style='width:95%;padding:15px;'>
+                    </div>
+                </td>
+                <td colspan='3'>
+                    <div class='td-flex-center'>
+                        <?php 
+                            $categoryList = new ProductCategoryList();
+                            echo $categoryList->displayListProductManagementPage();
+                        ?>
+                    </div>
+                </td>
+            </tr>
+            <tbody id="product-management-table-body">
+                <!-- Products put here from JS -->
+                <tr>
+                    <td colspan="100%">
+                        <p style='font-style:italic;padding-left:15px;opacity:0.8;'>Use the search bar or select from the category list to retrieve products</p>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        
 	</main>
 </body>
 <script src="js/classes/alert.class.js"></script>
@@ -43,6 +76,7 @@
             prepareMenu();
             prepareProductManagementPage();
             prepareProductManagementSearch();
+            prepareProductCategorySelect();
         }
     }
 </script>

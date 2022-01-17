@@ -1,6 +1,9 @@
 <?php
 require_once("db.php");
 class MenuCRUD {
+	/****************
+	 * CRUD class for all category details and attributes
+	 ****************************************************/
 	private static $db;
 	private $sql, $stmt;
 	

@@ -24,6 +24,13 @@ class CategoryAttributeList {
         $this->setAttributeList($this->menuCRUD->getProductFiltersByCategoryId($this->getCategoryId()));
     }
 
+    public function displayAttributeListCategoryManagementPage() {
+        $html = "";
+        $result = 0;
+        if ($this->getAttributeList()) {
+            $result = 1;
+        }
+    }
     public function displayCategoryAttributeList() {
         $html = "";
         $result = 0;
