@@ -6,11 +6,12 @@ require_once("page.class.php");
  * The following delivery code is garbage due to being hard coded
  * Should be changed once delivery options are discussed with client
  *********/
-if (util::valInt($_POST['deliveryType'], array(1,2)) && util::valStr($_POST['addressId'])  && util::valStr($_POST['user-email'])) {
+if (util::valInt($_POST['deliveryType'], array(1,2)) && util::valStr($_POST['addressId'])) {
+  $page = new Page();
   // Retrieve posted arguments
   $deliveryType = $_POST['deliveryType'];
   $addressid = $_POST['addressId'];
-  $email = $_POST['user-email'];
+  $email = $page->getUser()->getEmail();
 
   // Temporary hardcoded delivery logic
   if ($deliveryType == 1) {
@@ -26,7 +27,6 @@ if (util::valInt($_POST['deliveryType'], array(1,2)) && util::valStr($_POST['add
    * Initialize page on the same session as the user and retrieve
    * the required data
    *****************************/
-  $page = new Page();
   $cart_items = $page->getCart()->getItems();
   $line_items = [];
 
@@ -46,14 +46,14 @@ if (util::valInt($_POST['deliveryType'], array(1,2)) && util::valStr($_POST['add
   $validAddress = $userAddressCRUD->getUserAddressById($addressid, $userid);
 
   if (!$validAddress) {
-    header("Location: /deliveryselection.php");
+    header("Location: /checkout.php");
     // send notification?
   }
 
   // All good, begin checkout
   beginStripeCheckout($line_items, $userid, $cartid, $addressid, $deliveryLabel, $deliveryCost, $email);
 } else {
-  header("Location: /deliveryselection.php");
+  header("Location: /checkout.php");
 }
 
 
@@ -61,7 +61,7 @@ function beginStripeCheckout($line_items, $userid, $cartid, $addressid, $deliver
   // Stripe logic
   \Stripe\Stripe::setApiKey('sk_test_51Je0ufArTeMLOzQd1e4BFGLKWFOsabluGgErlDnWkmyea9G2LQQJY6PXusduRSaAXhsz6h27Owwz8n9SehfBY3a90087Gcb2ba');
   header('Content-Type: application/json');
-  $DOMAIN = 'http://ecommercev2';
+  $DOMAIN = 'http://getwhisky';
   $checkout_session = \Stripe\Checkout\Session::create([
       'billing_address_collection' => 'required',
       'line_items' => [$line_items],

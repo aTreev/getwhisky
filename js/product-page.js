@@ -1,5 +1,6 @@
 function prepareProductPage() {
     prepareProductTabs();
+    prepareOwlCarousel();
 
     $("[name='add-to-cart").on("click", function(){
         $(".form-feedback").remove();
@@ -64,5 +65,40 @@ function addToCart(productId, quantity) {
         if (result.result == 3) {
             new Alert(false, "We were unable to find that product, please try again");
         }
+    });
+}
+
+function prepareOwlCarousel() {
+    $(".owl-carousel").owlCarousel({
+        loop:true,
+        items:4,
+        margin: 10,
+        nav:true,
+        lazyLoad:true,
+        //animateIn:true,
+        responsive:{
+            0:{
+                items:2,
+            },
+            576:{
+                items:3,
+            },
+            768:{
+                items:4,
+            },
+            1200:{
+                items:6,
+            }
+        }
+
+    });
+    // Using FA icons for navigation mapped to owl nav
+    // Go to the next item
+    $('.owl-nav-right').click(function() {
+        $(".owl-carousel").trigger('next.owl.carousel');
+    });
+    // Go to the previous item
+    $('.owl-nav-left').click(function() {
+        $(".owl-carousel").trigger('prev.owl.carousel');
     });
 }

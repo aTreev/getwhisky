@@ -14,8 +14,11 @@
         echo $page->displayHead();
     ?>
     <link rel="stylesheet" href="style/css/product-page.css">
+    <link rel="stylesheet" href="style/css/index.css">
+    <link rel="stylesheet" href="owl-carousel/owl.carousel.min.css">
+    <link rel="stylesheet" href="owl-carousel/owl.theme.default.min.css">
 </head>
-<body>
+<body>  
     <?php 
         echo $page->displayHeader();
         echo $page->displayProductMenu();
@@ -33,7 +36,11 @@
         <div id='product-root'>
             <?php echo $page->displayProductPage(); ?>
         </div>
-        <div id='related-products-root'></div>
+        <div id='related-products-root'>
+            <?php 
+                echo $page->displayRelatedProducts();
+            ?>
+        </div>
         <?php
         } else {
             ?>
@@ -45,6 +52,7 @@
 </main>
 </body>
 <script src='js/classes/alert.class.js'></script>
+<script src="owl-carousel/owl.carousel.min.js"></script>
 <script src='js/functions.js'></script>
 <script src="js/form-functions.js"></script>
 <script src='js/product-page.js'></script>

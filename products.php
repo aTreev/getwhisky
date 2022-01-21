@@ -20,6 +20,7 @@
             <?php
                 if (isset($_GET['catid']) && util::valInt($_GET['catid'])) {
                     $categoryId = util::sanInt($_GET['catid']);
+                    $_SESSION['last_viewed_category'] = $categoryId;
                     ?>
                     <div id='category-details'>
                         <?php

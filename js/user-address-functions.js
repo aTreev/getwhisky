@@ -16,7 +16,7 @@ function prepareUserAddressPage() {
     prepareDeleteAddressFunctionality();
 
     // if on delivery page call this function
-    if(window.location.href.split("/").pop() == "deliveryselection.php") prepareDeliveryPage();
+    if(window.location.href.split("/").pop() == "checkout.php" || window.location.href.split("/").pop() == "checkout.php#") prepareDeliveryPage();
 }
 
 
@@ -128,6 +128,8 @@ function prepareDeleteAddressFunctionality() {
  ********************************/
 function prepareDeliveryPage() {
     const addressItems = $(".address-item");
+    let             deliveryHtml = $("#address-root").html();
+
     $("[name='addressId']").val("");
 
     // Loop through each address item
@@ -141,6 +143,22 @@ function prepareDeliveryPage() {
             addressItems.css({"background-color":"white", "border-color":"lightgrey"});
             $(this).css({"background-color":"lightgrey", "border-color":"black"});
             $("[name='addressId']").val(addressId);
+
+            $("#delivery-next-step").remove();
+            $("#address-root").append("<button type='submit' id='delivery-next-step'>Next</button>");
+
+
+            $("#delivery-next-step").click(function(){
+                $("#address-root").html("<img src='../assets/loader.gif' style='display:block;margin:auto;'>");
+                setTimeout(() => {
+                    $("#address-root").html(`<div class='fade-in-translate'><div class='arrow-back-text-container' id='back-to-address-select'><i class='fas fa-arrow-left'></i><p>back</p></div><form class='form-inline' method='post' action='/php/create-checkout-session.php'><h3>Delivery Method</h3><p style='margin-bottom:10px;'>Please select your preferred delivery method</p><input type='hidden' name='addressId' value='${addressId}' /><select name='deliveryType' class='form-item'><option value=1>£4.49 - Standard Delivery</option><option value=2>£5.99 - Next day delivery</option></select><button type='submit' id='delivery-submit'>Proceed to Payment</button></form></div>`);
+                    setTimeout(() => {$(".fade-in-translate").css({"opacity": 1, "transform": "translateY(0%)"})}, 200);
+                    $("#back-to-address-select").click(function(){
+                        $("#address-root").html(deliveryHtml);
+                        prepareUserAddressPage();
+                    });
+                }, 500);
+            });
         });
     });
 
@@ -151,10 +169,6 @@ function prepareDeliveryPage() {
         if ($("[name='addressId']").val() == "") {
             ev.preventDefault();
             new Alert(false, "Please select a delivery address");
-        }
-        // User email input
-        if (!checkEmail($("#user-email"))) {
-            ev.preventDefault();
         }
     });
 }

@@ -235,7 +235,7 @@ class Product {
             $html.="</div>";
             $html.="<div class='product-top-right'>";
                 // Name
-                $html.="<div class='product-name-container'>";
+                $html.="<div class='product-page-name-container'>";
                     $html.="<h2>".$this->getName()."</h2>";
                     $html.="<span class='product-type'>".$this->getType()."</span>";
                 $html.="</div>";
@@ -297,7 +297,7 @@ class Product {
         return $html;
     }
 
-    public function displayProductFeatured() {
+    public function displayProductOwlFeatured() {
         $html = "";
         $html.="<div class='featured-product'>";
             $html.="<img  class='owl-lazy' data-src='".$this->getImage()."' src='".$this->getImage()."' />";

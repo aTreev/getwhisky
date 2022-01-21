@@ -1,3 +1,69 @@
+body {
+    background-color: white;
+}
+.cart-position-container {
+    width: 1400px;
+    margin: auto;
+    margin-top: 20px;
+    border:1px solid lightgrey;
+    border-bottom:1px solid lightgrey;
+    padding: 1px 0px;
+}
+.cart-position-container p {
+    font-family: 'Merriweather', serif;
+    font-size: 1.4rem;
+}
+.cart-position-container > .content-container {
+    display: flex;
+    justify-content: space-between;
+    width: 900px;
+    margin: auto;
+}
+.position-item {
+    display: flex;
+    gap: 10px;
+    align-items:center;
+    width: 100%;
+}
+.position-item a {
+    width: 100%;
+}
+.position-item .previous-link {
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.position-item .previous-link p {
+    color: black;
+}
+.position-item .previous-link p:hover {
+    text-decoration: underline;
+}
+.position-item .previous-link i:hover {
+    background-color: var(--bg-primary-gradient);
+}
+.position-number {
+    background-color: var(--bg-primary-faded);
+    color: white;
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    font-size: 2rem;
+}
+.position-active > .position-number {
+    background-color: var(--bg-primary-gradient);
+}
+.position-active > .position-text {
+    font-weight: 700;
+}
+
+/****************************************************************
+*   CART.PHP CSS
+*****************************************************************/
 .cart-heading {
     margin: auto;
     margin-top: 40px;
@@ -7,7 +73,7 @@
 }
 #cart-container {
     margin: auto;
-    width: 90%;
+    width: 1400px;
     margin-top: 20px;
     display: flex;
     flex-direction: row;
@@ -161,12 +227,141 @@
 .no-items a:hover {
     text-decoration: underline;
 }
-@media screen and (max-width: 1600px) {
-    
+
+
+/**********************************************************************************************************
+* CART SIGN-UP PAGE
+**********************************************************************************************************/
+.checkout-sign-up-banner {
+    width: 1400px;
+    padding: 10px 0px;
+    border-bottom: 1px solid lightgrey;
+    margin: auto;
+}
+.checkout-sign-up-banner > .content-container {
+    width: 1400px;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+.continue-shopping {
+    opacity: 0.8;
+    color: black;
+}
+.continue-shopping:hover {
+    opacity: 1;
+}
+
+.cart-contents-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+}
+.cart-contents-container > p:first-child {
+    opacity: 0.8;
+}
+.cart-return-btn {
+    display: block;
+    background-color: var(--bg-primary);
+    color: white;
+    border-radius: 6px;
+    padding: 10px 5px;
+    text-decoration: none;
+    width: 60px;
+    text-align: center;
+}
+.cart-return-btn:hover {
+    background-color: var(--btn-hover-colour);
+}
+
+.checkout-sign-up-container {
+    width: 1400px;
+    margin: auto;
+    background-color: white;
+    margin-top: 40px;
+}
+
+.checkout-sign-up-container > .content-container {
+    display: flex;
+    justify-content: space-between;
+    padding: 30px;
+    gap: 20px;
+}
+.checkout-sign-up-container > .content-container form {
+    width: 75%;
+}
+.checkout-sign-up-container > .content-container .left {
+    border-right: 1px solid lightgrey;
+    width: 50%;
+    padding-right: 20px;
+}
+.checkout-sign-up-container > .content-container .right {
+    width: 50%;
+}
+.checkout-sign-up-header {
+    padding: 10px;
+    background-color: rgb(247, 247, 247);
+    border-top: 1px solid lightgrey;
+    border-bottom: 1px solid lightgrey;
+    margin-bottom: 20px;
+}
+.checkout-sign-up-header > p {
+    font-weight: 500;
+    font-family: 'Merriweather', serif;
+}
+
+/************************************************
+*   CHECKOUT PAGE CSS
+************************************************/
+.fade-in-translate {
+    transform: translateY(100%);
+    opacity: 0;
+    transition: all 500ms ease-in-out;
+}
+.arrow-back-text-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.6rem;
+    cursor: pointer;
+    opacity: 0.7;
+    user-select: none;
+    padding: 5px;
+
+}
+.arrow-back-text-container i {
+    opacity: 0.5;
+}
+.arrow-back-text-container p:hover {
+    text-decoration: underline;
+}
+
+@media screen and (max-width: 1400px) {
+    .cart-position-container {
+        width: 95%;
+    }
+    .cart-position-container > .content-container {
+        width: 95%;
+        margin: 0;
+    }
+
     #cart-container {
         width: 90%;
         margin: auto;
         margin-top: 20px;
+    }
+
+    .checkout-sign-up-banner {
+        width: 100%;
+    }
+    .checkout-sign-up-banner > .content-container {
+        width: 95%;
+    }
+    .checkout-sign-up-container {
+        width: 100%;
     }
 }
 @media screen and (max-width: 830px) {
@@ -182,9 +377,64 @@
         margin: auto;
         padding: 20px 0px 20px 0px;
     }
+
+    .checkout-sign-up-container > .content-container {
+        flex-direction: column;
+    }
+    .checkout-sign-up-container > .content-container .left {
+        width: 100%;
+        border-right: none;
+    }
+    .checkout-sign-up-container > .content-container .right {
+        width: 100%;
+    }
+    .checkout-sign-up-container > .content-container form {
+        width: 100%;
+    }
+}
+@media screen and (max-width: 768px) {
+    .cart-position-container {
+        /*border: none;*/
+        background-color: white;
+    }
+    .cart-position-container > .content-container {
+        gap: 2px;
+    }
+    .cart-position-container > .content-container .position-item:last-child {
+        margin-right: -34px;
+    }
+    .position-item .position-text {
+        display: none;
+    }
+    .position-active .position-text {
+        display: block;
+    }
+    .position-item {
+        width: 10%;
+    }
+    .position-active {
+        width: 100%;
+    }
+    .cart-return-btn {
+        margin-right: 25px;
+    }
+    
 }
 
-
 @media screen and (max-width: 576px) {
-    
+    .checkout-sign-up-banner > .content-container {
+        flex-direction: column;
+        gap: 20px;
+        margin-top: 20px;
+    }
+    .checkout-sign-up-header {
+        padding: 20px;
+    }
+    .cart-position-container > .content-container .position-item:last-child {
+        margin-right: -14px;
+    }
+  
+    .position-active {
+        width: 100%;
+    }
 }

@@ -33,6 +33,22 @@ class Cart {
 
 
     /*****************
+     * Transfers the user's cart when they log in from a guest session.
+     * Deletes the logged in user's old cart and overrides it with the 
+     * guest-session cart by updating the userid of the guest-session cart.
+     ***********************************/
+    public function transferCart($userid, $useridAsGuest) {
+        $cartCRUD = new CartCRUD();
+        $update = 0;
+
+        if ($cartCRUD->getUserCart($userid)) {
+            $delete = $cartCRUD->deleteUserOldCart($userid);
+        }
+        $update = $cartCRUD->transferUserCart($userid, $useridAsGuest);
+        
+        return $update;
+    }
+    /*****************
      * Retrieves the items in the cart from the database
      * pushes each item to the items array as a constructed object
      *********/
@@ -261,6 +277,9 @@ class Cart {
 
     public function __toString() {
         $html = "";
+        $formAction = "/checkout.php";
+        if (strpos($this->getUserid(), "guest-") !== false) $formAction = "/checkout-sign-up.php";
+        
         if (count($this->getItems()) > 0) {
             // cart has items
 
@@ -275,7 +294,7 @@ class Cart {
             $html.="<div id='cart-summary-root'>";
                 $html.="<h3>Basket Summary</h3>";
                 $html.="<p>Total: £".$this->getCartTotal()."</p>";
-                $html.="<form action='/deliveryselection.php' method='POST'>";
+                $html.="<form action='".$formAction."' method='POST'>";
                     $html.="<button type='submit'>Checkout</submit>";
                 $html.="</form>";
             $html."</div>";

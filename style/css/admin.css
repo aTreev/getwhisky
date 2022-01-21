@@ -1,3 +1,6 @@
+body {
+    background-color: #f7f7f7f7;
+}
 .admin-page-header {
     padding: 80px 0px;
     background-color: var(--btn-action-blue);

@@ -146,9 +146,6 @@
     .address-header {
         width: 90%;
     }
-    #address-root {
-        width: 80%;
-    }
     .address-item {
         flex-direction: column;
     }

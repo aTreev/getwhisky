@@ -135,6 +135,28 @@ class CartCRUD {
 		}
     }
 
-    
+    public function deleteUserOldCart($userid) {
+        $this->sql = "DELETE FROM cart WHERE userid = ?";
+        $this->stmt = self::$db->prepare($this->sql);
+        $this->stmt->bind_param("s", $userid);
+        $this->stmt->execute();
+        if($this->stmt->affected_rows!=1) {
+			return 0;
+		} else {
+			return $this->stmt->affected_rows;
+		}
+    }
+
+    public function transferUserCart($userid, $useridAsGuest) {
+        $this->sql = "UPDATE cart SET userid = ? WHERE userid = ?";
+        $this->stmt = self::$db->prepare($this->sql);
+        $this->stmt->bind_param("ss", $userid, $useridAsGuest);
+        $this->stmt->execute();
+        if($this->stmt->affected_rows!=1) {
+			return 0;
+		} else {
+			return $this->stmt->affected_rows;
+		}
+    }
 }
 ?>

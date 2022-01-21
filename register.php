@@ -58,12 +58,12 @@
 </body>
 <script src="js/functions.js"></script>
 <script src="js/form-functions.js"></script>
+<script src="js/registration.js"></script>
 <script>
     'use strict';
     document.onreadystatechange = function() {
         if(document.readyState==="complete") {
             prepareRegistrationForm();
-            //new Form("regform");
             prepareMenu();
         }
     }

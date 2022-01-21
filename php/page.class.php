@@ -1,5 +1,6 @@
 <?php
 //The Page class, responsible for the application state, checks that the user is authorised 
+require_once("constants.php");
 require_once("user.class.php");
 require_once("product-menu.class.php");
 require_once("product.class.php");
@@ -100,14 +101,22 @@ class Page {
 	 * if the hash of the passed in password matches the hash in the database
 	 * the user is logged in and a session is stored in the database
 	 **************************************************/
-	public function login($email, $userpass) {
+	public function login($email, $userpass, $checkoutLogin) {
 		session_regenerate_id();
 		if($this->getUser()->authEmailPass($email,$userpass)) {
-			$_SESSION['guest'] = false;
 			$this->getUser()->storeSession($this->getUser()->getUserid(),session_id());
+			$useridAsGuest = $_SESSION['userid'];
+			$_SESSION['guest'] = false;
 			$_SESSION['userid']=$this->getUser()->getUserid();
 			$_SESSION['last_activity'] = time(); // init inactivity timer
 
+			// Transfer cart before redirect
+			$this->transferCart($this->getUser()->getUserid(), $useridAsGuest);
+
+			if ($checkoutLogin) {
+				header("Location: checkout.php");
+				exit();
+			}
 			// userlevel logic here
 			switch($this->getUser()->getUsertype()) {
 				case 1:
@@ -127,8 +136,14 @@ class Page {
 		}
 	}
 
-	private function transferCart() {
-
+	/*******
+	 * Transfers a cart from the guest-session to the user's account
+	 * if the guest-session cart has items in it
+	 *********************/
+	private function transferCart($userid, $useridAsGuest) {
+		if (count($this->getCart()->getItems()) > 0) {
+			$this->getCart()->transferCart($userid, $useridAsGuest);
+		}
 	}
 
 	/****************
@@ -139,8 +154,12 @@ class Page {
 		session_regenerate_id();
 		if($this->getUser()->authEmailPass($email,$userpass)) {
 			$this->getUser()->storeSession($this->getUser()->getUserid(),session_id());
+			$useridAsGuest = $_SESSION['userid'];
 			$_SESSION['userid']=$this->getUser()->getUserid();
 			$_SESSION['guest'] = false;
+
+			// transfer cart
+			$this->transferCart($this->getUser()->getUserid(), $useridAsGuest);
 		} else {
 			echo "<br />Authentication failed";
 		}
@@ -182,7 +201,7 @@ class Page {
 			// send verification email
 			$emailTo = $email;
 			$subject = "getwhisky email verification";
-			$message = "<h1>Thank you for registering with getwhisky</h1><p>Please click on the link below to verify your account!</p><a href='http://ecommercev2/verify.php?vkey=$vKey'>Verify account</a>";
+			$message = "<h1>Thank you for registering with getwhisky</h1><p>Please click on the link below to verify your account!</p><a href='http://getwhisky/verify.php?vkey=$vKey'>Verify account</a>";
 			$headers = "From: neilunidev@yahoo.com\r\n";
 			$headers .= "MIME-Version: 1.0\r\n";
 			$headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
@@ -196,7 +215,7 @@ class Page {
 			$emailTo = $this->getUser()->getEmail();
 			$vKey = $this->getUser()->getVerificationKey();
 			$subject = "getwhisky email verification";
-			$message = "<h1>Thank you for registering with JA Mackay</h1><p>Please click on the link below to verify your account!</p><a href='http://ecommercev2/verify.php?vkey=$vKey'>Verify account</a>";
+			$message = "<h1>Thank you for registering with JA Mackay</h1><p>Please click on the link below to verify your account!</p><a href='http://getwhisky/verify.php?vkey=$vKey'>Verify account</a>";
 			$headers = "From: neilunidev@yahoo.com\r\n";
 			$headers .= "MIME-Version: 1.0\r\n";
 			$headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
@@ -219,8 +238,8 @@ class Page {
 			$userCRUD->setResetKeyByEmail($resetKey, $email);
 			// send email with reset key
 			$subject = "getwhisky password reset";
-			$message = "<p>A password reset has been requested to this email address, please follow the following link to reset your password.</p><a href='http://ecommercev2/password-reset.php?resetKey=$resetKey'>reset password</a>";
-			$message.= "<p>If you did not request this change <a href='http://ecommercev2/password-reset.php?resetKey=$resetKey&cancel=1'>click here</a> to cancel";
+			$message = "<p>A password reset has been requested to this email address, please follow the following link to reset your password.</p><a href='http://getwhisky/password-reset.php?resetKey=$resetKey'>reset password</a>";
+			$message.= "<p>If you did not request this change <a href='http://getwhisky/password-reset.php?resetKey=$resetKey&cancel=1'>click here</a> to cancel";
 			$headers = "From: neilunidev@yahoo.com\r\n";
 			$headers .= "MIME-Version: 1.0\r\n";
 			$headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
@@ -376,6 +395,7 @@ class Page {
 		return $html;
 	}
 
+	
 	/**********************************************************************************************
 	 * Cart methods
 	 ****************************************************************************/
@@ -587,7 +607,7 @@ class Page {
 			$html.="<div class='owl-carousel owl-featured-products'>";
 				foreach($this->getProducts() as $product) {
 					if ($product->isFeatured()) {
-						$html.=$product->displayProductFeatured();
+						$html.=$product->displayProductOwlFeatured();
 					}
 				}
 			$html.="</div>";
@@ -595,6 +615,44 @@ class Page {
             $html.="<i class='owl-nav-right fas fa-chevron-right'></i>";
         $html.="</div>";
 
+		return $html;
+	}
+
+	/***********
+	 * Uses array_intersect to search through the page's products array and find products with 
+	 * multiple matching attributes to that of the product page's product attributes.
+	 * If enough attributes match the product page product's attributes then it is displayed as a
+	 * related product. 
+	 *************************************/
+	public function displayRelatedProducts() {
+		$html = "";
+		$relatedProducts = [];
+		if ($this->getProduct()) {
+			$productPageAttributes = $this->getProduct()->getAttributes();
+			$productPageProductid = $this->getProduct()->getId();
+			foreach($this->getProducts() as $product) {
+				$haystack = $product->getAttributes();
+				//$html.=$product->getName()." - matching attributes: ".count(array_intersect($haystack, $productPageAttributes)). "<br>";
+				if (count(array_intersect($haystack, $productPageAttributes)) >= 2 && $product->getId() != $productPageProductid) {
+					array_push($relatedProducts, $product);
+				}
+			}
+
+			if ($relatedProducts) {
+				$html.="<div id='related-products-root'>";
+					$html.="<div class='related-products-header'>";
+						$html.="<h3>Similar Products To Consider</h3>";
+					$html.="</div>";
+					$html.="<div class='owl-carousel owl-featured-products'>";
+						foreach($relatedProducts as $relatedProduct) {
+							$html.=$relatedProduct->displayProductOwlFeatured();
+						}
+					$html.="</div>";
+					$html.="<i class='owl-nav-left fas fa-chevron-left'></i>";
+            		$html.="<i class='owl-nav-right fas fa-chevron-right'></i>";
+				$html.="</div>";
+			}
+		}
 		return $html;
 	}
 
