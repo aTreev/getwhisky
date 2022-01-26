@@ -20,6 +20,7 @@ p, li, a, span, time, label { font-size:var(--font-size-regtext) }
  --font-size-regtext: 1.6rem;
  --icon-size-small:1.9rem;
  --btn-save-green: #3d9970;
+ --btn-proceed-green-light: #00af6c;
  --btn-action-blue: #3b8cc3;
  --btn-hover-colour: #95b0c2;
  --btn-delete-red: #db4c3c;

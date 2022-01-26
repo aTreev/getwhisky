@@ -361,6 +361,12 @@ body {
 /************************************************
 *   CHECKOUT PAGE CSS
 ************************************************/
+#delivery-next-step, #delivery-submit {
+    background-color: var(--btn-proceed-green-light);
+}
+#delivery-next-step:hover, #delivery-submit:hover {
+    background-color: var(--btn-hover-colour);
+}
 .fade-in-translate {
     transform: translateY(100%);
     opacity: 0;

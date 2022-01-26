@@ -26,7 +26,7 @@ function getFilteredProducts() {
     if (isset($_POST['categoryId']) && util::valInt($_POST['categoryId'])) {
         $categoryId = util::sanInt($_POST['categoryId']);
         foreach($allProducts as $product) {
-            if ($product->getCategoryId() == $categoryId) {
+            if ($product->getCategoryId() == $categoryId && $product->isActive()) {
                 array_push($filteredProducts, $product);
                 $allProducts = $filteredProducts;
             }

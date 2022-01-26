@@ -28,7 +28,7 @@ function updateCartItemQuantity() {
         $result = $page->updateCartItemQuantity($productId, $quantity);
 
         if ($result == 1) {
-            $newCartHtml.= $page->getCart()->displayCart(util::sanInt($_SESSION['last_viewed_category']));
+            $newCartHtml.= $page->displayCart(null);
             $newCartCount = $page->getCart()->getCartItemCount();
         }
 
@@ -49,13 +49,9 @@ function removeFromCart() {
         $result = $page->removeFromCart($productId);
 
         if ($result == 1) {
-            $newCartHtml.=$page->getCart()->displayCart(null);
+            $newCartHtml.=$page->displayCart(null);
             $newCartCount = $page->getCart()->getCartItemCount();
-        }
-
-        if ($newCartCount == 0) {
-            $newCartHtml.=$page->displayFeaturedProductsOwl("Why not try some of the getwhisky favourites?");
-        }
+        } 
 
         $returnResult = ['result' => $result, 'html' => $newCartHtml, 'cartCount' => $newCartCount];
         echo json_encode($returnResult);    
@@ -74,7 +70,7 @@ function addToCart(){
         $result = $page->addToCart($productid);
 
         if ($result == 1) {
-            $newCartHtml.=$page->getCart()->displayCart(null);
+            $newCartHtml.=$page->displayCart(null);
             $newCartCount = $page->getCart()->getCartItemCount();
         }
 

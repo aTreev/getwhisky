@@ -47,11 +47,10 @@
         <?php 
             $last_viewed_categoryid = null;
             if (isset($_SESSION['last_viewed_category']) && util::valInt($_SESSION['last_viewed_category'])) $last_viewed_categoryid = util::sanInt($_SESSION['last_viewed_category']);
-            echo $page->getCart()->displayCart($last_viewed_categoryid); 
+            echo $page->displayCart($last_viewed_categoryid); 
 
-            if ($page->getCart()->getCartItemCount() == 0) {
-                echo $page->displayFeaturedProductsOwl("Why not try some of the getwhisky favourites?");
-            }
+            
+            
         ?>
     </main>
 </body>

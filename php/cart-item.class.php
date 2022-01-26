@@ -10,6 +10,7 @@ class Cartitem {
     private $discountPrice;
     private $price;     // price of the product
     private $stock;     // product stock
+    private $active;     // active state of the product
 
 
     public function __construct($item) {
@@ -32,6 +33,7 @@ class Cartitem {
     public function getDiscountPrice(){ return $this->discountPrice; }
     public function getPrice(){ return $this->price; }
     public function getStock(){ return $this->stock; }
+    public function isActive(){ return $this->active; }
 
 
     private function setCartId($cartId) { $this->cartId = $cartId; }
@@ -43,6 +45,7 @@ class Cartitem {
     private function setDiscountPrice($discountPrice){ $this->discountPrice = $discountPrice; }
     private function setPrice($price) { $this->price = $price; }
     private function setStock($stock) { $this->stock = $stock; }
+    private function setActive($activeState) { $this->active = $activeState; }
 
 
     private function retrieveItemDetails() {
@@ -54,6 +57,7 @@ class Cartitem {
         $this->setDiscountPrice($itemDetails[0]['discount_price']);
         $this->setPrice($itemDetails[0]['price']);
         $this->setStock($itemDetails[0]['stock']);
+        $this->setActive($itemDetails[0]['active']);
     }
 
     public function returnCorrectItemPrice() {

@@ -96,6 +96,13 @@ class Cart {
                     array_push($itemsUpdatedDetails, $itemDetails);
                 }
             }
+            // Item no longer active, remove from cart
+            if (!$this->getItem($i)->isActive()) {
+                $itemDetails = ['image' => $this->getItem($i)->getImage(), 'name' => $this->getItem($i)->getName(), 'action' => 'Product no longer available'];
+                $itemsUpdated++;
+                array_push($itemsUpdatedDetails, $itemDetails);
+                $this->removeFromCart($this->getItem($i)->getProductId());
+            }
         }
         // If any items updated construct update notification html
         if ($itemsUpdated > 0) {
@@ -313,13 +320,13 @@ class Cart {
                 $html.="</div>";
 
                 // display cart summary
-                $html.="<div id='cart-summary-root'>";
+                /* $html.="<div id='cart-summary-root'>";
                     $html.="<h3>Basket Summary</h3>";
                     $html.="<p>Total: £".$this->getCartTotal()."</p>";
                     $html.="<form action='".$formAction."' method='POST'>";
                         $html.="<button type='submit'>Checkout</submit>";
                     $html.="</form>";
-                $html."</div>";
+                $html."</div>"; */
             $html.="</div>";
         } else {
             // Display if empty cart

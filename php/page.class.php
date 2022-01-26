@@ -376,7 +376,14 @@ class Page {
 	}
 
 	public function displayProductPage() {
-		return $this->getProduct()->displayProductPage();
+		if ($this->getProduct()->isActive()) return $this->getProduct()->displayProductPage();
+		$html = "";
+		$html.="<div id='product-unavailable' style='margin: auto;text-align:center;'>";
+			$html.= "<h3>Sorry this product is no longer available!</h3>";
+			$html.="<img style='width:200px;display:block;margin:auto;' src='../assets/product-images/no-products-found.jpg'>";
+			$html.="<p>Why not have a look at some other similar products?</p>";
+		$html.="</div>";
+		return $html;
 	}
 
 	public function getCategoryFilters($categoryId) { 
@@ -428,8 +435,12 @@ class Page {
 		return $haveCart;
 	}
 
-	public function displayCart() {
-		return $this->getCart();
+	public function displayCart($lastViewdProductid = null) {
+		$html = "";
+		$html.= $this->getCart()->displayCart($lastViewdProductid);
+		$html.=$this->displayFeaturedProductsOwl("Why not try some of the getwhisky favourites?");
+		return $html;
+
 	}
 
 	/***********
@@ -607,7 +618,7 @@ class Page {
 			$html.="</div>";
 			$html.="<div class='owl-carousel owl-featured-products'>";
 				foreach($this->getProducts() as $product) {
-					if ($product->isFeatured()) {
+					if ($product->isFeatured() && $product->isActive()) {
 						$html.=$product->displayProductOwlFeatured();
 					}
 				}
@@ -631,11 +642,14 @@ class Page {
 		if ($this->getProduct()) {
 			$productPageAttributes = $this->getProduct()->getAttributes();
 			$productPageProductid = $this->getProduct()->getId();
+
 			foreach($this->getProducts() as $product) {
-				$haystack = $product->getAttributes();
-				// if 2 or more attributes match, count the product as related
-				if (count(array_intersect($haystack, $productPageAttributes)) >= 2 && $product->getId() != $productPageProductid) {
-					array_push($relatedProducts, $product);
+				if ($product->isActive()) {
+					$haystack = $product->getAttributes();
+					// if 2 or more attributes match, count the product as related
+					if (count(array_intersect($haystack, $productPageAttributes)) >= 2 && $product->getId() != $productPageProductid) {
+						array_push($relatedProducts, $product);
+					}
 				}
 			}
 

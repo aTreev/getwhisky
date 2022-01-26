@@ -92,10 +92,10 @@ function prepareSuggestedProducts() {
                 if (result.result == 1) {
                     // result success update html and eventListeners
                     new Alert(true, "Item added to cart");
-                    thisButton.text("View basket");
+                    thisButton.text("Update basket");
                     thisButton.addClass("view-cart-btn");
-                    $(`[product-id='${productid}']`).css({"opacity": 0.7});
-                    
+                    $(`.featured-product[product-id='${productid}']`).css({"opacity": 0.7});
+
                     thisButton.off();
                     thisButton.click(function(){
                         $('.cart-position-container').nextAll().remove();
@@ -105,7 +105,7 @@ function prepareSuggestedProducts() {
                             $('.cart-position-container').nextAll().remove();
                             $(".cart-position-container").after(result.html);
                             $(".cart-count").html(result.cartCount);
-                        addPageEventListeners();
+                        prepareCartPage();
                         }, 500);
                     })
                 } else {
@@ -130,7 +130,7 @@ function updateCartQuantity(productId, productName, quantity) {
             $('.cart-position-container').nextAll().remove()
             $(".cart-position-container").after(result.html);
             $(".cart-count").html(result.cartCount);
-            addPageEventListeners();
+            prepareCartPage();
             new Alert(true, `${productName} quantity updated`);
         }
         // insufficient stock
@@ -159,8 +159,7 @@ function removeFromCart(productId) {
             $('.cart-position-container').nextAll().remove()
             $(".cart-position-container").after(result.html);
             $(".cart-count").html(result.cartCount);
-            addPageEventListeners();
-            if (result.cartCount == 0) prepareSuggestedProducts();
+            prepareCartPage();
 
             new Alert(true, "Item removed from cart");
         } else {
