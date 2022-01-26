@@ -82,12 +82,12 @@
             </div>
         </div>
 
-        <div class="checkout-sign-up-banner">
+        <div class="cart-details-banner">
             <div class="content-container">
-                <p><a href="/products.php?catid=<?php echo $_SESSION['last_viewed_category']?>" class="continue-shopping">Continue shopping</a></p>
+                <p><a href="/products.php?catid=<?php echo htmlentities($_SESSION['last_viewed_category'])?>" class="continue-shopping">Continue shopping</a></p>
                 <div class='cart-contents-container'>
-                    <p>Your cart contains <?php echo count($page->getCart()->getItems())?> item(s) (£<?php echo $page->getCart()->getCartTotal();?>)</p>
-                    <p><a href="/cart.php" class="cart-return-btn">Edit</a></p>
+                    <p>Your cart contains <?php echo $page->getCart()->getCartItemCount(); ?> item(s) (£<?php echo $page->getCart()->getCartTotal();?>)</p>
+                    <a href="/cart.php" class="cart-return-btn">Edit</a>
                 </div>
             </div>
         </div>

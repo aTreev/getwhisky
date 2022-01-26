@@ -6,10 +6,9 @@ function prepareProductPage() {
         $(".form-feedback").remove();
         const productId = $("#product-id").val();
         const quantityField = $("[name='product-quantity']");
-        
         let quantityValid = false;
 
-        quantityValid = checkNumberField(quantityField, "Please enter a quantity", [-15,15]);
+        quantityValid = checkNumberField(quantityField, "Please enter a quantity", [0,15]);
         
         if (quantityValid) {
             addToCart(productId, quantityField.val());

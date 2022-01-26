@@ -25,7 +25,7 @@
 
 
     
-        <?php echo $page->displayFeaturedProductsOwl();?>
+        <?php echo $page->displayFeaturedProductsOwl("Our Favourite Picks");?>
             
         
         <div class="about-section">

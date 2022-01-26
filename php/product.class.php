@@ -256,7 +256,7 @@ class Product {
                 }
 
                 // Quantity input and add to cart button
-                $html.="<label for='product-quantity'>Quantity: <input type='number' name='product-quantity' value='1'></label>";
+                $html.="<label for='product-quantity'>Quantity: <input type='number' name='product-quantity' max='".$this->getStock()."' value='1'></label>";
                 if ($this->getStock() > 0) {
                     $html.="<input type='hidden' id='product-id' value='".$this->getId()."'>";
                     $html.="<button name='add-to-cart' class='add-to-cart-btn'>Add to cart</button>";
@@ -299,7 +299,7 @@ class Product {
 
     public function displayProductOwlFeatured() {
         $html = "";
-        $html.="<div class='featured-product'>";
+        $html.="<div class='featured-product' product-id='".$this->getId()."'>";
             $html.="<img  class='owl-lazy' data-src='".$this->getImage()."' src='".$this->getImage()."' />";
             $html.="<div class='product-name-container'><h3>".$this->getName()."</h3></div>";
             $html.="<h4 class='product-type'>".$this->getType()."</h4>";

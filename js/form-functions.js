@@ -134,7 +134,6 @@ function checkNumberField(numberField, feedbackMessage, minMax = [null, null]) {
 	const number = numberField.val();
 	const minVal = minMax[0];
 	const maxVal = minMax[1]; 
-
 	if (number.length <= 0) {
 		doFeedback(numberField, feedbackMessage);
 		return false;

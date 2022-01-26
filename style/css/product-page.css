@@ -225,6 +225,7 @@ input[type=number]::-webkit-inner-spin-button {
     width: 1400px;
     margin: auto;
     position: relative;
+    margin-bottom: 20px;
 }
 .related-products-header {
     margin-top: 20px;

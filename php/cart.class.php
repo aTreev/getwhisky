@@ -275,35 +275,61 @@ class Cart {
         return $result;
     }
 
-    public function __toString() {
+    // change lastviewedcategory logic
+    public function displayCart($lastViewedCategoryId) {
         $html = "";
         $formAction = "/checkout.php";
-        if (strpos($this->getUserid(), "guest-") !== false) $formAction = "/checkout-sign-up.php";
-        
-        if (count($this->getItems()) > 0) {
-            // cart has items
+        $continueLink = "/index.php";
 
-            // call the __toString method of each cart item
-            $html.="<div id='cart-item-root'>";
-                foreach($this->getItems() as $item) {
-                    $html.=$item;
-                }
+        if (strpos($this->getUserid(), "guest-") !== false) $formAction = "/checkout-sign-up.php";
+        if ($lastViewedCategoryId) $continueLink = "/products.php?catid=".$lastViewedCategoryId;
+
+        if (count($this->getItems()) > 0) {
+            $html.="<div class='cart-details-banner'>";
+                $html.="<div class='content-container'>";
+                    $html.="<p><a href='".$continueLink."' class='continue-shopping'>Continue shopping</a></p>";
+                    $html.="<div class='cart-contents-container'>";
+                        $html.="<p>Your cart contains ".$this->getCartItemCount()." item(s) (£".$this->getCartTotal().")</p>";
+                        $html.="<a href='/checkout-sign-up.php' class='cart-return-btn'>Proceed To Checkout &#x3e;</a>";
+                    $html.="</div>";
+                $html.="</div>";
             $html.="</div>";
 
-            // display cart summary
-            $html.="<div id='cart-summary-root'>";
-                $html.="<h3>Basket Summary</h3>";
-                $html.="<p>Total: £".$this->getCartTotal()."</p>";
-                $html.="<form action='".$formAction."' method='POST'>";
-                    $html.="<button type='submit'>Checkout</submit>";
-                $html.="</form>";
-            $html."</div>";
+            $html.="<div class='cart-heading'><h2>Your shopping basket</h2></div>";
+
+            // cart has items
+            $html.="<div id='cart-container'>";
+                $html.="<div class='cart-item-headings'>";
+                    $html.="<div class='content-container'>";
+                        $html.="<p>Product</p>";
+                        $html.="<p>Details</p>";
+                    $html.="</div>";
+                $html.="</div>";
+                // call the __toString method of each cart item
+                $html.="<div id='cart-item-root'>";
+                    foreach($this->getItems() as $item) {
+                        $html.=$item;
+                    }
+                $html.="</div>";
+
+                // display cart summary
+                $html.="<div id='cart-summary-root'>";
+                    $html.="<h3>Basket Summary</h3>";
+                    $html.="<p>Total: £".$this->getCartTotal()."</p>";
+                    $html.="<form action='".$formAction."' method='POST'>";
+                        $html.="<button type='submit'>Checkout</submit>";
+                    $html.="</form>";
+                $html."</div>";
+            $html.="</div>";
         } else {
             // Display if empty cart
-            $html.="<div class='no-items'>";
-                $html.="<h3>Your shopping basket is empty!</h3>";
-                $html.="<p>Add to your basket from our wide range of lovely drams and come back to complete your purchase!</p>";
-                $html.="<a class='continue-shopping' href='/index.php'>Continue shopping</a>";
+            $html.="<div class='cart-heading'><h2>Your shopping basket</h2></div>";
+            $html.="<div id='cart-container'>";
+                $html.="<div class='no-items'>";
+                    $html.="<h3>Your shopping basket is empty!</h3>";
+                    $html.="<p>Add to your basket from our wide range of lovely drams and come back to complete your purchase!</p>";
+                    $html.="<a class='continue-shopping' href='/index.php'>Continue shopping</a>";
+                $html.="</div>";
             $html.="</div>";
         }
 

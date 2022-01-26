@@ -64,23 +64,17 @@ class Cartitem {
     
     public function __toString() {
         $html = "";
-        $html.="<div class='cart-item'>";
+        $html.="<div class='cart-item' product-id='".$this->getProductId()."'>";
             $html.="<div class='cart-item-left'>";
-                $html.="<img src='".$this->getImage()."'>";
+                $html.="<div class='cart-item-image-name'>";
+                    $html.="<img src='".$this->getImage()."'>";
+                    $html.="<h3 id='product-name-".$this->getProductId()."'>".$this->getName()."</h3>";
+                $html.="</div>";
             $html.="</div>";
-            $html.="<div class='cart-item-right'>";
-                $html.="<h3>".$this->getName()."</h3>";
 
+            $html.="<div class='cart-item-right'>";
                 $html.="<div class='cart-item-functions'>";
-                    $html.="<div class='cart-item-quantity-container'>";
-                        $html.="<label for='quantity'>Quantity</label>";
-                        $html.="<input type='number' name='quantity' value='".$this->getQuantity()."'>";
-                        $html.="<input type='hidden' name='product_id' value='".$this->getProductId()."'>";
-                    $html.="</div>";
-                    $html.="<div class='cart-item-buttons'>";
-                        $html.="<a href='#' name='update-qty'>Update</a>";
-                        $html.="<a href='#'name='remove-from-cart'>Remove</a>";
-                    $html.="</div>";
+                    $html.="<input type='number' id='quantity-".$this->getProductId()."' value=".$this->getQuantity()."  max='".$this->getStock()."'>";
                 $html.="</div>";
 
                 $html.="<div class='cart-item-price-container'>";
@@ -92,10 +86,12 @@ class Cartitem {
                         $html.="</div>";
                         $html.="<p>Subtotal:<span class='subtotal'> £".($this->getDiscountPrice()*$this->getQuantity())."</span></p>";
                     } else {
-                        $html.="<p class='item-price'>Unit price: £".$this->getPrice()."</p>";
+                        $html.="<p class='item-price'>Unit price: <span class='unit-price'>£".$this->getPrice()."</span></p>";
                         $html.="<p>Subtotal:<span class='subtotal'> £".($this->getPrice()*$this->getQuantity())."</span></p>";
                     }
                 $html.="</div>";
+
+                $html.="<button id='remove-".$this->getProductId()."' class='remove-from-cart-btn'>remove</button>";
             $html.="</div>";
         $html.="</div>";
 

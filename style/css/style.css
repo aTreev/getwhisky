@@ -534,7 +534,22 @@ input { font-size: 1.4rem;}
   align-items: center;
   top: 15px;
 }
+input[type=number] {
+  display:inline;
+  width: 75px;
+  text-align: center;
+  border: 1px solid #ccc;
+  padding: 17px 15px 17px 5px;
+}
 
+input[type=number]::-webkit-inner-spin-button {
+  height:95%;
+  padding: 0px 10px;
+  position: absolute;
+  right: 1px;
+  top: 1px;
+  opacity: 1;
+}
 ::placeholder {
   font-size: 1.4rem;
   color: black;

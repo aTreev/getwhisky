@@ -597,12 +597,13 @@ class Page {
 	 /********
 	  * Displays a carousel of featured products
 	  * Uses owl carousel
+	  * Takes a heading as parameter and a page
 	  *****/
-	public function displayFeaturedProductsOwl() {
+	public function displayFeaturedProductsOwl($sectionHeading) {
 		$html = "";
 		$html.="<div class='featured-products'>";
 			$html.="<div class='featured-products-header'>";
-				$html.="<h2>Our Favourite Picks</h2>";
+				$html.="<h2>$sectionHeading</h2>";
 			$html.="</div>";
 			$html.="<div class='owl-carousel owl-featured-products'>";
 				foreach($this->getProducts() as $product) {
@@ -618,11 +619,11 @@ class Page {
 		return $html;
 	}
 
-	/***********
+/***********
 	 * Uses array_intersect to search through the page's products array and find products with 
 	 * multiple matching attributes to that of the product page's product attributes.
 	 * If enough attributes match the product page product's attributes then it is displayed as a
-	 * related product. 
+	 * related product using the product.class owl product display. 
 	 *************************************/
 	public function displayRelatedProducts() {
 		$html = "";
@@ -632,16 +633,17 @@ class Page {
 			$productPageProductid = $this->getProduct()->getId();
 			foreach($this->getProducts() as $product) {
 				$haystack = $product->getAttributes();
-				//$html.=$product->getName()." - matching attributes: ".count(array_intersect($haystack, $productPageAttributes)). "<br>";
+				// if 2 or more attributes match, count the product as related
 				if (count(array_intersect($haystack, $productPageAttributes)) >= 2 && $product->getId() != $productPageProductid) {
 					array_push($relatedProducts, $product);
 				}
 			}
 
-			if ($relatedProducts) {
+			// Only display if multiple related
+			if (count($relatedProducts) > 5) {
 				$html.="<div id='related-products-root'>";
 					$html.="<div class='related-products-header'>";
-						$html.="<h3>Similar Products To Consider</h3>";
+						$html.="<h3>Related Products To Consider</h3>";
 					$html.="</div>";
 					$html.="<div class='owl-carousel owl-featured-products'>";
 						foreach($relatedProducts as $relatedProduct) {

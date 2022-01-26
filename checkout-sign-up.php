@@ -2,6 +2,7 @@
     require_once("php/page.class.php");
     $page = new Page(0);
     if (count($page->getCart()->getItems()) == 0) header("Location: /cart.php");
+    if ($page->getUser()->getUserType() != 0) header("Location: /checkout.php");
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -46,12 +47,12 @@
             </div>
         </div>
 
-        <div class="checkout-sign-up-banner">
-            <div class="content-container">
-                <p><a href="/products.php?catid=<?php echo $_SESSION['last_viewed_category']?>" class="continue-shopping">Continue shopping</a></p>
+        <div class='cart-details-banner'>
+            <div class='content-container'>
+                <p><a href='/products.php?catid=<?php echo htmlentities($_SESSION['last_viewed_category'])?>' class='continue-shopping'>Continue shopping</a></p>
                 <div class='cart-contents-container'>
-                    <p>Your cart contains <?php echo count($page->getCart()->getItems())?> item(s) (£<?php echo $page->getCart()->getCartTotal();?>)</p>
-                    <p><a href="/cart.php" class="cart-return-btn">Edit</a></p>
+                    <p>Your cart contains <?php echo $page->getCart()->getCartItemCount(); ?> item(s) (£<?php echo $page->getCart()->getCartTotal();?>)</p>
+                    <a href='/cart.php' class='cart-return-btn'>Edit</a>
                 </div>
             </div>
         </div>
