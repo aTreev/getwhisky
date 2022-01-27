@@ -45,6 +45,47 @@ function prepareSuggestedProducts() {
     const suggestedProducts = $(".featured-product");
     if (!suggestedProducts) return;
 
+    // Each suggested product logic
+    suggestedProducts.each(function(){
+        // Get product id and create add to cart buttons
+        const productid = $(this).attr("product-id");
+        $(this).append(`<button class='add-to-cart-btn' id='add-to-cart-${productid}'>Add to cart</button>`)
+
+        // Newly created add to cart btn logic
+        $(`#add-to-cart-${productid}`).click(function(){
+            const thisButton = $(this);
+            // Add to cart then
+            addToCart(productid).then(function(result){
+                if (result.result == 1) {
+                    // result success update html and eventListeners
+                    new Alert(true, "Item added to cart");
+                    thisButton.text("Update basket");
+                    thisButton.addClass("view-cart-btn");
+                    $(`.featured-product[product-id='${productid}']`).css({"opacity": 0.7});
+
+                    thisButton.off();
+                    thisButton.click(function(){
+                        $('.cart-position-container').nextAll().remove();
+                        $(".cart-position-container").after("<img src='../assets/loader.gif' style='position:absolute;top:50%;left:50%;transform:translate(-50%, -50%);'>");
+                        // add ironic loader for UX
+                        setTimeout(() => {
+                            $('.cart-position-container').nextAll().remove();
+                            $(".cart-position-container").after(result.html);
+                            $(".cart-count").html(result.cartCount);
+                        prepareCartPage();
+                        }, 500);
+                    })
+                } 
+                if (result.result == 2) {
+                    new Alert(false, "Insufficient stock to add to cart");
+                }
+                else {
+                    new Alert(false, "Error processing request, please try again");
+                }
+            });
+        })
+    });
+
     $(".owl-carousel").owlCarousel({
         loop:true,
         items:4,
@@ -76,43 +117,6 @@ function prepareSuggestedProducts() {
     // Go to the previous item
     $('.owl-nav-left').click(function() {
         $(".owl-carousel").trigger('prev.owl.carousel');
-    });
-
-    // Each suggested product logic
-    suggestedProducts.each(function(){
-        // Get product id and create add to cart buttons
-        const productid = $(this).attr("product-id");
-        $(this).append(`<button class='add-to-cart-btn' id='add-to-cart-${productid}'>Add to cart</button>`)
-
-        // Newly created add to cart btn logic
-        $(`#add-to-cart-${productid}`).click(function(){
-            const thisButton = $(this);
-            // Add to cart then
-            addToCart(productid).then(function(result){
-                if (result.result == 1) {
-                    // result success update html and eventListeners
-                    new Alert(true, "Item added to cart");
-                    thisButton.text("Update basket");
-                    thisButton.addClass("view-cart-btn");
-                    $(`.featured-product[product-id='${productid}']`).css({"opacity": 0.7});
-
-                    thisButton.off();
-                    thisButton.click(function(){
-                        $('.cart-position-container').nextAll().remove();
-                        $(".cart-position-container").after("<img src='../assets/loader.gif' style='position:absolute;top:50%;left:50%;transform:translate(-50%, -50%);'>");
-                        // add ironic loader for UX
-                        setTimeout(() => {
-                            $('.cart-position-container').nextAll().remove();
-                            $(".cart-position-container").after(result.html);
-                            $(".cart-count").html(result.cartCount);
-                        prepareCartPage();
-                        }, 500);
-                    })
-                } else {
-                    new Alert(false, "Error processing request, please try again");
-                }
-            });
-        })
     });
 }
 

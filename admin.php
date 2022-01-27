@@ -49,6 +49,17 @@
                 </div>
             </div>
 
+            <!-- Order Management -->
+            <div class="admin-card">
+                <div class="card-top">
+                    <div class="circle"><i class="fas fa-boxes"></i></div>
+                </div>
+                <div class="card-bot">
+                    <h4>Order Management</h4>
+                    <p>View your orders and update their status</p>
+                    <span><a class='wrapper-link' href="admin-order-management.php"></a></span>
+                </div>
+            </div>
         </div>
 
 	</main>

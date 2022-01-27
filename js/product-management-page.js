@@ -122,7 +122,7 @@ function prepareProductManagementPage() {
         addDiscountBtn.off();
         addDiscountBtn.click(function(){
             // Construct the markup to create a new discount
-            $("#product-stock-data-"+productid).html(`<div class='td-flex-center'><div><label class='container-label'>Discount price: &nbsp;<input type='number' id='discount-price-${productid}' step='0.01' /></label></div><div><label class='container-label'>End date: &nbsp;<input type='datetime-local' id='discount-end-datetime-${productid}' min='${new Date().toISOString().split("Z")[0]}'></label></div><button id='update-discount-${productid}'><i class='fas fa-wrench'></i>Save</button><button class='delete-action-btn' id='end-discount-${productid}'><i class='fas fa-hourglass-end'></i>End</button></div>`);
+            $("#product-stock-data-"+productid).html(`<div class='td-flex-center'><div class='container-label'><label class='container-label'>Discount price: &nbsp;<input type='number' class='discount-number' id='discount-price-${productid}' step='0.01' /></label></div><div class='container-label'><label class='container-label'>End date: &nbsp;<input type='datetime-local' id='discount-end-datetime-${productid}' min='${new Date().toISOString().split("Z")[0]}'></label></div><button id='update-discount-${productid}'><i class='fas fa-wrench'></i>Save</button><button class='delete-action-btn' id='end-discount-${productid}'><i class='fas fa-hourglass-end'></i>End</button></div>`);
             // Recall function to refresh event listeners
             prepareProductManagementPage();
         });

@@ -1,0 +1,129 @@
+
+.table-wrapper {
+    width: 1400px;
+    margin: auto;
+    background-color: white;
+    border-radius: 4px;
+    box-shadow: 2px 2px 15px lightgrey;
+    margin-top: 40px;
+    margin-bottom: 40px;
+    overflow-x: auto;
+
+}
+.order-search-container {
+    display: flex;
+    justify-content: space-between;
+    padding: 40px 40px 0px 40px;
+}
+
+.order-search-container input[type=checkbox] {
+    cursor: pointer;
+}
+.order-search-container input[type=text] {
+    padding: 8px;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    width: 200px;
+}
+table {
+    width: 100%;
+    border-collapse: separate!important;
+    background-color: white;
+    padding: 20px;
+    text-align: left;
+    border-spacing: 14px;
+    table-layout: fixed;
+    line-height: 1.4;
+}
+tr {
+}
+th {
+    border-bottom: 1px solid black;
+    font-size: 1.4rem;
+    padding: 20px 0px 5px 0px;
+    width: auto;
+}
+.column-largest {
+    width: 220px;
+}
+td {
+    padding: 14px 0px;
+    font-size: 1.4rem;
+    border-bottom: 1px solid #dee2e6;
+    vertical-align:middle;
+    height: 70px;
+
+}
+.table-flex-row {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.table-flex-row button {
+    padding: 8px 12px;
+    font-size: 1.2rem;
+    color: white;
+    background-color: var(--btn-action-blue);
+    border: none;
+    border-radius: 4px;
+    font-weight: 500;
+    cursor: pointer;
+}
+.table-flex-row button:hover {
+    background-color: var(--btn-hover-colour);
+}
+.table-flex-row .btn-dispatch {
+    background-color: var(--btn-save-green);
+    
+}
+
+.order-items-row {
+    display: none;
+    padding: 0px 40px 0px 0px;
+}
+.order-items-row td {
+    padding: 0px 40px 0px 0px;
+}
+.order-items-container {
+    display:flex;
+    flex-wrap: wrap;
+    gap: 50px;
+    padding: 20px 0px;
+}
+.order-item {
+    padding: 10px;
+    width: 20%;
+    border-bottom: 1px solid lightgrey;
+    text-align: center;
+}
+.order-item img {
+    display: block;
+    margin: auto;
+}
+
+#orders-shown {
+    display: flex;
+    gap: 20px;
+    overflow: hidden;
+    padding: 20px 30px;
+    align-items: center;
+    float:right;
+}
+#orders-shown p {
+    opacity: 0.7;
+    font-style: italic;
+}
+#orders-shown button {
+    cursor: pointer;
+    padding: 6px 12px;
+    font-size: 1.4rem;
+}
+@media screen and (max-width:1450px) {
+    .table-wrapper {
+        width: 95%;   
+        overflow-x: auto; 
+    }
+    table {
+        min-width: 850px;
+    }
+}

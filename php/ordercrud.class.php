@@ -68,6 +68,22 @@ class OrderCRUD {
 		return $resultset;
     }
 
+    public function getOrderFullByOrderid($orderid, $style=MYSQLI_ASSOC) {
+        $this->sql="SELECT orders.*, order_status.name AS 'status_label',  order_status_admin.name AS 'admin_status_label'
+                    FROM orders
+                    JOIN order_status
+                    ON orders.status_id = order_status.id
+                    JOIN order_status_admin
+                    ON orders.admin_status_id = order_status_admin.id
+                    WHERE orders.order_id = ?
+                    ORDER BY date_placed DESC;";
+        $this->stmt = self::$db->prepare($this->sql);
+        $this->stmt->bind_param("s", $orderid);
+        $this->stmt->execute();
+		$result = $this->stmt->get_result();
+		$resultset=$result->fetch_all($style);
+		return $resultset;
+    }
 
     public function getOrderItems($orderid, $style = MYSQLI_ASSOC) {
         $this->sql="SELECT order_items.*, products.name, products.image
@@ -81,6 +97,33 @@ class OrderCRUD {
 		$result = $this->stmt->get_result();
 		$resultset=$result->fetch_all($style);
 		return $resultset;
+    }
+
+    public function getAllOrders($style = MYSQLI_ASSOC) {
+        $this->sql = "  SELECT orders.*, order_status.name AS 'status_label',  order_status_admin.name AS 'admin_status_label'
+                        FROM orders
+                        JOIN order_status
+                        ON orders.status_id = order_status.id
+                        JOIN order_status_admin
+                        ON orders.admin_status_id = order_status_admin.id
+                        ORDER BY date_placed DESC";
+        $this->stmt = self::$db->prepare($this->sql);
+        $this->stmt->execute();
+		$result = $this->stmt->get_result();
+		$resultset=$result->fetch_all($style);
+		return $resultset;
+    }
+
+    public function updateOrderStatusToDispatched($orderid) {
+        $this->sql = "UPDATE orders SET status_id = 2 WHERE order_id = ?;";
+        $this->stmt = self::$db->prepare($this->sql);
+        $this->stmt->bind_param("s", $orderid);
+        $this->stmt->execute();
+        if($this->stmt->affected_rows!=1) {
+			return 0;
+		} else {
+			return $this->stmt->affected_rows;
+		}
     }
 }
 

@@ -377,6 +377,7 @@ class Page {
 
 	public function displayProductPage() {
 		if ($this->getProduct()->isActive()) return $this->getProduct()->displayProductPage();
+		else
 		$html = "";
 		$html.="<div id='product-unavailable' style='margin: auto;text-align:center;'>";
 			$html.= "<h3>Sorry this product is no longer available!</h3>";

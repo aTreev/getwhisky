@@ -111,7 +111,7 @@ class Order {
                     $html.="<li><b>Status:</b> <span class='".strtolower($this->getStatus())."'>".$this->getStatus()."</span></li>";
                     $html.="<li><b>Total:</b> £".($this->getTotal() + $this->getDeliveryCost())."</li>";
                     $html.="<li><b>Delivery type:</b> ".$this->getDeliveryLabel()." £".$this->getDeliveryCost()."</li>";
-                    $html.="<li><b>Deliery address:</b> ".$this->displayDeliveryAddress()."</li>";
+                    $html.="<li><b>Delivery address:</b> ".$this->displayDeliveryAddress()."</li>";
                 $html.="</ul>";
 
             $html.="</div>";
@@ -128,6 +128,41 @@ class Order {
             $html.="</div>";
         $html.="</div>";
 
+        return $html;
+    }
+
+
+    public function displayOrderAdmin() {
+        $html = "";
+        $html.="<tr status='".strtolower($this->getStatus())."' orderid='".$this->getOrderid()."' name='order'>";
+            $html.="<td>".$this->getAddress()->getFullName()."</td>";
+            $html.="<td>#".$this->getOrderid()."</td>";
+            $html.="<td>".$this->getStripePaymentIntent()."</td>";
+            $html.="<td>".$this->getFormattedDate()."</td>";
+            $html.="<td>£".$this->getTotal()."</td>";
+            $html.="<td class='".strtolower($this->getStatus())."'>".$this->getStatus()."</td>";
+            $html.="<td>";
+                $html.="<div class='table-flex-row'>";
+                if ($this->getStatus() == "Processing") {
+                    $html.="<button class='btn-dispatch' id='set-order-dispatched-".$this->getOrderid()."'>Dispatched</button>";
+                }
+                $html.="<button class='btn-view-items' id='view-order-items-".$this->getOrderid()."'>View Items</button>";
+                $html.="</div>";
+            $html.="</td>";
+            $html.="<div class='order-items'>";
+                $html.="<p>order items</p>";
+            $html.="</div>";
+
+            $html.="<tr name='order-items-".$this->getOrderid()."' class='order-items-row'>";
+                $html.="<td colspan='7'>";
+                    $html.="<div class='order-items-container'>";
+                        foreach ($this->getOrderItems() as $item) {
+                            $html.=$item->displayOrderItemUser();
+                        }
+                    $html.="</div>";
+                $html.="</td>";
+            $html.="</tr>";
+        $html.="</tr>";
         return $html;
     }
 }

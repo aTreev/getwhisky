@@ -27,5 +27,19 @@ class OrderItem {
     public function getProductImage(){ return $this->productImage; }
     public function getQuantity(){ return $this->quantity; }
     public function getPriceBought(){ return $this->priceBought; }
+
+
+
+    public function displayOrderItemUser() {
+        $html = "";
+        $html.="<div class='order-item'>";
+            $html.="<a href='/productpage.php?pid=".$this->getProductid()."'><img style='width:100px;' src='".$this->getProductImage()."'/></a>";
+            $html.="<a href='/productpage.php?pid=".$this->getProductid()."'><h4>".$this->getProductName()."</h4></a>";
+            $html.="<p><b>QTY:</b> ".$this->getQuantity()."</p>";
+            $html.="<p><b>Price:</b> £".$this->getPriceBought()."</p>";
+        $html.="</div>";
+
+        return $html;
+    }
 }
 ?>

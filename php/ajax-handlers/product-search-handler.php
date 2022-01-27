@@ -18,7 +18,7 @@ if ((isset($_POST['location']) && util::valStr($_POST['location']))  && (util::p
     
     // Loop through products adding matching products to the array
     foreach($allProducts as $product) {
-        if (preg_match("/{$searchQuery}/i", $product->getName())) {
+        if (strpos(strtolower($product->getName()), strtolower($searchQuery)) !== false && $product->isActive()) {
             array_push($matchingProducts, $product);
         }
     }
