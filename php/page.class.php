@@ -508,7 +508,7 @@ class Page {
 
 		// Create order on database
 		$orderCRUD = new OrderCRUD();
-		$orderCRUD->createOrder($orderid, $userid, $addressid, $deliveryLabel, $deliveryCost, $stripePaymentIntent, $dateTimeAdded, $this->getCart()->getCartTotal());
+		$orderCRUD->createOrder($orderid, $userid, $addressid, $deliveryLabel, $deliveryCost, $stripePaymentIntent, $dateTimeAdded, ($this->getCart()->getCartTotal() + $deliveryCost));
 
 		// add order items to order and update stock levels
 		$productCRUD = new ProductCRUD();

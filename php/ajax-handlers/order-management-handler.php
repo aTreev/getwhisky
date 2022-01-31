@@ -1,6 +1,14 @@
 <?php 
 require_once("../util.class.php");
 require_once("../order.class.php");
+require_once("../page.class.php");
+$page = new Page(3);
+if ($page->getUser()->getUsertype() != 3) {
+    echo json_encode(0);
+    exit();
+    die();
+    return;
+}
 if (isset($_POST['function']) && util::valInt($_POST['function'])) {
     $functionToCall = util::sanInt($_POST['function']);
 
@@ -11,6 +19,10 @@ if (isset($_POST['function']) && util::valInt($_POST['function'])) {
 
         case 2:
             setOrderStatusToDispatched();
+        break;
+
+        case 3:
+            cancelOrderAndIssueRefund();
         break;
     }
 }
@@ -40,13 +52,66 @@ function setOrderStatusToDispatched() {
         $result = 0;
         $orderHtml = "";
 
-        $result = $orderCRUD->updateOrderStatusToDispatched($orderid);
+        $result = $orderCRUD->updateOrderStatus($orderid, "dispatched");
+        $result = $orderCRUD->updateAdminOrderStatus($orderid, "dispatched");
         if ($result) {
             // email customer
             $orderObj = new Order($orderCRUD->getOrderFullByOrderid($orderid)[0]);
             $orderHtml = $orderObj->displayOrderAdmin();
         }
         echo json_encode(['result' => $result, 'new_html' => $orderHtml]);
+    }
+}
+
+function cancelOrderAndIssueRefund() {
+    if (util::valStr($_POST['orderid']) && util::valStr($_POST['stripe_payment_intent']) && util::valFloat($_POST['orderTotal'])) {
+        require_once('../../stripe/init.php');
+        $orderid = util::sanStr($_POST['orderid']);
+        $paymentIntent = util::sanStr($_POST['stripe_payment_intent']);
+        $amountToRefund = util::sanStr($_POST['amount_to_refund']);
+        $orderTotal = util::sanStr($_POST['orderTotal']);
+        $orderCRUD = new OrderCRUD();
+        $failureReason = "";
+
+        if ($amountToRefund == 0) {
+            $amountToRefund = $orderTotal;
+        }
+
+        $stripe = new \Stripe\StripeClient(
+            'sk_test_51Je0ufArTeMLOzQd1e4BFGLKWFOsabluGgErlDnWkmyea9G2LQQJY6PXusduRSaAXhsz6h27Owwz8n9SehfBY3a90087Gcb2ba'
+        );
+
+        $refundResult = $stripe->refunds->create([
+            'payment_intent' => $paymentIntent,  
+            'reason' => 'requested_by_customer',
+            'amount' => util::sanFloat($amountToRefund)
+        ]);
+
+        if ($refundResult['status'] == "succeeded") {
+            $returnResult = 1;
+            // success
+            // update statuses to refund type, update order refund_amount
+            $refundType = "partial_refund";
+            if ($amountToRefund == $orderTotal) $refundType = "refunded";
+            $orderCRUD->updateOrderStatus($orderid, $refundType);
+            $orderCRUD->updateAdminOrderStatus($orderid, $refundType);
+            $orderCRUD->updateOrderRefundAmount($amountToRefund, $orderid);
+            $orderObj = new Order($orderCRUD->getOrderFullByOrderid($orderid)[0]);
+            $orderHtml = $orderObj->displayOrderAdmin();
+            // email user
+        }
+        if ($refundResult['status'] == "failed") {
+            $returnResult = 0;
+            $failureReason = $result['failure_reason'];
+            // handle failure
+                // email getwhisky inbox
+                // update admin status to refund failure
+            $orderCRUD->updateAdminOrderStatus($orderid, "refund_failure");
+            $orderObj = new Order($orderCRUD->getOrderFullByOrderid($orderid)[0]);
+            $orderHtml = $orderObj->displayOrderAdmin();
+
+        }
+        echo json_encode(['result' => $returnResult, 'new_html' => $orderHtml, 'failure_reason' => $failureReason, 'amount_to_refund' => $amountToRefund]);
     }
 }
 ?>

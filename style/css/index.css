@@ -187,6 +187,7 @@ main {
     margin: auto;
     display: flex;
     background-color: var(--bg-primary);
+    margin-bottom: 60px;
 }
 
 .featured-banner-left {

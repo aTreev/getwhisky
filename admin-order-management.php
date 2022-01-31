@@ -63,7 +63,7 @@
 </body>
 <script src="js/classes/alert.class.js"></script>
 <script src="js/functions.js"></script>
-<script src="js/admin-order-page.js"></script>
+<script src="js/order-management-page.js"></script>
 <script>
     document.onreadystatechange = function() {
         if(document.readyState==="complete") {

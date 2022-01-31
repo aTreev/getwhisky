@@ -114,10 +114,67 @@ class OrderCRUD {
 		return $resultset;
     }
 
-    public function updateOrderStatusToDispatched($orderid) {
-        $this->sql = "UPDATE orders SET status_id = 2 WHERE order_id = ?;";
+    public function updateOrderStatus($orderid, $status) {
+        switch($status) {
+            case "processing":
+                $orderStatus = 1;
+            break;
+            case "dispatched":
+                $orderStatus = 2;
+            break;
+            case "refunded":
+                $orderStatus = 3;
+            break;
+            case "partial_refund":
+                $orderStatus = 4;
+            break;
+        }
+
+        $this->sql = "UPDATE orders SET status_id = ? WHERE order_id = ?;";
         $this->stmt = self::$db->prepare($this->sql);
-        $this->stmt->bind_param("s", $orderid);
+        $this->stmt->bind_param("is", $orderStatus, $orderid);
+        $this->stmt->execute();
+        if($this->stmt->affected_rows!=1) {
+			return 0;
+		} else {
+			return $this->stmt->affected_rows;
+		}
+    }
+
+    public function updateAdminOrderStatus($orderid, $status) {
+        switch($status) {
+            case "payment_received":
+                $orderStatus = 1;
+            break;
+            case "dispatched":
+                $orderStatus = 2;
+            break;
+            case "refunded":
+                $orderStatus = 3;
+            break;
+            case "partial_refund":
+                $orderStatus = 4;
+            break;
+            case "refund_failure":
+                $orderStatus = 5;
+            break;
+        }
+
+        $this->sql = "UPDATE orders SET admin_status_id = ? WHERE order_id = ?;";
+        $this->stmt = self::$db->prepare($this->sql);
+        $this->stmt->bind_param("is", $orderStatus, $orderid);
+        $this->stmt->execute();
+        if($this->stmt->affected_rows!=1) {
+			return 0;
+		} else {
+			return $this->stmt->affected_rows;
+		}
+    }
+
+    public function updateOrderRefundAmount($refundAmount, $orderid) {
+        $this->sql = "UPDATE orders SET refund_amount = ? WHERE order_id = ?;";
+        $this->stmt = self::$db->prepare($this->sql);
+        $this->stmt->bind_param("ds", $refundAmount, $orderid);
         $this->stmt->execute();
         if($this->stmt->affected_rows!=1) {
 			return 0;

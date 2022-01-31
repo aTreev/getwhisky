@@ -1,6 +1,14 @@
 <?php 
 require_once("../category-attribute-list.class.php");
 require_once("../util.class.php");
+$page = new Page(3);
+if ($page->getUser()->getUsertype() != 3) {
+    echo json_encode(0);
+    exit();
+    die();
+    return;
+}
+
 if (isset($_POST['function']) && util::valInt($_POST['function'])) {
     $functionToCall = util::sanInt($_POST['function']);
 

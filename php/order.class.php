@@ -14,6 +14,7 @@ class Order {
     private $stripePaymentIntent;
     private $datePlaced;
     private $total;
+    private $refundAmount;
     private $orderItems = [];
 
     public function __construct($order) {
@@ -27,6 +28,7 @@ class Order {
         $this->setStripePaymentIntent($order['stripe_payment_intent']);
         $this->setDatePlaced($order['date_placed']);
         $this->setTotal($order['total']);
+        $this->setRefundAmount($order['refund_amount']);
         // retrieve address create new object with it
         // retrieve order items and send them to order_item array
         $this->retrieveOrderItems();
@@ -44,6 +46,7 @@ class Order {
     private function setStripePaymentIntent($stripePaymentIntent) { $this->stripePaymentIntent = $stripePaymentIntent; }
     private function setDatePlaced($datePlaced) { $this->datePlaced = $datePlaced; }
     private function setTotal($total) { $this->total = $total; }
+    private function setRefundAmount($refundAmount) { $this->refundAmount = $refundAmount; }
 
     
 
@@ -58,6 +61,7 @@ class Order {
     public function getDatePlaced(){ return $this->datePlaced; }
     public function getTotal(){ return $this->total; }
     public function getOrderItems(){ return $this->orderItems; }
+    public function getRefundAmount() { return $this->refundAmount; }
 
     // Converts and returns UK formatted date
     private function getFormattedDate() {
@@ -105,10 +109,20 @@ class Order {
 
             $html.="<div class='order-details-container'>";
                 $html.="<ul>";
-                    $html.="<li><b>Order ID:</b> ".$this->getOrderid()."</li>";
+                    $html.="<li><b>Order number:</b> #".$this->getOrderid()."</li>";
                     $html.="<li><b>Payment reference:</b> ".$this->getStripePaymentIntent()."</li>";
 
-                    $html.="<li><b>Status:</b> <span class='".strtolower($this->getStatus())."'>".$this->getStatus()."</span></li>";
+                    // Order status
+                    $html.="<li>";
+                        $html.="<b>Status: </b>";
+                        $html.="<span class='".strtolower($this->getStatus())."'>";
+                            $html.=$this->getStatus();
+                            if ($this->getStatus() == "Partial Refund") {
+                                $html.=" (£".$this->getRefundAmount().")";
+                            }
+                        $html.="</span>";
+                    $html.="</li>";
+
                     $html.="<li><b>Total:</b> £".($this->getTotal() + $this->getDeliveryCost())."</li>";
                     $html.="<li><b>Delivery type:</b> ".$this->getDeliveryLabel()." £".$this->getDeliveryCost()."</li>";
                     $html.="<li><b>Delivery address:</b> ".$this->displayDeliveryAddress()."</li>";
@@ -134,27 +148,39 @@ class Order {
 
     public function displayOrderAdmin() {
         $html = "";
-        $html.="<tr status='".strtolower($this->getStatus())."' orderid='".$this->getOrderid()."' name='order'>";
+        $html.="<tr status='".str_replace(' ','-',strtolower($this->getAdminStatus()))."' orderid='".$this->getOrderid()."' name='order'>";
             $html.="<td>".$this->getAddress()->getFullName()."</td>";
             $html.="<td>#".$this->getOrderid()."</td>";
             $html.="<td>".$this->getStripePaymentIntent()."</td>";
             $html.="<td>".$this->getFormattedDate()."</td>";
-            $html.="<td>£".$this->getTotal()."</td>";
+            $html.="<td id='order-total-".$this->getOrderid()."'>£".$this->getTotal()."</td>";
             $html.="<td>".$this->getDeliveryLabel()."</td>";
 
-            $html.="<td class='".strtolower($this->getStatus())."'>".$this->getStatus()."</td>";
+            // order status
+            $html.="<td>";
+            $html.="<p class='".str_replace(" ","-",strtolower($this->getAdminStatus()))."'>";
+                $html.=$this->getAdminStatus();
+            if ($this->getAdminStatus() == "Partial Refund") {
+                $html.= " (£".$this->getRefundAmount().")";
+            }
+            $html.="</p>";
+            $html.="</td>";
+
+            // order actions
             $html.="<td>";
                 $html.="<div class='table-flex-row'>";
-                if ($this->getStatus() == "Processing") {
+                // Display buttons depending on status
+                if ($this->getAdminStatus() == "Payment received") {
                     $html.="<button class='btn-dispatch' id='set-order-dispatched-".$this->getOrderid()."'>Dispatched</button>";
                 }
-                $html.="<button class='btn-view-items' id='view-order-items-".$this->getOrderid()."'>View Items</button>";
+                if ($this->getAdminStatus() == "Payment received" || $this->getAdminStatus() == "Dispatched") {
+                    $html.="<button class='btn-view-items' id='issue-refund-".$this->getOrderid()."' stripe-payment-intent='".$this->getStripePaymentIntent()."'>Issue Refund</button>";
+                }
+                    $html.="<button class='btn-view-items' id='view-order-items-".$this->getOrderid()."'>View Items</button>";
                 $html.="</div>";
             $html.="</td>";
-            $html.="<div class='order-items'>";
-                $html.="<p>order items</p>";
-            $html.="</div>";
 
+            // display order's items
             $html.="<tr name='order-items-".$this->getOrderid()."' class='order-items-row'>";
                 $html.="<td colspan='7'>";
                     $html.="<div class='order-items-container'>";

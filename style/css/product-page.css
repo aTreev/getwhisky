@@ -190,8 +190,8 @@ input[type=number]::-webkit-inner-spin-button {
 }
 .attribute-item p {
     width: 50%;
-    font-weight: 600;
-    opacity: 0.8;
+    font-weight: 500;
+    opacity: 0.9;
 }
 
 .overview-item {

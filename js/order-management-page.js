@@ -16,11 +16,11 @@ function prepareAdminOrderPage() {
 function prepareHideCompletedCheckbox() {
     $("#hide-completed-orders").click(function(){
         if ($(this).is(":checked")) {
-            $("[status=dispatched]").hide();
-            $("[status=dispatched").next().hide();
+            $("[status=dispatched], [status=partial-refund], [status=refunded]").hide();
+            $("[status=dispatched], [status=partial-refund], [status=refunded]").next().hide();
             hideCompletedOrders = true;
         } else {
-            $("[status=dispatched]").show();
+            $("[status=dispatched], [status=partial-refund], [status=refunded]").show();
             hideCompletedOrders = false;
         }
     })
@@ -61,6 +61,7 @@ function addOrderEventListeners() {
     $("tbody tr[name=order]").each(function(){
         // get the orderid via attribute
         const orderid = $(this).attr("orderid");
+        const orderStatus = $(this).attr("status")
         const thisTr = $(this);
 
         // add functionality to the set dispatched buttons
@@ -86,7 +87,39 @@ function addOrderEventListeners() {
         $(`#view-order-items-${orderid}`).off();
         $(`#view-order-items-${orderid}`).click(function(){
             $(`tr[name=order-items-${orderid}]`).toggle();
-        })
+        });
+
+
+        $(`#issue-refund-${orderid}`).off();
+        $(`#issue-refund-${orderid}`).click(function(){
+            const orderTotal = parseFloat($(`#order-total-${orderid}`).text().replace('£', ''));
+            const stripePaymentIntent = $(this).attr("stripe-payment-intent");
+            const amountToRefund = prompt("Enter the amount to refund: (or leave blank to issue full refund)");
+
+            // Return conditions
+            if (isNaN(amountToRefund)) return new Alert(false, "Please provide a numerical value for the refund");
+            if (amountToRefund > orderTotal) return new Alert(false, "Refund amount cannot be higher than total");
+            if (amountToRefund < orderTotal && orderStatus == "payment-received") return new Alert(false, "Please dispatch the order prior to issuing a partial refund");
+            if (!confirm(`Are you sure you want to issue the refund for order #${orderid}? This action is irreversible`)) return;
+            
+            // issue refund
+            issueOrderRefund(orderid, stripePaymentIntent, amountToRefund, orderTotal).then(function(result){
+                if (result.result == 1) {
+                    $(`tr[name=order-items-${orderid}]`).remove();
+                    thisTr.replaceWith(result.new_html);
+                    addOrderEventListeners();
+                    new Alert(true, `order #${orderid} refunded`);
+                }
+                if (result.result == 0) {
+                    $(`tr[name=order-items-${orderid}]`).remove();
+                    thisTr.replaceWith(result.new_html);
+                    addOrderEventListeners();
+                    new Alert(false, `Refund for order #${orderid} with error (${result.failure_reason})`);
+                }
+            });
+
+
+        });
     });
 }
 
@@ -140,4 +173,18 @@ function setOrderDispatched(orderid) {
             resolve(JSON.parse(result))
         });
     });
+}
+
+function issueOrderRefund(orderid, stripePaymentIntent, amountToRefund, orderTotal) {
+    return new Promise(function(resolve){
+        $.ajax({
+           url: "../php/ajax-handlers/order-management-handler.php",
+           method: "POST",
+           data: {function: 3, orderid: orderid, stripe_payment_intent: stripePaymentIntent, amount_to_refund: amountToRefund, orderTotal: orderTotal}
+        })
+        .done(function(result){
+            console.log(result);
+            resolve(JSON.parse(result));
+        })
+    })
 }

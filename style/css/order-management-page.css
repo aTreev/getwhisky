@@ -43,9 +43,7 @@ th {
     padding: 20px 0px 5px 0px;
     width: auto;
 }
-.column-largest {
-    width: 220px;
-}
+
 td {
     padding: 14px 0px;
     font-size: 1.4rem;
@@ -77,6 +75,26 @@ td {
     
 }
 
+/*****
+* order status css
+*/
+.refunded, .dispatched, .partial-refund {
+    border: 1px solid #6f9a37;
+    color: white;
+    background-color: #6f9a37;
+    border-radius: 4px;
+    width: fit-content;
+    font-size: 1.2rem;
+    padding: 5px 10px;
+}
+.payment-received {
+    font-size: 1.2rem;
+    color: white;
+    background-color: rgb(245, 159, 0);
+    border-radius: 4px;
+    width: fit-content;
+    padding: 5px 10px;
+}
 .order-items-row {
     display: none;
     padding: 0px 40px 0px 0px;
