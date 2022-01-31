@@ -75,15 +75,7 @@ body {
     width: 1400px;
     margin-top: 20px;
 }
-#cart-summary-root {
-    width: 30%;
-    background-color: white;
-    border: 1px solid lightgrey;
-    height: fit-content;
-    padding: 20px;
-    text-align: center;
-    line-height: 1.6;
-}
+
 #cart-item-root {
     width: 100%;
 
@@ -221,12 +213,52 @@ body {
 .remove-from-cart-btn:hover {
     opacity: 0.6;
 }
+
+#cart-summary-root {
+    width: 100%;
+    background-color: white;
+    height: fit-content;
+    line-height: 1.6;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    margin-top: 40px;
+    margin-bottom: 100px;
+}
+.cart-summary-content {
+    width: 100%;
+    max-width: 300px;
+}
+.flex-row-list {
+    display: flex;
+    justify-content: space-between;
+}
+.flex-row-list > ul > li {
+    font-size: 1.4rem;
+}
+.list-one {
+    display:flex;
+    flex-direction: column;
+    gap: 10px;
+    
+}
+.list-two {
+    display:flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+    font-weight: bold;
+}
+/********
+* EMPTY CART CSS
+**********/
 .no-items {
     background-color: rgb(255, 214, 214);
     padding: 20px;
     border-radius: 6px;
     margin: auto;
     max-width: 700px;
+    margin-top: 40px;
 }
 
 .no-items h3 {
@@ -309,7 +341,7 @@ body {
 }
 .cart-return-btn {
     display: block;
-    background-color: #00af6c;
+    background-color: #00af6c!important;
     color: white;
     border-radius: 6px;
     padding: 14px 14px;
@@ -319,7 +351,7 @@ body {
     font-weight: 700;
 }
 .cart-return-btn:hover {
-    background-color: var(--btn-hover-colour);
+    background-color: var(--btn-hover-colour)!important;
 }
 
 .checkout-sign-up-container {
@@ -363,6 +395,7 @@ body {
 ************************************************/
 #delivery-next-step, #delivery-submit {
     background-color: var(--btn-proceed-green-light);
+    font-weight: 500;
 }
 #delivery-next-step:hover, #delivery-submit:hover {
     background-color: var(--btn-hover-colour);
@@ -479,7 +512,7 @@ body {
         width: 100%;
     }
     .cart-return-btn {
-        width: 100%;
+        width: 80%;
         padding: 14px 0px;
         margin: auto;
     }

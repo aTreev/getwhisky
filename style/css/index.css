@@ -15,7 +15,7 @@ main {
 .featured-products {
     position: relative;
     margin: auto;
-    margin-top: 60px;
+    margin-top: 0px;
     margin-bottom: 60px;
     width: 1400px;
 }
@@ -49,13 +49,12 @@ main {
 .product-name-container {
     text-align: center;
     margin-top: 10px;
-    height: 30px;
-    line-height: 1.4;
     justify-content: center;
 }
 .product-name-container > h3 {
     font-size: 1.6rem!important;
     font-weight: 500;
+    line-height: 1.4;
 }
 .product-type {
     text-transform: uppercase;
@@ -63,6 +62,12 @@ main {
     font-family: 'Merriweather', serif;
     font-size:1.4rem;
     font-weight: 400;
+    line-height: 1.4;
+    margin-top:10px;
+}
+.product-desc-short {
+    line-height: 1.1;
+    margin-top:10px;
 }
 .product-price-container {
     display: flex;
@@ -181,7 +186,6 @@ main {
     width: 1400px;
     margin: auto;
     display: flex;
-    margin-bottom: 100px;
     background-color: var(--bg-primary);
 }
 
@@ -244,9 +248,6 @@ main {
     .featured-banner-section {
         width: 95%;
     }
-    .product-name-container {
-        height: 40px;
-    }
 }
 
 @media screen and (max-width: 1200px) {
@@ -299,6 +300,17 @@ main {
     .featured-banner-right {
         width: 100%;
         max-height: 500px;
+    }
+    .owl-nav-left, .owl-nav-right {
+        width: 28px;
+        height: 28px;
+        font-size: 1.1rem;
+    }
+    .owl-nav-left {
+        left: -1%;
+    }
+    .owl-nav-right {
+        right: -1%;
     }
 }
 

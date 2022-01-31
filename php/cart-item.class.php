@@ -29,7 +29,7 @@ class Cartitem {
     public function getQuantity(){ return $this->quantity; }
     public function getName(){ return $this->name; }
     public function getImage(){ return $this->image; }
-    public function getDiscounted(){ return $this->discounted; }
+    public function isDiscounted(){ return $this->discounted; }
     public function getDiscountPrice(){ return $this->discountPrice; }
     public function getPrice(){ return $this->price; }
     public function getStock(){ return $this->stock; }
@@ -61,7 +61,7 @@ class Cartitem {
     }
 
     public function returnCorrectItemPrice() {
-        if ($this->getDiscounted()) return $this->getDiscountPrice();
+        if ($this->isDiscounted()) return $this->getDiscountPrice();
         return $this->getPrice();
     }
 
@@ -82,7 +82,7 @@ class Cartitem {
                 $html.="</div>";
 
                 $html.="<div class='cart-item-price-container'>";
-                    if ($this->getDiscounted()) {
+                    if ($this->isDiscounted()) {
                         $html.="<div class='discounted-price-container'>";
                             $html.="<p>Unit price: </p>";
                             $html.="<p class='old-price'>£".$this->getPrice()."</p>";

@@ -597,7 +597,7 @@ input[type=number]::-webkit-inner-spin-button {
   text-decoration: underline;
 }
 button[type=submit] {
-  background-color: var(--bg-secondary);
+  background-color: var(--btn-action-blue);
   color: white;
   padding: 14px 20px;
   margin: 10px 0;
@@ -621,7 +621,7 @@ button[type=submit] {
   text-decoration: underline;
 }
 button[type=submit]:hover {
-  background-color: var(--bg-secondary-light);
+  background-color: var(--btn-hover-colour);
 }
 .generic-select {
   padding: 15px;

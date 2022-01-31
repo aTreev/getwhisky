@@ -140,6 +140,8 @@ class Order {
             $html.="<td>".$this->getStripePaymentIntent()."</td>";
             $html.="<td>".$this->getFormattedDate()."</td>";
             $html.="<td>£".$this->getTotal()."</td>";
+            $html.="<td>".$this->getDeliveryLabel()."</td>";
+
             $html.="<td class='".strtolower($this->getStatus())."'>".$this->getStatus()."</td>";
             $html.="<td>";
                 $html.="<div class='table-flex-row'>";

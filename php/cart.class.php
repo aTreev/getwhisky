@@ -160,7 +160,19 @@ class Cart {
         foreach($this->getItems() as $item) {
             $total = $total + ($item->returnCorrectItemPrice() * $item->getQuantity());
         }
-        return $total;
+        return number_format((float)$total, 2, '.', '');
+    }
+
+
+    private function getTotalDiscount() {
+        $discountTotal = 0;
+        foreach($this->getItems() as $item) {
+            if ($item->isDiscounted()) {
+                $discountTotal = $discountTotal + (($item->getPrice() - $item->getDiscountPrice()) * $item->getQuantity());
+            }
+        }
+       
+        return number_format((float)$discountTotal, 2, '.', '');
     }
 
     /**************
@@ -318,19 +330,27 @@ class Cart {
                         $html.=$item;
                     }
                 $html.="</div>";
-
                 // display cart summary
-                /* $html.="<div id='cart-summary-root'>";
-                    $html.="<h3>Basket Summary</h3>";
-                    $html.="<p>Total: £".$this->getCartTotal()."</p>";
-                    $html.="<form action='".$formAction."' method='POST'>";
-                        $html.="<button type='submit'>Checkout</submit>";
-                    $html.="</form>";
-                $html."</div>"; */
+                $html.="<div id='cart-summary-root'>";
+                    $html.="<div class='cart-summary-content'>";
+                        $html.="<div class='flex-row-list'>";
+                            $html.="<ul class='list-one'>";
+                                $html.="<li>Discounts:</li>";
+                                $html.="<li>Total:</li>";
+                            $html.="</ul>";
+                            $html.="<ul class='list-two'>";
+                                $html.="<li>- £".$this->getTotalDiscount()."</li>";
+                                $html.="<li>£".$this->getCartTotal()."</li>";
+                            $html.="</ul>";
+                        $html.="</div>";
+                        $html.="<form action='".$formAction."' method='POST'>";
+                            $html.="<button type='submit' class='cart-return-btn'>Proceed To Checkout &#x3e;</submit>";
+                        $html.="</form>";
+                    $html.="</div>";
+                $html."</div>";
             $html.="</div>";
         } else {
             // Display if empty cart
-            $html.="<div class='cart-heading'><h2>Your shopping basket</h2></div>";
             $html.="<div id='cart-container'>";
                 $html.="<div class='no-items'>";
                     $html.="<h3>Your shopping basket is empty!</h3>";

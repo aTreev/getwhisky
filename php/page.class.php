@@ -658,7 +658,7 @@ class Page {
 			if (count($relatedProducts) > 5) {
 				$html.="<div id='related-products-root'>";
 					$html.="<div class='related-products-header'>";
-						$html.="<h3>Related Products To Consider</h3>";
+						$html.="<h3>You may also like</h3>";
 					$html.="</div>";
 					$html.="<div class='owl-carousel owl-featured-products'>";
 						foreach($relatedProducts as $relatedProduct) {

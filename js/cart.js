@@ -1,6 +1,8 @@
 function prepareCartPage() {
     addPageEventListeners();
     prepareSuggestedProducts();
+    prepareSuggestedProductsCarousel();
+
 }
 
 function addPageEventListeners() {
@@ -63,6 +65,7 @@ function prepareSuggestedProducts() {
                     thisButton.addClass("view-cart-btn");
                     $(`.featured-product[product-id='${productid}']`).css({"opacity": 0.7});
 
+                    // change function of addToCart to page refresh
                     thisButton.off();
                     thisButton.click(function(){
                         $('.cart-position-container').nextAll().remove();
@@ -73,10 +76,11 @@ function prepareSuggestedProducts() {
                             $(".cart-position-container").after(result.html);
                             $(".cart-count").html(result.cartCount);
                         prepareCartPage();
+                        $('html, body').animate({ scrollTop: 0 }, 'slow');
                         }, 500);
                     })
                 } 
-                if (result.result == 2) {
+                else if (result.result == 2) {
                     new Alert(false, "Insufficient stock to add to cart");
                 }
                 else {
@@ -86,6 +90,10 @@ function prepareSuggestedProducts() {
         })
     });
 
+}
+
+
+function prepareSuggestedProductsCarousel() {
     $(".owl-carousel").owlCarousel({
         loop:true,
         items:4,

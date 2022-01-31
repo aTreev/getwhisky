@@ -28,7 +28,7 @@
 }
 
 .register-thank-you a:hover {
-    background-color: var(--bg-secondary-light);
+    background-color: var(--btn-hover-colour);
 }
 
 .register-thank-you-show {

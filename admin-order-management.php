@@ -22,6 +22,7 @@
         <div class='admin-page-header'>
             <div class="admin-header-text-container">
                 <h1>Getwhisky Order Management</h1>
+                <p><a href="/admin.php">Back to Admin Page</a></p>
             </div>
         </div>
 
@@ -45,6 +46,7 @@
                         <th style='width: 300px;'>Payment Reference</th>
                         <th style='width: 100px;'>Date</th>
                         <th style='width: 100px;'>Total</th>
+                        <th style='width: 100px;'>Delivery Type</th>
                         <th style='width: 150px;'>Status</th>
                         <th style='width: 100px;'>Actions</th>
                     </tr>

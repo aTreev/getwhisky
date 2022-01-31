@@ -27,6 +27,7 @@
     
         <?php echo $page->displayFeaturedProductsOwl("Our Favourite Picks");?>
             
+        <?php echo $page->displayFeaturedBannerSection(); ?>
         
         <div class="about-section">
             <div class="about-section-content">
@@ -39,7 +40,7 @@
             </div>
         </div>
 
-        <?php echo $page->displayFeaturedBannerSection(); ?>
+        
     </main>
 </body>
 <script src="js/classes/alert.class.js"></script>

@@ -84,7 +84,13 @@
 
         <div class="cart-details-banner">
             <div class="content-container">
-                <p><a href="/products.php?catid=<?php echo htmlentities($_SESSION['last_viewed_category'])?>" class="continue-shopping">Continue shopping</a></p>
+                <?php 
+                    $continueShoppingLink = "/index.php";
+                    if (isset($_SESSION['last_viewed_category'])) {
+                        $continueShoppingLink = "/products.php?catid=".util::sanInt($_SESSION['last_viewed_category']);
+                    }
+                ?>
+                <p><a href="<?php echo $continueShoppingLink ?>" class='continue-shopping'>Continue shopping</a></p>
                 <div class='cart-contents-container'>
                     <p>Your cart contains <?php echo $page->getCart()->getCartItemCount(); ?> item(s) (£<?php echo $page->getCart()->getCartTotal();?>)</p>
                     <a href="/cart.php" class="cart-return-btn">Edit</a>
