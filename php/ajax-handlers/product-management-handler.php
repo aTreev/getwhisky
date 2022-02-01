@@ -6,7 +6,7 @@
  ********/
 require_once("../page.class.php");
 $page = new Page(3);
-if ($page->getUser()->getUsertype() != 3) {
+if ($page->getUser()->getUsertype() < 3) {
     echo json_encode(0);
     exit();
     die();

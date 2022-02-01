@@ -8,6 +8,7 @@ require_once("product-filter.class.php");
 require_once("cart.class.php");
 require_once("unique-id-generator.class.php");
 require_once("order.class.php");
+require_once("emailer.class.php");
 
 /****************
  * TODO: 
@@ -27,7 +28,7 @@ class Page {
 	private $product;
 	
 	public function __construct($pagetype=0){
-		session_start();
+		if (!isset($_SESSION)) session_start();
 		$this->setPagetype($pagetype);
 		$this->user = new User();
 		
@@ -519,83 +520,9 @@ class Page {
 		
 		// Checkout cart
 		$this->getCart()->checkOutCart();
-
-		$this->sendOrderConfirmationEmail($orderid, $email);
+		$emailer = new Emailer($email, "neilunidev@yahoo.com", "Thank you for your order at getwhisky!");
+		$emailer->sendOrderConfirmationEmail($orderid);
 	}
-
-
-	/*************
-	 * Sends details of a created order as an email to the user's
-	 * email address
-	 ***************************************/
-	private function sendOrderConfirmationEmail($orderid, $email) {
-		$orderCRUD = new OrderCRUD();
-		$addressCRUD = new UserAddressCRUD();
-
-		$orderDetails = $orderCRUD->getOrderById($orderid);
-		$orderItems = $orderCRUD->getOrderItems($orderid);
-		$addressDetails = $addressCRUD->getUserAddressById($orderDetails[0]['address_id'], $orderDetails[0]['userid']);
-
-		$html = "";
-        $html.="<div style='margin:auto;font-family:sans-serif;'>";
-            $html.="<p style='margin-left:10px;margin-right:10px;font-size:30px;'>Hi ".$addressDetails[0]['full_name']."</p>";
-            $html.="<p style='margin-left:10px;margin-right:10px;font-size:30px;'>Thank you for your recent purchase on getwhisky.site.</p>";
-            $html.="<p style='margin-left:10px;margin-right:10px;padding-bottom:60px;font-size:30px;'>Please find your order summary below.</p>";
-
-            $html.="<div style='background-color:#ededed;padding:10px 20px 10px 20px;line-height:0.8;display:flex;justify-content:space-between'>";
-                $html.="<div>";
-                    $html.="<h3 style='font-size:18px;'>Order details</h3>";
-                    $html.="<p style='font-size:14px;'><b>Order ID: </b>".$orderDetails[0]['order_id']."</p>";
-                    $html.="<p style='font-size:14px;'><b>Payment ref: </b>".$orderDetails[0]['stripe_payment_intent']."</p>";
-                    $html.="<p style='font-size:14px;'><b>Order date: </b>".date("d M Y",strtotime($orderDetails[0]['date_placed']))."</p>";
-                    $html.="<p style='font-size:14px;'><b>Total: </b>&#163;".($orderDetails[0]['total']+$orderDetails[0]['delivery_paid'])."</p>";
-                    $html.="<p style='font-size:14px;'><b>Delivery Option: </b>".$orderDetails[0]['delivery_label']." &#163;".$orderDetails[0]['delivery_paid']."</p>";
-                $html.="</div>";
-                $html.="<div style='padding:40px 0px 0px 0px;'>";
-                    $html.="<h3 style='font-size:18px;'>Delivery address</h3>";
-                    $html.="<p style='opacity:0.8;font-size:14px;'>".$addressDetails[0]['full_name']."</p>";
-                    $html.="<p style='opacity:0.8;font-size:14px;'>".$addressDetails[0]['line1']."</p>";
-                    $html.="<p style='opacity:0.8;font-size:14px;'>".$addressDetails[0]['line2']."</p>";
-                    $html.="<p style='opacity:0.8;font-size:14px;'>".$addressDetails[0]['postcode']."</p>";
-                    $html.="<p style='opacity:0.8;font-size:14px;'>".$addressDetails[0]['city']."</p>";
-                    $html.="<p style='opacity:0.8;font-size:14px;'>".$addressDetails[0]['county']."</p>";
-                $html.="</div>";
-            $html.="</div>";
-
-            $html.="<div style='background-color:#ededed;padding:40px 20px 10px 20px;line-height:0.8;'>";
-                $html.="<h3 style='font-size:18px;padding:0;margin:0;padding-bottom:20px;'>Items to be delivered</h3>";
-                foreach($orderItems as $item) {
-                    $html.="<div style='display:flex;justify-content:space-between;border-bottom:1px solid black;'>";
-                        $html.="<div>";
-                            $html.="<p style='font-size:14px;font-weight:600;'>".$item['name']."</p>";
-                            $html.="<p style='opacity:0.8;font-size:14px;'>Quantity: ".$item['quantity']."<p>";
-                            $html.="<p style='opacity:0.8;font-size:14px;'>Price unit: &#163;".$item['price_bought']."</p>";
-                        $html.="</div>";
-
-                        $html.="<div style='display:flex;align-items:flex-end;'>";
-                            $html.="<p style='font-size:14px;font-weight:600;'> &#163;".($item['quantity'] * $item['price_bought'])."</p>";
-                        $html.="</div>";
-                    $html.="</div>";
-                }
-            $html.="</div>";
-
-            $html.="<div style='background-color:#ededed;padding:40px 20px 10px 20px;line-height:1.2;'>";
-                $html.="<p style='font-size:14px;opacity:0.8;'>If you have any issues with your order please give us a call on 011114411. Alternatively email us at info@getwhisky.com</p>";
-                $html.="<p style='font-size:14px;opacity:0.8;'>These details can be viewed through the orders section on your account if you have created an account with us. If not please consider registering with us <a href='http://ecommercev2/register.php'>here!</a></p>";
-            $html.="</div>";
-        $html.="</div>";
-
-
-			$subject = "getwhisky order confirmation #".$orderDetails[0]['order_id']."";
-			$message = $html;
-			$headers = "From: neilunidev@yahoo.com\r\n";
-			$headers .= "MIME-Version: 1.0\r\n";
-			$headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
-			$result = mail($email, $subject, $message, $headers);
-			error_log($email,0);
-			error_log($result, 0);
-	}
-
 
 
 

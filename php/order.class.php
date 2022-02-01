@@ -176,6 +176,9 @@ class Order {
                 if ($this->getAdminStatus() == "Payment received" || $this->getAdminStatus() == "Dispatched") {
                     $html.="<button class='btn-view-items' id='issue-refund-".$this->getOrderid()."' stripe-payment-intent='".$this->getStripePaymentIntent()."'>Issue Refund</button>";
                 }
+                if ($this->getAdminStatus() == "Refund failure") {
+                    $html.="<button class='btn-view-items' id='manual-refund-".$this->getOrderid()."'>Manually Refunded</button>";
+                }
                     $html.="<button class='btn-view-items' id='view-order-items-".$this->getOrderid()."'>View Items</button>";
                 $html.="</div>";
             $html.="</td>";

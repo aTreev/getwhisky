@@ -24,6 +24,10 @@ if (isset($_POST['function']) && util::valInt($_POST['function'])) {
         case 3:
             cancelOrderAndIssueRefund();
         break;
+
+        case 4:
+            orderManuallyRefunded();
+        break;
     }
 }
 
@@ -112,6 +116,50 @@ function cancelOrderAndIssueRefund() {
 
         }
         echo json_encode(['result' => $returnResult, 'new_html' => $orderHtml, 'failure_reason' => $failureReason, 'amount_to_refund' => $amountToRefund]);
+    }
+}
+
+function orderManuallyRefunded() {
+    if (util::valStr($_POST['orderid']) && util::valStr($_POST['orderTotal'])) {
+        $orderid = util::sanStr($_POST['orderid']);
+        $orderTotal = util::sanStr($_POST['orderTotal']);
+        $amountRefunded = util::sanStr($_POST['amountRefunded']);
+        $orderCRUD = new OrderCRUD();
+        $refundType = "partial_refund";
+        $result = 0;
+        $message = "";
+        $orderHtml = "";
+        if (!$amountRefunded) {
+            $amountRefunded = $orderTotal;
+            $refundType = "refunded";
+        }
+
+        $result = $orderCRUD->updateOrderRefundAmount($amountRefunded, $orderid);
+
+        // Refund update check
+        if ($result) {
+            $result = $orderCRUD->updateOrderStatus($orderid, $refundType);
+        } else {
+            if (!$message) $message = "Failed to update <b>refund amount</b>, please try again";
+        }
+        
+        // Order_status update check
+        if ($result) {
+            $result = $orderCRUD->updateAdminOrderStatus($orderid, $refundType);
+        } else {
+            if (!$message) $message = "Failed to update <b>order status</b>, please try again";
+        }
+
+        // Admin_order_status update check
+        if ($result) {
+            $orderObj = new Order($orderCRUD->getOrderFullByOrderid($orderid)[0]);
+            $orderHtml = $orderObj->displayOrderAdmin();
+            $message = "Order status set to '".$refundType."'";
+        } else {
+            if (!$message) $message = "Failed to update <b>admin order status</b>, manual database update required";
+        }
+
+        echo json_encode(['result' => $result, 'message' => $message, 'new_order_html' => $orderHtml]);
     }
 }
 ?>

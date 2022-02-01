@@ -90,6 +90,12 @@ function addOrderEventListeners() {
         });
 
 
+        /************
+         * Issue refund button
+         * Gets the required data
+         * asks for a refund amount, validates it
+         * and issues a refund on the backend
+         */
         $(`#issue-refund-${orderid}`).off();
         $(`#issue-refund-${orderid}`).click(function(){
             const orderTotal = parseFloat($(`#order-total-${orderid}`).text().replace('£', ''));
@@ -98,6 +104,7 @@ function addOrderEventListeners() {
 
             // Return conditions
             if (isNaN(amountToRefund)) return new Alert(false, "Please provide a numerical value for the refund");
+            if(amountToRefund == null) return;
             if (amountToRefund > orderTotal) return new Alert(false, "Refund amount cannot be higher than total");
             if (amountToRefund < orderTotal && orderStatus == "payment-received") return new Alert(false, "Please dispatch the order prior to issuing a partial refund");
             if (!confirm(`Are you sure you want to issue the refund for order #${orderid}? This action is irreversible`)) return;
@@ -117,8 +124,33 @@ function addOrderEventListeners() {
                     new Alert(false, `Refund for order #${orderid} with error (${result.failure_reason})`);
                 }
             });
+        });
 
+        /*****
+         * Manual refund button in the case that an automatic refund fails
+         * This just takes an amount and updates the status to refunded
+         * also sends email
+         **********************/
+        $(`#manual-refund-${orderid}`).off();
+        $(`#manual-refund-${orderid}`).click(function() {
+            const orderTotal = parseFloat($(`#order-total-${orderid}`).text().replace('£', ''));
+            const amountRefunded = prompt("Enter the amount that was refunded: ");
 
+            // Return conditions
+            if (isNaN(amountRefunded)) return new Alert(false, "Please provide a numerical value for the refund");
+            if (amountRefunded > orderTotal) return new Alert(false, "Refund amount cannot be higher than total");
+            if(amountRefunded == null) return;
+
+            orderManuallyRefunded(orderid, orderTotal, amountRefunded).then(function(result){
+                if (result.result == 1) {
+                    $(`tr[name=order-items-${orderid}]`).remove();
+                    thisTr.replaceWith(result.new_order_html);
+                    addOrderEventListeners();
+                    new Alert(result.result, result.message);
+                } else {
+                    new Alert(result.result, result.message);
+                }
+            });
         });
     });
 }
@@ -129,6 +161,7 @@ function prepareOrderSearch() {
     $("#order-search").bind("input", function(){
         const searchInput = $(this).val();
 
+        tableRows.off();
         tableRows.each(function(){
             let matches = 0;
             if ($(this).children().text().toLowerCase().includes(searchInput.toLowerCase())) {
@@ -185,6 +218,20 @@ function issueOrderRefund(orderid, stripePaymentIntent, amountToRefund, orderTot
         .done(function(result){
             console.log(result);
             resolve(JSON.parse(result));
+        });
+    });
+}
+
+function orderManuallyRefunded(orderid, orderTotal, amountRefunded) {
+    return new Promise(function(resolve){
+        $.ajax({
+            url: "../php/ajax-handlers/order-management-handler.php",
+           method: "POST",
+           data: {function: 4, orderid: orderid, orderTotal: orderTotal, amountRefunded:amountRefunded}
         })
-    })
+        .done(function(result){
+            console.log(result);
+            resolve(JSON.parse(result));
+        });
+    });
 }

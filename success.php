@@ -45,6 +45,7 @@
             </div>
         </div>
     <section style='width:1400px;margin:auto;margin-top:40px;'>
+    <h1>Thank you!</h1>
       <p>
         We appreciate your business! If you have any questions, please email
         <a href="mailto:orders@example.com">orders@example.com</a>.
