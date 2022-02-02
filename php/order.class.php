@@ -123,7 +123,7 @@ class Order {
                         $html.="</span>";
                     $html.="</li>";
 
-                    $html.="<li><b>Total:</b> £".($this->getTotal() + $this->getDeliveryCost())."</li>";
+                    $html.="<li><b>Total:</b> £".($this->getTotal())."</li>";
                     $html.="<li><b>Delivery type:</b> ".$this->getDeliveryLabel()." £".$this->getDeliveryCost()."</li>";
                     $html.="<li><b>Delivery address:</b> ".$this->displayDeliveryAddress()."</li>";
                 $html.="</ul>";
@@ -148,7 +148,7 @@ class Order {
 
     public function displayOrderAdmin() {
         $html = "";
-        $html.="<tr status='".str_replace(' ','-',strtolower($this->getAdminStatus()))."' orderid='".$this->getOrderid()."' name='order'>";
+        $html.="<tr status='".str_replace(' ','-',strtolower($this->getAdminStatus()))."' orderid='".$this->getOrderid()."' userid='".$this->getUserid()."' name='order'>";
             $html.="<td>".$this->getAddress()->getFullName()."</td>";
             $html.="<td>#".$this->getOrderid()."</td>";
             $html.="<td>".$this->getStripePaymentIntent()."</td>";
@@ -179,17 +179,24 @@ class Order {
                 if ($this->getAdminStatus() == "Refund failure") {
                     $html.="<button class='btn-view-items' id='manual-refund-".$this->getOrderid()."'>Manually Refunded</button>";
                 }
-                    $html.="<button class='btn-view-items' id='view-order-items-".$this->getOrderid()."'>View Items</button>";
+                    $html.="<button class='btn-view-items' id='view-order-items-".$this->getOrderid()."'>View Details</button>";
                 $html.="</div>";
             $html.="</td>";
 
             // display order's items
             $html.="<tr name='order-items-".$this->getOrderid()."' class='order-items-row'>";
                 $html.="<td colspan='7'>";
+                    $html.="<div class='order-address-container'>";
+                        $html.="<h3>Delivery address</h3>";
+                        $html.=$this->getAddress()->displayAddressShort();
+                    $html.="</div>";
                     $html.="<div class='order-items-container'>";
-                        foreach ($this->getOrderItems() as $item) {
-                            $html.=$item->displayOrderItemUser();
-                        }
+                        $html.="<h3>Items to be delivered</h3>";
+                        $html.="<div class='order-items'>";
+                            foreach ($this->getOrderItems() as $item) {
+                                $html.=$item->displayOrderItemUser();
+                            }
+                        $html.="</div>";
                     $html.="</div>";
                 $html.="</td>";
             $html.="</tr>";

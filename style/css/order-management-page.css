@@ -113,7 +113,14 @@ td {
 .order-items-row td {
     padding: 0px 40px 0px 0px;
 }
+.order-address-container {
+    border-bottom: 1px solid lightgrey;
+    padding-bottom: 15px;
+}
 .order-items-container {
+    margin-top: 20px;
+}
+.order-items {
     display:flex;
     flex-wrap: wrap;
     gap: 50px;

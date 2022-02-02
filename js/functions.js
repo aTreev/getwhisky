@@ -209,9 +209,9 @@ function prepareProductSearch() {
 
 function showModal(id, showOverlay) {
     $("#"+id).show();
+    $("#"+id).get(0).scrollIntoView({behavior: "auto", block:"center"});
     if (showOverlay == true) {
         $(".page-overlay").show();
-        $(document.body).addClass("prevent-scrolling-all");
     }
     
     // Define a function for closing modal when out of focus

@@ -178,6 +178,8 @@ function checkSelectField(selectField, feedbackStr) {
  function testPasswordStrength(passwordField) {
     let password = passwordField.val();
     let feedbackcolour;
+	let feedbackText;
+	let textColour;
     // Get the total length of password, baseline strength of 1 for a 6 character password
     let passtr=(password.length<6)?1:password.length/2;
     // Use Regex to find what types of characters, symbols and numbers used
@@ -191,25 +193,28 @@ function checkSelectField(selectField, feedbackStr) {
 	// Cap for strong passwords
     if(passwordStrength>24) { passwordStrength=24; }
     // Yellow colour for medium strength passwords
-    if(passwordStrength>8) { feedbackcolour="#FF0"; }
+    if(passwordStrength>8) { 
+		feedbackcolour="#ffff8c"; 
+		textColour="#929502";
+		feedbackText="Good";
+	}
     // Green colour for strong passwords
-    if(passwordStrength>16) { feedbackcolour="#0F0"; }
+    if(passwordStrength>16) { 
+		feedbackcolour="lightgreen"; 
+		textColour="darkgreen";
+		feedbackText = "Strong";
+	}
     // Red for weak
-    if(passwordStrength<8) { feedbackcolour="#F00";}
+    if(passwordStrength<8) { 
+		feedbackcolour="rgb(255, 110, 110)";
+		textColour = "darkred";
+		feedbackText="Weak";
+	}
 
-    var fbtarget=document.getElementById("password-feedback");
-    if(!fbtarget && password.length > 0) {
-        var fb=document.createElement("p");
-        fb.setAttribute("id", "password-feedback");
-        fb.classList.add("password-indicator");
-        passwordField.parent().after(fb);
-        fbtarget=document.getElementById("password-feedback");
-        fbtarget.style.display="block";
-        fbtarget.style.height="1em";
+	$("#password-feedback").remove();
+    if(password.length > 0) {
+        passwordField.parent().after(`<div id='password-feedback' style='margin-top:-15px;margin-bottom:10px;padding: 10px;background-color:${feedbackcolour};display:flex;align-items:center;'><p style='color:${textColour};font-weight:600;'>${feedbackText}</p></div>`);
     }
-    fbtarget.style.backgroundColor=feedbackcolour;
-    fbtarget.style.width=passwordStrength+"em"
-
     return passwordStrength;
 }
 

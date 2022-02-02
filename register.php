@@ -30,24 +30,31 @@
             </div>
 
             <div class="input-container-100">
-                <i class="input-icon far fa-envelope"></i>
-                <input class="form-item" type="email" id="email" name="email" placeholder="email address" required />
+                <label for="email">Email</label>
+                <input class="form-item" type="email" id="email" name="email" required />
             </div>
             
             <div class="input-container-50">
-                <input class="form-item-50" type="text" id="firstname" name="firstname" placeholder="first name" required />
-                <input class="form-item-50" type="text" id="surname" name="surname" placeholder="last name" required />
+                <div>
+                    <label for="firstname">First name</label>
+                    <input class="form-item-50" type="text" id="firstname" name="firstname" required />
+                </div>
+                <div>
+                    <label for="surname">Surname</label>
+                    <input class="form-item-50" type="text" id="surname" name="surname" required />  
+                </div>
+                
 
             </div>
 
             <div class="input-container-100">
-                <i class="input-icon fas fa-lock"></i>
-                <input class="form-item" type="password" id="userpass" name="userpass" placeholder="password" required />
+                <label for="userpass">Password</label>
+                <input class="form-item" type="password" id="userpass" name="userpass" required />
             </div>
 
             <div class="input-container-100">
-                <i class="input-icon fas fa-lock"></i>
-                <input class="form-item" type="password" id="repeatUserpass" name="repeatPassword" placeholder="password" required />
+                <label for="repeatUserpass">Repeat Password</label>
+                <input class="form-item" type="password" id="repeatUserpass" name="repeatPassword" required />
             </div>
 
             <div class="submit">

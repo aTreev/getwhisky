@@ -24,26 +24,38 @@
                     <h3>New delivery address</h3>
                 </div>
                 <div class="input-container-100">
-                    <input class="form-item" type="text" id="add-identifier" name="add-address" placeholder="Name of address" autocomplete="no" maxlength=50 /><span></span>
+                    <label>Address Name*</label>
+                    <input class="form-item" type="text" id="add-identifier" name="add-address" autocomplete="no" maxlength=50 /><span></span>
                 </div>
                 <div class="input-container-100">
-                    <input class="form-item" type="name" id="add-full-name" name="add-address" placeholder="Full name" maxlength=90 /><span></span>
+                    <label>Recipient full name*</label>
+                    <input class="form-item" type="name" id="add-full-name" name="add-address" maxlength=90 /><span></span>
                 </div>
                 <div class="input-container-100">
-                    <input class="form-item" type="tel" id="add-mobile" name="add-address" placeholder="Phone number" maxlength=12 /><span></span>
+                    <label>Phone number</label>
+                    <input class="form-item" type="tel" id="add-mobile" name="add-address" maxlength=12 /><span></span>
                 </div>
                 <div class="input-container-100">
-                    <input class="form-item" type="postcode" id="add-postcode" name="add-address" placeholder="postcode" maxlength=10 /><span></span>
+                    <label>Postcode*</label>
+                    <input class="form-item" type="postcode" id="add-postcode" name="add-address" maxlength=10 /><span></span>
                 </div>
                 <div class="input-container-100">
-                    <input class="form-item" type="street" id="add-line1" name="add-address" placeholder="Address line 1" maxlength=80 /><span></span>
+                    <label>Address Line 1*</label>
+                    <input class="form-item" type="street" id="add-line1" name="add-address" maxlength=80 /><span></span>
                 </div>
                 <div class="input-container-100">
-                    <input class="form-item" type="street" id="add-line2" name="add-address" placeholder="Address line 2" maxlength=80 /><span></span>
+                    <label>Address Line 2</label>
+                    <input class="form-item" type="street" id="add-line2" name="add-address" maxlength=80 /><span></span>
                 </div>
                 <div class="input-container-50">
-                    <input class="form-item-50" type="city" id="add-city" name="add-address" placeholder="Town/City" maxlength=50 /><span></span>
-                    <input class="form-item-50" type="county" id="add-county" name="add-address" placeholder="County" maxlength=50 /><span></span>
+                    <div>
+                        <label>Town/City*</label>
+                        <input class="form-item-50" type="city" id="add-city" name="add-address" maxlength=50 /><span></span>
+                    </div>
+                    <div>
+                        <label>County</label>
+                        <input class="form-item-50" type="county" id="add-county" name="add-address" maxlength=50 /><span></span>
+                    </div>
                 </div>
                 <div class="input-container-100">
                     <button type="submit" id="new-address-submit">Submit</button>

@@ -394,7 +394,7 @@ header {
   position: relative;     
   margin-top: 40px;
   margin-bottom: 40px;
-  box-shadow: 2px 2px 15px 0 grey;
+  box-shadow: 2px 2px 15px 0 #d9d9d9;
 }
 form label {
   display: block;
@@ -437,6 +437,7 @@ form label {
   font-size: 22px;
   pointer-events: none;
   color: #8e8e8e;
+  z-index: 8;
 }
 input { font-size: 1.4rem;}
 
@@ -446,10 +447,9 @@ input { font-size: 1.4rem;}
   display:block;
   box-sizing: border-box;
   font-size: 1.4rem;
-  background-color: #f2f2f2;
   border: none;
   outline: none;
-  border: 1px solid #ebebeb;
+  border: 1px solid #ddd;
 }
 .input-container-100 textarea {
   resize: none;
@@ -465,38 +465,20 @@ input { font-size: 1.4rem;}
   padding: 15px 40px 15px 40px;
   box-sizing: border-box;
   font-size: 1.4rem;
-  background-color: #f2f2f2;
   border: none;
   outline: none;
-  border: 1px solid #ebebeb;
-
+  border: 1px solid #ddd;
 }
-
+.form-item:focus, .form-item-50:focus {
+  border-color: var(--btn-hover-colour);
+  position: relative;
+  z-index: 5;
+}
+.input-container-50 .form-item-50:last-child {
+  margin-left: -1px;
+}
 .form-divider {
   padding: 40px 0px;
-}
-/*******
-* little focus animation every form element needs a span after it
-********/
-.form-main .form-item + span::after, .form-main .form-item-50 + span::after {
-  content: '';
-  display: block;
-  margin: auto;
-  height: 2px;
-  width: 0px;
-  transition: width 300ms ease-in-out;
-}
-
-.form-main .form-item:focus + span::after, .form-item-50:focus + span::after {
-  width:100%;
-  background-color: var(--bg-secondary);
-}
-/********
-* Span hack not working for these forms
-**********/
-.form-item-50:focus {
-  border-bottom: 2px solid var(--bg-secondary);
-  padding: 15px 40px 13px 40px;
 }
 
 /*********
@@ -522,10 +504,10 @@ input { font-size: 1.4rem;}
 .form-inline .form-item, .form-inline .form-item-50 {
   padding: 15px;
   background-color: white;
-  border: 1px solid rgb(165, 165, 165);
+  border: 1px solid #ddd;
 }
 .form-inline .form-item:focus, .form-inline .form-item-50:focus {
-  border:1px solid black;
+  border:1px solid var(--btn-hover-colour);
 }
 .form-icons .form-item {
   padding-left: 40px;
@@ -565,10 +547,11 @@ input[type=number]::-webkit-inner-spin-button {
 
 .form-feedback {
   width:100%;
-  margin: 10px 0;
   display:flex;
   align-items:center;
   gap:10px;
+  margin-top: -10px;
+  margin-bottom: 10px;
 }
 .form-feedback i {
   color:#b41919;
@@ -579,10 +562,6 @@ input[type=number]::-webkit-inner-spin-button {
   box-sizing: border-box;
   color:#b41919;
   font-size: 1.2rem;
-}
-
-.password-indicator {
-  border-radius: 12px;
 }
 
 .form-link {
@@ -672,17 +651,19 @@ option {
 
 .modal-container {
   display:none;
-  position: fixed;
+  position: absolute;
   max-width: 400px;
   background-color: white;
   font-weight: 300;
   box-shadow: 5px 5px 12px grey;
   margin: 0;
-  top: 50%;
+  top: 20%;
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 99;
-
+}
+.modal-container .form-main {
+  box-shadow: 2px 5px 5px grey;
 }
 .modal-container i {
   font-size: 18px;
@@ -703,7 +684,6 @@ option {
 
 .modal-content {
   padding: 15px;
-  text-align: center;
   margin: auto;
 }
 

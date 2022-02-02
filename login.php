@@ -19,14 +19,16 @@
                 <h3>getwhisky sign in</h3>
             </div>
             <div class="input-container-100">
-            <input class="form-item" type="text" name="email" id="email" placeholder="email"/>
+            <label for="email">Email</label>
+            <input class="form-item" type="text" name="email" id="email" />
             </div>
             <div class="input-container-100">
-            <input class="form-item" type="password" name="userpass" id="userpass" placeholder="password"/>
+            <label for="userpass">Password</label>
+            <input class="form-item" type="password" name="userpass" id="userpass" />
 
             </div>
             <p class='form-link' id='forgot-password'><a href='#'>Forgotten password?</a></p>
-            <p class='form-link'><a href='/register.php'>New to getwhisky? sign up here</a></p>
+            <p class='form-link'><a href='/register.php'>New customer? sign up here</a></p>
 
             <div class="submit">
                 <button type="submit">Login</button>

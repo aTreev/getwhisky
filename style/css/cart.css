@@ -66,9 +66,12 @@ body {
 *****************************************************************/
 .cart-heading {
     margin: auto;
-    margin-top: 40px;
+    margin-top: 50px;
     width: 90%;
     text-align: center;
+}
+.cart-heading h2 {
+    font-weight: 400;
 }
 #cart-container {
     margin: auto;
@@ -283,11 +286,10 @@ body {
     border-bottom: 1px solid lightgrey;
 }
 .featured-products-header h2 {
-    font-size: 1.8rem;
+    font-size: 2.2rem;
     border-bottom: 1px solid lightgrey;
     padding-bottom: 10px;
-    font-weight: 500;
-    font-family: 'Merriweather', 'serif';
+    font-weight: 400;
 }
 .add-to-cart-btn {
     position:relative;
@@ -311,7 +313,7 @@ body {
 .cart-details-banner {
     width: 1400px;
     padding: 10px 0px;
-    border-bottom: 2px solid lightgrey;
+    border-bottom: 1px solid lightgrey;
     margin: auto;
 }
 .cart-details-banner > .content-container {
@@ -500,6 +502,9 @@ body {
         width: 100%;
     }
 
+    .cart-heading h2 {
+        margin-top:-20px;
+    }
 
     .cart-details-banner > .content-container {
         flex-direction: column;

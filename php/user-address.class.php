@@ -57,6 +57,21 @@ class UserAddress {
     public function getCity(){ return $this->city; }
     public function getCounty(){ return $this->county; }
 
+
+    public function displayAddressShort() {
+        $html = "";
+
+        $html.= "<p>".$this->getFullName()."</p>";
+        $html.= "<p>".$this->getLine1()."</p>";
+        if ($this->getLine2()) $html.= "<p>".$this->getLine2()."</p>";
+        $html.= "<p>".$this->getPostcode()."</p>";
+        $html.= "<p>".$this->getCity()."</p>";
+        if ($this->getCounty()) $html.= "<p>".$this->getCounty()."</p>";
+        if ($this->getPhoneNumber()) $html.= "<p>".$this->getPhoneNumber()."</p>";
+
+        return $html;
+    }
+
     public function __toString() {
         $html = "";
         $html.="<div class='address-item' id='".$this->getId()."'>";

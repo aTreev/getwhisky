@@ -96,12 +96,15 @@
 }
 
 #add-address-modal {
-    position: fixed;
+    position: absolute;
     top: 30%;
     left: 50%;
     transform: translate(-50%, -30%);
     z-index: 55;
     display: none;
+}
+#add-address-modal .form-main {
+    box-shadow: 2px 2px 15px grey;
 }
 
 .delivery-selection {

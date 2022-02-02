@@ -203,7 +203,7 @@ class Page {
 			$emailTo = $email;
 			$subject = "getwhisky email verification";
 			$message = "<h1>Thank you for registering with getwhisky</h1><p>Please click on the link below to verify your account!</p><a href='http://getwhisky/verify.php?vkey=$vKey'>Verify account</a>";
-			$headers = "From: neilunidev@yahoo.com\r\n";
+			$headers = "From: ".constant("noreply_email")."\r\n";
 			$headers .= "MIME-Version: 1.0\r\n";
 			$headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
 			mail($emailTo, $subject, $message, $headers);
@@ -217,7 +217,7 @@ class Page {
 			$vKey = $this->getUser()->getVerificationKey();
 			$subject = "getwhisky email verification";
 			$message = "<h1>Thank you for registering with JA Mackay</h1><p>Please click on the link below to verify your account!</p><a href='http://getwhisky/verify.php?vkey=$vKey'>Verify account</a>";
-			$headers = "From: neilunidev@yahoo.com\r\n";
+			$headers = "From: ".constant("noreply_email")."\r\n";
 			$headers .= "MIME-Version: 1.0\r\n";
 			$headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
 			$result['sent'] = mail($emailTo, $subject, $message, $headers);
@@ -241,7 +241,7 @@ class Page {
 			$subject = "getwhisky password reset";
 			$message = "<p>A password reset has been requested to this email address, please follow the following link to reset your password.</p><a href='http://getwhisky/password-reset.php?resetKey=$resetKey'>reset password</a>";
 			$message.= "<p>If you did not request this change <a href='http://getwhisky/password-reset.php?resetKey=$resetKey&cancel=1'>click here</a> to cancel";
-			$headers = "From: neilunidev@yahoo.com\r\n";
+			$headers = "From: ".constant("noreply_email")."\r\n";
 			$headers .= "MIME-Version: 1.0\r\n";
 			$headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
 			mail($email, $subject, $message, $headers);
@@ -520,7 +520,7 @@ class Page {
 		
 		// Checkout cart
 		$this->getCart()->checkOutCart();
-		$emailer = new Emailer($email, "neilunidev@yahoo.com", "Thank you for your order at getwhisky!");
+		$emailer = new Emailer($email, constant("noreply_email"), "Thank you for your order at getwhisky!");
 		$emailer->sendOrderConfirmationEmail($orderid);
 	}
 

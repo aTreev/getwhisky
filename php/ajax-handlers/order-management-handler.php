@@ -49,17 +49,27 @@ function retrieveAllOrders() {
     echo json_encode(['html_array' => $html]);
 }
 
+/************
+ * Sets the status of an order to dispatched and emails the customer
+ ********************/
 function setOrderStatusToDispatched() {
-    if (util::valStr($_POST['orderid'])) {
+    if (util::valStr($_POST['orderid']) && util::valStr($_POST['userid'])) {
         $orderid = util::sanStr($_POST['orderid']);
+        $userid = util::sanStr($_POST['userid']);
         $orderCRUD = new OrderCRUD();
+        $userCRUD = new UserCRUD();
         $result = 0;
         $orderHtml = "";
 
         $result = $orderCRUD->updateOrderStatus($orderid, "dispatched");
         $result = $orderCRUD->updateAdminOrderStatus($orderid, "dispatched");
+
         if ($result) {
             // email customer
+            $email = $userCRUD->getUserEmailByUserid($userid)[0]['email'];
+            $emailer = new Emailer($email, constant("noreply_email"), "Your getwhisky order #$orderid has been dispatched");
+            $emailer->sendOrderDispatchedEmail($orderid);
+            // Fetch new order html
             $orderObj = new Order($orderCRUD->getOrderFullByOrderid($orderid)[0]);
             $orderHtml = $orderObj->displayOrderAdmin();
         }
@@ -67,14 +77,24 @@ function setOrderStatusToDispatched() {
     }
 }
 
+/******************
+ * Function issues a refund/partial-refund through the stripe API
+ * if a refund attempt returns the 'succeed' flag then the order's statuses are updated and
+ * the customer emailed with the refund amount.
+ * 
+ * In the case of a failure only the order's admin_status will be updated to reflect a failure
+ * Owner then has to issue a refund manually through alternative means.
+ **************************************/
 function cancelOrderAndIssueRefund() {
-    if (util::valStr($_POST['orderid']) && util::valStr($_POST['stripe_payment_intent']) && util::valFloat($_POST['orderTotal'])) {
+    if (util::valStr($_POST['orderid']) && util::valStr($_POST['stripe_payment_intent']) && util::valFloat($_POST['orderTotal']) && util::valStr($_POST['userid'])) {
         require_once('../../stripe/init.php');
         $orderid = util::sanStr($_POST['orderid']);
         $paymentIntent = util::sanStr($_POST['stripe_payment_intent']);
         $amountToRefund = util::sanStr($_POST['amount_to_refund']);
         $orderTotal = util::sanStr($_POST['orderTotal']);
+        $userid = util::sanStr($_POST['userid']);
         $orderCRUD = new OrderCRUD();
+        $userCRUD = new UserCRUD();
         $failureReason = "";
 
         if ($amountToRefund == 0) {
@@ -93,23 +113,24 @@ function cancelOrderAndIssueRefund() {
 
         if ($refundResult['status'] == "succeeded") {
             $returnResult = 1;
-            // success
             // update statuses to refund type, update order refund_amount
             $refundType = "partial_refund";
             if ($amountToRefund == $orderTotal) $refundType = "refunded";
             $orderCRUD->updateOrderStatus($orderid, $refundType);
             $orderCRUD->updateAdminOrderStatus($orderid, $refundType);
             $orderCRUD->updateOrderRefundAmount($amountToRefund, $orderid);
+            // Fetch new order html
             $orderObj = new Order($orderCRUD->getOrderFullByOrderid($orderid)[0]);
             $orderHtml = $orderObj->displayOrderAdmin();
-            // email user
+            // email customer
+            $email = $userCRUD->getUserEmailByUserid($userid)[0]['email'];
+            $emailer = new Emailer($email, constant("noreply_email"), "getwhisky order #$orderid refund");
+            $emailer->sendRefundEmail($orderid, $amountToRefund);
         }
         if ($refundResult['status'] == "failed") {
             $returnResult = 0;
             $failureReason = $result['failure_reason'];
-            // handle failure
-                // email getwhisky inbox
-                // update admin status to refund failure
+            // Update status and fetch new order html
             $orderCRUD->updateAdminOrderStatus($orderid, "refund_failure");
             $orderObj = new Order($orderCRUD->getOrderFullByOrderid($orderid)[0]);
             $orderHtml = $orderObj->displayOrderAdmin();
@@ -119,16 +140,28 @@ function cancelOrderAndIssueRefund() {
     }
 }
 
+/**********
+ * Function to manually set the status of an order
+ * to refunded.
+ * This function is only called should a stripe refund fail
+ * and the owner has to manually refund through other means
+ * 
+ * Updates the order status, emails the customer and returns
+ * an updated order obj html
+ *************************************/
 function orderManuallyRefunded() {
-    if (util::valStr($_POST['orderid']) && util::valStr($_POST['orderTotal'])) {
+    if (util::valStr($_POST['orderid']) && util::valStr($_POST['orderTotal']) && util::valStr($_POST['userid'])) {
         $orderid = util::sanStr($_POST['orderid']);
         $orderTotal = util::sanStr($_POST['orderTotal']);
         $amountRefunded = util::sanStr($_POST['amountRefunded']);
+        $userid = util::sanStr($_POST['userid']);
         $orderCRUD = new OrderCRUD();
+        $userCRUD = new UserCRUD();
         $refundType = "partial_refund";
         $result = 0;
         $message = "";
         $orderHtml = "";
+
         if (!$amountRefunded) {
             $amountRefunded = $orderTotal;
             $refundType = "refunded";
@@ -152,9 +185,14 @@ function orderManuallyRefunded() {
 
         // Admin_order_status update check
         if ($result) {
+            // entire process successfull
             $orderObj = new Order($orderCRUD->getOrderFullByOrderid($orderid)[0]);
             $orderHtml = $orderObj->displayOrderAdmin();
             $message = "Order status set to '".$refundType."'";
+            // email customer
+            $email = $userCRUD->getUserEmailByUserid($userid)[0]['email'];
+            $emailer = new Emailer($email, constant("noreply_email"), "getwhisky order #$orderid refund");
+            $emailer->sendRefundEmail($orderid, $amountRefunded);
         } else {
             if (!$message) $message = "Failed to update <b>admin order status</b>, manual database update required";
         }

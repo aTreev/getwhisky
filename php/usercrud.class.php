@@ -186,5 +186,15 @@ class UserCRUD {
 			return $this->stmt->affected_rows;
 		}
 	}
+
+	public function getUserEmailByUserid($userid, $style=MYSQLI_ASSOC) {
+		$this->sql = "SELECT email FROM usertable WHERE userid = ?;";
+		$this->stmt=self::$db->prepare($this->sql);
+		$this->stmt->bind_param("s",$userid);		
+		$this->stmt->execute();
+		$result = $this->stmt->get_result();
+		$resultset=$result->fetch_all($style);
+		return $resultset;
+	}
 }
 ?>

@@ -61,6 +61,7 @@ function addOrderEventListeners() {
     $("tbody tr[name=order]").each(function(){
         // get the orderid via attribute
         const orderid = $(this).attr("orderid");
+        const userid = $(this).attr("userid");
         const orderStatus = $(this).attr("status")
         const thisTr = $(this);
 
@@ -69,7 +70,7 @@ function addOrderEventListeners() {
         $(`#set-order-dispatched-${orderid}`).click(function(){
             if (!confirm(`Are you sure you want to update order #${orderid} status to dispatched?`)) return;
             // Update order status to dispatched
-            setOrderDispatched(orderid)
+            setOrderDispatched(orderid, userid)
             .then(function(result){
                 if (result.result == 1) {
                     // success update html and recursive call to add eventlistener
@@ -110,7 +111,7 @@ function addOrderEventListeners() {
             if (!confirm(`Are you sure you want to issue the refund for order #${orderid}? This action is irreversible`)) return;
             
             // issue refund
-            issueOrderRefund(orderid, stripePaymentIntent, amountToRefund, orderTotal).then(function(result){
+            issueOrderRefund(orderid, stripePaymentIntent, amountToRefund, orderTotal, userid).then(function(result){
                 if (result.result == 1) {
                     $(`tr[name=order-items-${orderid}]`).remove();
                     thisTr.replaceWith(result.new_html);
@@ -141,7 +142,7 @@ function addOrderEventListeners() {
             if (amountRefunded > orderTotal) return new Alert(false, "Refund amount cannot be higher than total");
             if(amountRefunded == null) return;
 
-            orderManuallyRefunded(orderid, orderTotal, amountRefunded).then(function(result){
+            orderManuallyRefunded(orderid, orderTotal, amountRefunded, userid).then(function(result){
                 if (result.result == 1) {
                     $(`tr[name=order-items-${orderid}]`).remove();
                     thisTr.replaceWith(result.new_order_html);
@@ -194,12 +195,12 @@ function getOrders() {
     });
 }
 
-function setOrderDispatched(orderid) {
+function setOrderDispatched(orderid, userid) {
     return new Promise(function(resolve){
         $.ajax({
             url: "../php/ajax-handlers/order-management-handler.php",
             method: "POST",
-            data: {function: 2, orderid: orderid}
+            data: {function: 2, orderid: orderid, userid: userid}
         })
         .done(function(result) {
             console.log(result);
@@ -208,12 +209,12 @@ function setOrderDispatched(orderid) {
     });
 }
 
-function issueOrderRefund(orderid, stripePaymentIntent, amountToRefund, orderTotal) {
+function issueOrderRefund(orderid, stripePaymentIntent, amountToRefund, orderTotal, userid) {
     return new Promise(function(resolve){
         $.ajax({
            url: "../php/ajax-handlers/order-management-handler.php",
            method: "POST",
-           data: {function: 3, orderid: orderid, stripe_payment_intent: stripePaymentIntent, amount_to_refund: amountToRefund, orderTotal: orderTotal}
+           data: {function: 3, orderid: orderid, stripe_payment_intent: stripePaymentIntent, amount_to_refund: amountToRefund, orderTotal: orderTotal, userid: userid}
         })
         .done(function(result){
             console.log(result);
@@ -222,12 +223,12 @@ function issueOrderRefund(orderid, stripePaymentIntent, amountToRefund, orderTot
     });
 }
 
-function orderManuallyRefunded(orderid, orderTotal, amountRefunded) {
+function orderManuallyRefunded(orderid, orderTotal, amountRefunded, userid) {
     return new Promise(function(resolve){
         $.ajax({
             url: "../php/ajax-handlers/order-management-handler.php",
            method: "POST",
-           data: {function: 4, orderid: orderid, orderTotal: orderTotal, amountRefunded:amountRefunded}
+           data: {function: 4, orderid: orderid, orderTotal: orderTotal, amountRefunded:amountRefunded, userid: userid}
         })
         .done(function(result){
             console.log(result);

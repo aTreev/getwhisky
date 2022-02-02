@@ -26,8 +26,8 @@
 
     
         <?php echo $page->displayFeaturedProductsOwl("Our Favourite Picks");?>
-            
         <?php echo $page->displayFeaturedBannerSection(); ?>
+            
         
         <div class="about-section">
             <div class="about-section-content">
