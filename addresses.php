@@ -8,6 +8,7 @@
 	<?php
 		echo $page->displayHead();
 	?>
+    <link rel="stylesheet" href="style/css/user.css">
 	<link rel="stylesheet" href="style/css/address-page.css" />
 	<title>user page</title>
 </head>
@@ -63,12 +64,21 @@
             </form>
         </div>
 	<main>
-        <div class='address-header'>
-            <h3>Your delivery addresses</h3>
+        <div class='account-header'>
+            <h2>Your delivery addresses</h2>
         </div>
-        <div id="address-root">
-            <?php echo $page->getUser()->getAndDisplayAddressPage(); ?>
+        <div id="user-root">
+            <?php echo $page->getUser()->displayAccountOptionsSidebar()?>
+            <div class="account-main-content">
+                <div class="form-header">
+                    <h3>Manage your delivery addresses</h3>
+                </div>
+                <div id="address-root" style='max-width: 100%;margin-top:0;margin-bottom:0;padding:0;'>
+                    <?php echo $page->getUser()->getAndDisplayAddressPage(); ?>
+                </div>
+            </div>
         </div>
+        
     </main>
 </body>
 <script src="js/classes/alert.class.js"></script>

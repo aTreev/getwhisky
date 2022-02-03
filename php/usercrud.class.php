@@ -56,22 +56,21 @@ class UserCRUD {
 	}
 
 	// updates a user's details
-	public function updateUser($username,$firstname,$surname,$hash,$email,$usertype, $userid) {
-		$this->sql="UPDATE usertable SET username=?, firstname=?, surname=?, userpass=?, email=?, usertype=? WHERE userid=?;";
+	public function updateUser($firstname,$surname,$hash,$email,$usertype, $userid) {
+		$this->sql="UPDATE usertable SET firstname=?, surname=?, userpass=?, email=?, usertype=? WHERE userid=?;";
 		$this->stmt = self::$db->prepare($this->sql);
-		$this->stmt->bind_param("sssssis",$username,$firstname,$surname,$hash,$email,$usertype,$userid);		
-		$this->stmt->execute();
-		if($this->stmt->affected_rows!=1) {
-			$errors="";
-			if(strpos($this->stmt->error,'email')) {
-				$errors.="Email address exists<br />";
+		$this->stmt->bind_param("ssssis",$firstname,$surname,$hash,$email,$usertype,$userid);	
+		try {
+			$this->stmt->execute();
+				return $this->stmt->affected_rows;
+		}	catch(Exception $e) {
+			if($this->stmt->affected_rows!=1) {
+				$errors=['email' => ""];
+				if(strpos($this->stmt->error,'email')) {
+					$errors['email'] = "Email address already exists";
+				}
+				return $errors;
 			}
-			if(strpos($this->stmt->error,'username')) {
-				$errors.="Username exists<br />";
-			}
-			return $errors;
-		} else {
-			return $this->stmt->affected_rows;
 		}
 	}
 

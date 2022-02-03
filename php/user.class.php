@@ -132,6 +132,11 @@ class User {
 			return $authenticated;
 		}
 
+		public function testPassword($userpass) {
+			$authenticated = $this->userhash->testPass($userpass);
+			return $authenticated;
+		}
+
 		public function getUserById($userid) {
 			$haveuser=false;
 			$source=new UserCRUD();
@@ -212,23 +217,23 @@ class User {
 
 		// allows a user to update their details by calling the update method in the userCRUD class
 		// also uses the util class to validate
-		public function updateUser($username,$firstname,$surname,$password,$email,$usertype, $userid) {		
+		public function updateUser($firstname,$surname,$password,$email,$usertype, $userid) {		
 			$update=0;
 			$messages="";
 			$found=$this->getUserById($userid);
 			$target=new UserCRUD();
 			if($found) {
-				if(util::posted($username)){$messages.=$this->setUsername($username);}
 				if(util::posted($firstname)){$messages.=$this->setFirstname($firstname);}
 				if(util::posted($surname)){$messages.=$this->setSurname($surname);}
 				if(util::posted($password)){$messages.=$this->setPass($password);}
 				if(util::posted($email)){$messages.=$this->setEmail($email);}
 				if(util::posted($usertype)){$messages.=$this->setUsertype($usertype);}
 				if($messages=="") {
-					$update=$target->updateUser($this->getUsername(), $this->getFirstname(), $this->getSurname(), $this->userhash->getHash(), $this->getEmail(),$this->getUsertype(), $userid);
+					$update=$target->updateUser($this->getFirstname(), $this->getSurname(), $this->userhash->getHash(), $this->getEmail(),$this->getUsertype(), $userid);
 					if($update!=1) {$messages=$update;$update=0;}
 				}			
 			}
+			if ($messages == "") $messages = "Details successfully updated";
 			$result=['update' => $update, 'messages' => $messages];	
 			return $result;
 		}
@@ -311,66 +316,79 @@ class User {
 			return $html;
 		}
 
+		public function displayAccountOptionsSidebar() {
+			$html = "";
+			$html.="<div class='account-sidebar'>";
+				$html.="<h3 class='sidebar-header'>Account options</h3>";
+					$html.="<div class='sidebar-content'>";
+					$html.="<a href='/orders.php'>My orders</a>";
+					$html.="<a href='/addresses.php'>My delivery addresses</a>";
+					$html.="<a href='/userdetails.php'>My personal details</a>";
+					$html.="<a href='/logout.php'>Sign out</a>";
+				$html.="</div>";
+			$html.="</div>";
+			return $html;
+		}
+
 		// sends user menu data to the $ouput variable via the getters
 		public function __toString() {
 			$html = "";
-			$html.="<div class='account-header'>";
-				$html.="<h2>Hello ".$this->getFirstname()." ".$this->getSurname()."</h2>";
-				$html.="<p> Select an option below blah blah</p>";
+			$html.="<div class='account-main-content'>";
+				$html.="<div class='account-main-content-header'>";
+					$html.="<h3>Hello ".$this->getFirstname()." ".$this->getSurname()."</h3>";
+					$html.="<p>Welcome to your account page, select from one of the options below to manage your account.</p>";
+				$html.="</div>";
+				if ($this->getVerifiedStatus() == 0) {
+					$html.= "<button id='resend-validation'>Resend validation email</button>";
+				}
+				// Links to account options
+				$html.="<div class='account-options'>";
 
+					// Delivery addresses
+					$html.="<div class='account-option'>";
+						$html.="<div class='account-option-top'>";
+							$html.="<div class='account-icon-container'>";
+								$html.="<i class='fas fa-truck'></i>";
+							$html.="</div>";
+						$html.="</div>";
+						$html.="<div class='account-option-bottom'>";
+							$html.="<h4>Delivery Addresses</h4>";
+							$html.="<p>Manage your addresses</p>";
+						$html.="</div>";
+						$html.="<a class='wrapper-link' href='/addresses.php'><span></span></a>";
+					$html.="</div>";
+
+					// Orders
+					$html.="<div class='account-option'>";
+						$html.="<div class='account-option-top'>";
+							$html.="<div class='account-icon-container'>";
+								$html.="<i class='fas fa-box-open'></i>";
+							$html.="</div>";
+						$html.="</div>";
+						$html.="<div class='account-option-bottom'>";
+							$html.="<h4>Your Orders</h4>";
+							$html.="<p>View and manage your orders</p>";
+							$html.="<a class='wrapper-link' href='/orders.php'><span></span></a>";
+						$html.="</div>";
+					$html.="</div>";
+
+					// Account details
+					$html.="<div class='account-option'>";
+						$html.="<div class='account-option-top'>";
+							$html.="<div class='account-icon-container'>";
+								$html.="<i class='fas fa-user'></i>";
+							$html.="</div>";
+						$html.="</div>";
+						$html.="<div class='account-option-bottom'>";
+							$html.="<h4>Account Details</h4>";
+							$html.="<p>Manage your personal details</p>";
+							$html.="<a class='wrapper-link' href='/userdetails.php'><span></span></a>";
+						$html.="</div>";
+					$html.="</div>";
+
+
+				$html.="</div>";
 			$html.="</div>";
-			if ($this->getVerifiedStatus() == 0) {
-				$html.= "<button id='resend-validation'>Resend validation email</button>";
-			}
-			$html.="<a href='logout.php'>Sign out</a>";
-
-			// Links to account options
-			$html.="<div class='account-options'>";
-
-				// Delivery addresses
-				$html.="<div class='account-option'>";
-					$html.="<div class='account-option-top'>";
-						$html.="<div class='account-icon-container'>";
-							$html.="<i class='fas fa-truck'></i>";
-						$html.="</div>";
-					$html.="</div>";
-					$html.="<div class='account-option-bottom'>";
-						$html.="<h4>Delivery Addresses</h4>";
-						$html.="<p>Manage your addresses</p>";
-					$html.="</div>";
-					$html.="<a class='wrapper-link' href='/addresses.php'><span></span></a>";
-				$html.="</div>";
-
-				// Orders
-				$html.="<div class='account-option'>";
-					$html.="<div class='account-option-top'>";
-						$html.="<div class='account-icon-container'>";
-							$html.="<i class='fas fa-box-open'></i>";
-						$html.="</div>";
-					$html.="</div>";
-					$html.="<div class='account-option-bottom'>";
-						$html.="<h4>Your Orders</h4>";
-						$html.="<p>View and manage your orders</p>";
-						$html.="<a class='wrapper-link' href='/orders.php'><span></span></a>";
-					$html.="</div>";
-				$html.="</div>";
-
-				// Account details
-				$html.="<div class='account-option'>";
-					$html.="<div class='account-option-top'>";
-						$html.="<div class='account-icon-container'>";
-							$html.="<i class='fas fa-user'></i>";
-						$html.="</div>";
-					$html.="</div>";
-					$html.="<div class='account-option-bottom'>";
-						$html.="<h4>Account Details</h4>";
-						$html.="<p>Manage your personal details</p>";
-					$html.="</div>";
-				$html.="</div>";
-
-
-			$html.="</div>";
-
 			return $html;
 		}
 	

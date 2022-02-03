@@ -8,6 +8,7 @@
     <?php 
         echo $page->displayHead();
     ?>
+    <link rel="stylesheet" href="style/css/user.css">
     <link rel="stylesheet" href="style/css/user-order-page.css">
     <title>Order page</title>
 </head>
@@ -18,14 +19,21 @@
         echo $page->displayCartNotifications();
     ?>
     <main>
-        <div id="order-root">
-            <div class="order-root-header">
-                <h2>My orders</h2>
+        <div class="account-header">
+            <h2>My Orders</h2>
+        </div>
+        <div id="user-root">
+            <?php echo $page->getUser()->displayAccountOptionsSidebar(); ?>
+            <div class="account-main-content">
+                <div id="order-root">
+                    <div class="form-header">
+                        <h3>View your previous orders</h3>
+                    </div>
+                    <?php 
+                        echo $page->getUser()->getAndDisplayOrderPage();
+                    ?>
+                </div>
             </div>
-            <?php 
-                echo $page->getUser()->getAndDisplayOrderPage();
-            ?>
-
         </div>
     </main>
 </body>

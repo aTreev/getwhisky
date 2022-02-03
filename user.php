@@ -18,8 +18,12 @@
     ?>
 	
 	<main>
+		<div class="account-header">
+			<h2>My account</h2>
+		</div>
 		<div id="user-root" style='margin-top:20px;'>
 			<?php 
+				echo $page->getUser()->displayAccountOptionsSidebar();
 				echo $page->getUser(); 
 			?>
 		</div>

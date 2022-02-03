@@ -1,6 +1,6 @@
 <?php 
 require_once("../category-attribute-list.class.php");
-require_once("../util.class.php");
+require_once("../page.class.php");
 $page = new Page(3);
 if ($page->getUser()->getUsertype() != 3) {
     echo json_encode(0);

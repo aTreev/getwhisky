@@ -399,9 +399,9 @@ header {
 form label {
   display: block;
   font-weight:700;
-  font-size:1.4rem;
+  font-size:1.2rem;
   width: 100%;
-  font-family: 'Merriweather', serif;
+  font-family: sans-serif;
   margin-bottom: 5px;
 
 }
@@ -443,13 +443,24 @@ input { font-size: 1.4rem;}
 
 .form-item {
   width: 100%;
-  padding: 15px 25px 15px 40px;
+  padding: 15px 25px 15px 15px;
   display:block;
   box-sizing: border-box;
   font-size: 1.4rem;
   border: none;
   outline: none;
   border: 1px solid #ddd;
+}
+.form-item-slim {
+  width: 100%;
+  padding: 8px 25px 8px 15px;
+  display:block;
+  box-sizing: border-box;
+  font-size: 1.4rem;
+  border: none;
+  outline: none;
+  border: 1px solid #ddd;
+  border-radius: 4px;
 }
 .input-container-100 textarea {
   resize: none;
@@ -462,14 +473,14 @@ input { font-size: 1.4rem;}
 .form-item-50 {
   width:100%;
   display:block;
-  padding: 15px 40px 15px 40px;
+  padding: 15px 40px 15px 15px;
   box-sizing: border-box;
   font-size: 1.4rem;
   border: none;
   outline: none;
   border: 1px solid #ddd;
 }
-.form-item:focus, .form-item-50:focus {
+.form-item:focus, .form-item-slim:focus, .form-item-50:focus {
   border-color: var(--btn-hover-colour);
   position: relative;
   z-index: 5;
@@ -479,6 +490,11 @@ input { font-size: 1.4rem;}
 }
 .form-divider {
   padding: 40px 0px;
+}
+.form-info {
+  font-size: 1.3rem;
+  margin: 15px 0px 20px 0px;
+  font-style: italic;
 }
 
 /*********
@@ -833,6 +849,40 @@ option {
 .cart-notification-item img {
   width: 40px;
 }
+
+
+/**************
+* GENERAL CSS
+*********************************************************************/
+.flex-row-gap-10 {
+  display: flex;
+  gap: 10px;
+}
+.background-grey-p-20 {
+  background-color: #ecedee;
+  padding: 20px;
+  border-radius: 6px;
+  margin-top: 20px;
+}
+.info-area-red {
+  background-color: #d9edf7;
+  padding: 15px;
+  border-radius: 6px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.info-area-red > p {
+  font-size: 1.2rem;
+  color:black;
+  font-weight: 400;
+}
+.info-area-red > i {
+  font-size: 22px;
+  color: #585874;
+}
+
 /*********************************************************************
 *   MEDIA QUERIES
 *********************************************************************/

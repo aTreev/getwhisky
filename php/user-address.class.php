@@ -102,7 +102,7 @@ class UserAddress {
         $html.="</div>";
         
         $html.="<div class='address-item-edit-form' id='address-item-edit-form-".$this->getId()."'>";
-                $html.="<form class='form-inline'>";
+                $html.="<form class='form-inline' style='max-width:100%;'>";
                     $html.="<div class='input-container-100'>";
                         $html.="<label>Address Name</label><input type='text' class='form-item' autocomplete='no' maxlength=50 id='edit-identifier-".$this->getId()."' value='".$this->getIdentifier()."' /><span></span>";
                     $html.="</div>";

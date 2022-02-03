@@ -48,7 +48,7 @@ function checkPassword(passwordField, repeatPasswordField) {
 		doFeedback(repeatPasswordField, "Please enter a password"); 
 		return false;
 	}
-	if (testPasswordStrength(passwordField) < 8) {
+	if (testPasswordStrength(passwordField) < 14) {
 		doFeedback(repeatPasswordField, "Password does not meet minimum complexity"); 
 		return false;
 	}
@@ -180,32 +180,32 @@ function checkSelectField(selectField, feedbackStr) {
     let feedbackcolour;
 	let feedbackText;
 	let textColour;
-    // Get the total length of password, baseline strength of 1 for a 6 character password
-    let passtr=(password.length<6)?1:password.length/2;
+    // Get the total length of password, baseline strength of 1 for a 8 character password
+    let passtr=(password.length<8)?1:password.length/2;
     // Use Regex to find what types of characters, symbols and numbers used
     let hassymbol=((/[-!£$%^&*()_+|~=`{}\[\]:";'<>?,.\/]/).test(password))?1.5:0;
-    let hasnumeric=((/[0-9]/).test(password))?1.4:0;
+    let hasnumeric=((/[0-9]/).test(password))?1.3:0;
     let hasupper=((/[A-Z]/).test(password))?1.2:0;
     let haslower=((/[a-z]/).test(password))?1.1:0;
     // Calculate the overall relative strength of the password
     passwordStrength=passtr*(hassymbol+hasnumeric+hasupper+haslower);
     
 	// Cap for strong passwords
-    if(passwordStrength>24) { passwordStrength=24; }
+    if(passwordStrength>60) { passwordStrength=60; }
     // Yellow colour for medium strength passwords
-    if(passwordStrength>8) { 
+    if(passwordStrength<22) { 
 		feedbackcolour="#ffff8c"; 
 		textColour="#929502";
-		feedbackText="Good";
+		feedbackText="Better";
 	}
     // Green colour for strong passwords
-    if(passwordStrength>16) { 
+    if(passwordStrength>22) { 
 		feedbackcolour="lightgreen"; 
 		textColour="darkgreen";
-		feedbackText = "Strong";
+		feedbackText = "Good";
 	}
     // Red for weak
-    if(passwordStrength<8) { 
+    if(passwordStrength<14) { 
 		feedbackcolour="rgb(255, 110, 110)";
 		textColour = "darkred";
 		feedbackText="Weak";
@@ -213,7 +213,7 @@ function checkSelectField(selectField, feedbackStr) {
 
 	$("#password-feedback").remove();
     if(password.length > 0) {
-        passwordField.parent().after(`<div id='password-feedback' style='margin-top:-15px;margin-bottom:10px;padding: 10px;background-color:${feedbackcolour};display:flex;align-items:center;'><p style='color:${textColour};font-weight:600;'>${feedbackText}</p></div>`);
+        passwordField.parent().after(`<div id='password-feedback' style='margin-top:-15px;margin-bottom:10px;padding: 10px;background-color:${feedbackcolour};display:flex;align-items:center;width:${passwordStrength}em;max-width:95%;'><p style='color:${textColour};font-weight:600;font-size:1.4rem;'>${feedbackText}</p></div>`);
     }
     return passwordStrength;
 }

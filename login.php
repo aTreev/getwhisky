@@ -46,7 +46,6 @@
                 <form>
                 <p id='invalid-email-message' style='color:darkred;'></p>
                 <div class="input-container-100">
-                    <i class="input-icon far fa-envelope" aria-hidden="true"></i>
                     <input class='form-item' type="email" id='password-reset-email-input' placeholder="email"/>
                 </div>
                 <button type="submit" id="submit-password-reset">submit</button>

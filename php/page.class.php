@@ -615,7 +615,7 @@ class Page {
 				$html.="<div class='featured-right-text-container'>";
 					$html.="<h2>New Gin Hampers</h2>";
 					$html.="<p>Ice & Fire gin hampers now available and make for the perfect gift or treat!</p>";
-					$html.="<a href='#'>Browse Hampers</a>";
+					$html.="<a href='/products.php?catid=5'>Browse Hampers</a>";
 				$html.="</div>";
 			$html.="</div>";
 		$html.="</div>";
