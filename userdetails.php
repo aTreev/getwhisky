@@ -20,6 +20,7 @@
 	<main>
         <div class="account-header">
             <h2>My Personal Details</h2>
+            <a href="/user.php">back to user profile</a>
         </div>
         <div id="user-root">
             <?php echo $page->getUser()->displayAccountOptionsSidebar();?>

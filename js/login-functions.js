@@ -13,6 +13,37 @@ function prepareLoginPage() {
         validateResetEmail($("#password-reset-email-input").val());
     }
     });
+
+
+    // Login form submit handle login
+    $("#login-form").submit(function(ev){
+        // prevent default & remove feedback
+        ev.preventDefault();
+        $(".form-feedback").remove();
+        
+        // Get login details
+        const emailField = $("#login-email");
+        const passwordField = $("#login-password");
+        // Check for login from checkout page
+        const checkoutPage = $("#checkout").val() || 0;
+
+        // Check if fields are empty
+        let em, pw = false;
+
+        em = checkFieldEmpty(emailField, "Please enter your email address");
+        pw = checkFieldEmpty(passwordField, "Please enter your password");
+
+        // Field empty return
+        if (!em || !pw) return;
+
+        // attempt to login
+        attemptLogin(emailField.val(), passwordField.val(), checkoutPage).then(function(result){
+            // invalid credentials, display message
+            if (result.authenticated == 0) return doFeedback(passwordField, "Invalid email or password");
+            // redirect to returned location
+            window.location.href = result.redirect_location;
+        });
+    });
 }
 
 
@@ -68,4 +99,24 @@ function sendResetEmail(email) {
             new Alert(false, "We were unable to find that email address, please try again");
         }
     });
+}
+
+
+/*********
+ * Attempts to login user using ajax call to login handler & page class
+ * Response is associative array / object
+ *  @authenticated boolean
+ *  @redirect_location string
+ ****************************************/
+function attemptLogin(email, password, checkoutPage) {
+    return new Promise(function(resolve){
+        $.ajax({
+            url: "../php/ajax-handlers/processlogin.php",
+            method: "POST",
+            data: {email: email, password: password, checkoutPage: checkoutPage}
+        })
+        .done(function(result){
+            resolve(JSON.parse(result));
+        })
+    })
 }

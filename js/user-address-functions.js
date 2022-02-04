@@ -140,8 +140,8 @@ function prepareDeliveryPage() {
 
         // When address clicked transfer the ID to the hidden form and change CSS
         $(this).click(function(){
-            addressItems.css({"background-color":"white", "border-color":"lightgrey"});
-            $(this).css({"background-color":"lightgrey", "border-color":"black"});
+            addressItems.css({"background-color":"white", "border":"none", "border-bottom":"1px solid #ddd"});
+            $(this).css({"background-color":"lightgrey", "border":"1px solid black","border-color":"black"});
             $("[name='addressId']").val(addressId);
 
             $("#delivery-next-step").remove();

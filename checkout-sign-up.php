@@ -108,15 +108,15 @@
                     </div>
 
                     <!-- Login -->
-                    <form action="processlogin.php" method="POST" class="form-inline">
-                        <input type="hidden" name="checkout" value="1" />
+                    <form action="processlogin.php" method="POST" class="form-inline" id='login-form'>
+                        <input type="hidden" name="checkout" id='checkout' value="1" />
                         <div class="input-container-100">
                             <label for="email">Email Address</label>
                             <input class="form-item" type="text" name="email" id="login-email"/>
                         </div>
                         <div class="input-container-100">
                             <label for="userpass">Password</label>
-                            <input class="form-item" type="password" name="userpass" id="login-userpass"/>
+                            <input class="form-item" type="password" name="userpass" id="login-password"/>
                         </div>
                         <p class='form-link' id='forgot-password'><a href='#'>Forgotten password?</a></p>
                         <div class="submit">

@@ -103,8 +103,12 @@ class Page {
 	 * the user is logged in and a session is stored in the database
 	 **************************************************/
 	public function login($email, $userpass, $checkoutLogin) {
+		$authenticated = 0;
+		$location = "user.php";
 		session_regenerate_id();
+
 		if($this->getUser()->authEmailPass($email,$userpass)) {
+			$authenticated = 1;
 			$this->getUser()->storeSession($this->getUser()->getUserid(),session_id());
 			$useridAsGuest = $_SESSION['userid'];
 			$_SESSION['guest'] = false;
@@ -113,28 +117,23 @@ class Page {
 
 			// Transfer cart before redirect
 			$this->transferCart($this->getUser()->getUserid(), $useridAsGuest);
-
-			if ($checkoutLogin) {
-				header("Location: checkout.php");
-				exit();
-			}
+			
 			// userlevel logic here
 			switch($this->getUser()->getUsertype()) {
 				case 1:
-					header("location: suspended.php");
+					$location == "suspended.php";
 					break;
 				case 2:
-					header("location: user.php");
+					$location == "user.php";
 					break;
 				case 3:
-					header("location: admin.php");
+					$location == "admin.php";
 					break;
 			}
-			exit();
-			
-		} else {
-			echo "<br />Authentication failed";
-		}
+			if ($checkoutLogin == true) $location = "checkout.php";
+
+		} 
+		return ['authenticated' => $authenticated, 'redirect_location' => $location];
 	}
 
 	/*******

@@ -102,7 +102,7 @@ class Order {
     public function displayUserOrderPage() {
         $html = "";
 
-        $html.="<div class='order'>";
+        $html.="<div class='order' orderid='".$this->getOrderid()."' date='".$this->getDatePlaced()."' status='".$this->getStatus()."'>";
             $html.="<div class='order-header-container'>";
                 $html.="<h4>Order #".$this->getOrderid()." - Placed on ".$this->getFormattedDate()."</h4>";
             $html.="</div>";
@@ -110,7 +110,6 @@ class Order {
             $html.="<div class='order-details-container'>";
                 $html.="<ul>";
                     $html.="<li><b>Order number:</b> #".$this->getOrderid()."</li>";
-                    $html.="<li><b>Payment reference:</b> ".$this->getStripePaymentIntent()."</li>";
 
                     // Order status
                     $html.="<li>";
@@ -135,8 +134,8 @@ class Order {
                     $html.="<div class='order-item'>";
                         $html.="<a href='/productpage.php?pid=".$item->getProductid()."'><img style='width:100px;' src='".$item->getProductImage()."'/></a>";
                         $html.="<a href='/productpage.php?pid=".$item->getProductid()."'><h4>".$item->getProductName()."</h4></a>";
-                        $html.="<p><b>QTY:</b> ".$item->getQuantity()."</p>";
-                        $html.="<p><b>Price:</b> £".$item->getPriceBought()."</p>";
+                        $html.="<p><b>Qty :</b> ".$item->getQuantity()."</p>";
+                        $html.="<p><b>Price :</b> £".$item->getPriceBought()."</p>";
                     $html.="</div>";
                 }
             $html.="</div>";

@@ -1,6 +1,12 @@
 <?php
-    require_once("php/page.class.php");
-    $page = new Page(0);
+require_once("php/page.class.php");
+$page = new Page(0);
+switch($page->getUser()->getUserType()) {
+    case 1: header("Location: suspended.php"); break;
+    case 2: header("Location: user.php"); break;
+    case 3: header("Location: admin.php"); break;
+}
+    
 ?>
 <!doctype html>
 <html lang="en">
@@ -14,17 +20,17 @@
         echo $page->displayProductMenu();
     ?>
     <main>
-        <form method="post" action="processlogin.php" class="form-main">
+        <form method="post" action="processlogin.php" class="form-main" id='login-form'>
             <div class="form-header">
                 <h3>getwhisky sign in</h3>
             </div>
             <div class="input-container-100">
             <label for="email">Email</label>
-            <input class="form-item" type="text" name="email" id="email" />
+            <input class="form-item" type="text" name="email" id="login-email" />
             </div>
             <div class="input-container-100">
             <label for="userpass">Password</label>
-            <input class="form-item" type="password" name="userpass" id="userpass" />
+            <input class="form-item" type="password" name="userpass" id="login-password" />
 
             </div>
             <p class='form-link' id='forgot-password'><a href='#'>Forgotten password?</a></p>
@@ -56,6 +62,7 @@
 </body>
 <script src="js/classes/alert.class.js"></script>
 <script src="js/functions.js"></script>
+<script src="js/form-functions.js"></script>
 <script src="js/login-functions.js"></script>
 <script>
     document.onreadystatechange = function() {

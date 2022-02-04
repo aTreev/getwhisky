@@ -266,7 +266,7 @@ class User {
 			$html.="<div class='address-btn-container'>";
 			
 			$html.="<span class='wrapper-link' id='add-new-address-btn'></span>";
-				$html.="<button>Add new address</button>";
+				$html.="<button>Add new address +</button>";
 			$html.="</div>";
 
 			return $html;

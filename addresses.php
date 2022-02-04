@@ -66,6 +66,7 @@
 	<main>
         <div class='account-header'>
             <h2>Your delivery addresses</h2>
+            <a href="/user.php">back to user profile</a>
         </div>
         <div id="user-root">
             <?php echo $page->getUser()->displayAccountOptionsSidebar()?>

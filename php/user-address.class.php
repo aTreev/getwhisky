@@ -96,11 +96,12 @@ class UserAddress {
             $html.="</div>";
 
             $html.="<div class='address-options-container'>";
-                $html.="<input type='button' class='link-button' id='edit-".$this->getId()."' value='edit' />";
-                $html.="<input type='button' class='link-button' id='delete-".$this->getId()."' value='delete' /'>";
+                $html.="<input type='button' class='link-button' id='edit-".$this->getId()."' value='EDIT' />";
+                $html.="<input type='button' class='link-button' id='delete-".$this->getId()."' value='DELETE' /'>";
             $html.="</div>";
         $html.="</div>";
         
+        // Address edit form
         $html.="<div class='address-item-edit-form' id='address-item-edit-form-".$this->getId()."'>";
                 $html.="<form class='form-inline' style='max-width:100%;'>";
                     $html.="<div class='input-container-100'>";
@@ -126,7 +127,7 @@ class UserAddress {
                         $html.="<label>County<input type='county' class='form-item-50'  maxlength=50 id='edit-county-".$this->getId()."' value='".$this->getCounty()."' /></label>";
                     $html.="</div>";
                     $html.="<div class='input-container-100'>";
-                        $html.="<button type='submit' id='edit-submit-".$this->getId()."'>Submit</button>";
+                        $html.="<button type='submit' id='edit-submit-".$this->getId()."'>Save changes</button>";
                     $html.="</div>";
                 $html.="</form>";
         $html.="</div>";
