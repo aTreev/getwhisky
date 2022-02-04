@@ -120,7 +120,7 @@
                         </div>
                         <p class='form-link' id='forgot-password'><a href='#'>Forgotten password?</a></p>
                         <div class="submit">
-                            <button type="submit">Login</button>
+                            <button type="submit" id='login-submit'>Login</button>
                         </div>
                     </form>
                 </div>

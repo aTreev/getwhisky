@@ -87,16 +87,6 @@ class Page {
 		}
 	}
 	
-	/**************
-	 * Log user out if inactive for 1 hour 3200
-	 ******************************/
-	private function checkInactivityLength() {
-		if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) > 64000) {
-			$this->logout();
-		}
-		$_SESSION['last_activity'] = time();
-	}
-
 	/*******************
 	 * Checks for user credentials with the authNamePass method
 	 * if the hash of the passed in password matches the hash in the database
@@ -104,7 +94,7 @@ class Page {
 	 **************************************************/
 	public function login($email, $userpass, $checkoutLogin) {
 		$authenticated = 0;
-		$location = "user.php";
+		$location = "";
 		session_regenerate_id();
 
 		if($this->getUser()->authEmailPass($email,$userpass)) {
@@ -121,13 +111,13 @@ class Page {
 			// userlevel logic here
 			switch($this->getUser()->getUsertype()) {
 				case 1:
-					$location == "suspended.php";
+					$location = "suspended.php";
 					break;
 				case 2:
-					$location == "user.php";
+					$location = "user.php";
 					break;
 				case 3:
-					$location == "admin.php";
+					$location = "admin.php";
 					break;
 			}
 			if ($checkoutLogin == true) $location = "checkout.php";
@@ -164,14 +154,26 @@ class Page {
 			echo "<br />Authentication failed";
 		}
 	}
+
+	/**************
+	 * Log user out if inactive for 1 hour 3200
+	 ******************************/
+	private function checkInactivityLength() {
+		if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) > 3200) {
+			$this->logout(true);
+		}
+		$_SESSION['last_activity'] = time();
+	}
 	
-	public function logout() {
+	public function logout($inactivity=false) {
 		if(isset($_SESSION['userid']) && $_SESSION['userid']!="") {
 			$this->getUser()->storeSession($_SESSION['userid']);
 		}
-		session_regenerate_id();
 		session_unset();
 		session_destroy();
+		session_start();
+		session_regenerate_id();
+		if ($inactivity) $_SESSION['getwhisky_inactivity_logout'] = "You have been logged out due to inactivity";
 		header("location: login.php");
 		exit();
 	}

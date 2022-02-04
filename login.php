@@ -20,6 +20,19 @@ switch($page->getUser()->getUserType()) {
         echo $page->displayProductMenu();
     ?>
     <main>
+        <?php 
+            if (isset($_SESSION['getwhisky_inactivity_logout'])) {
+                ?>
+                <?php
+                echo "<div class='inactivity-logout-container'>";
+                    echo "<div class='inactivity-logout-content'>";
+                        echo "<p>".htmlentities($_SESSION['getwhisky_inactivity_logout'])."</p>";
+                        echo "<i class='fas fa-info-circle'></i>";
+                    echo "</div>";
+                echo "</div>";
+                unset($_SESSION['getwhisky_inactivity_logout']);
+            }
+        ?>
         <form method="post" action="processlogin.php" class="form-main" id='login-form'>
             <div class="form-header">
                 <h3>getwhisky sign in</h3>
@@ -37,7 +50,7 @@ switch($page->getUser()->getUserType()) {
             <p class='form-link'><a href='/register.php'>New customer? sign up here</a></p>
 
             <div class="submit">
-                <button type="submit">Login</button>
+                <button type="submit" id='login-submit'>Login</button>
             </div>
         </form>
 

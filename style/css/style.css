@@ -883,6 +883,27 @@ option {
   color: #585874;
 }
 
+.inactivity-logout-container {
+  background-color: lightcoral;
+  max-width: 650px;
+  margin: auto;
+  margin-top: 40px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+}
+.inactivity-logout-content {
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.inactivity-logout-content p {
+  color: darkred;
+}
+.inactivity-logout-content i {
+  color: darkred;
+  font-size: 28px;
+}
 /*********************************************************************
 *   MEDIA QUERIES
 *********************************************************************/

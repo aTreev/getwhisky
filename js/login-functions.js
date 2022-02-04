@@ -41,6 +41,7 @@ function prepareLoginPage() {
             // invalid credentials, display message
             if (result.authenticated == 0) return doFeedback(passwordField, "Invalid email or password");
             // redirect to returned location
+            $("#login-submit").text("Please wait...")
             window.location.href = result.redirect_location;
         });
     });
