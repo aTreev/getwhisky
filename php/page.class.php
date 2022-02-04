@@ -201,28 +201,19 @@ class Page {
 		if($result['insert']==1) {
 			$this->loginDiscreet($email, $userpass);
 			// send verification email
-			$emailTo = $email;
-			$subject = "getwhisky email verification";
-			$message = "<h1>Thank you for registering with getwhisky</h1><p>Please click on the link below to verify your account!</p><a href='http://getwhisky/verify.php?vkey=$vKey'>Verify account</a>";
-			$headers = "From: ".constant("noreply_email")."\r\n";
-			$headers .= "MIME-Version: 1.0\r\n";
-			$headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
-			mail($emailTo, $subject, $message, $headers);
+			$emailer = new Emailer($email, constant("noreply_email"), "Welcome to getwhisky");
+			$emailer->sendRegistrationEmail($vKey);
 		}
 		return $result;
 	}
 
 	public function resendValidationEmail() {
 		if ($this->getUser()) {
-			$emailTo = $this->getUser()->getEmail();
+			$email = $this->getUser()->getEmail();
 			$vKey = $this->getUser()->getVerificationKey();
-			$subject = "getwhisky email verification";
-			$message = "<h1>Thank you for registering with JA Mackay</h1><p>Please click on the link below to verify your account!</p><a href='http://getwhisky/verify.php?vkey=$vKey'>Verify account</a>";
-			$headers = "From: ".constant("noreply_email")."\r\n";
-			$headers .= "MIME-Version: 1.0\r\n";
-			$headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
-			$result['sent'] = mail($emailTo, $subject, $message, $headers);
-			$result['address'] = $emailTo;
+			$emailer = new Emailer($email, constant("noreply_email"), "getwhisky email verification");
+			$result['sent'] = $emailer->sendRegistrationEmail($vKey);
+			$result['address'] = $email;
 		} else {
 			$result = false;
 		}
@@ -238,14 +229,9 @@ class Page {
 			$uniqueIdGenerator = new UniqueIdGenerator("passwordResetKey");
         	$resetKey = $uniqueIdGenerator->getUniqueId();
 			$userCRUD->setResetKeyByEmail($resetKey, $email);
-			// send email with reset key
-			$subject = "getwhisky password reset";
-			$message = "<p>A password reset has been requested to this email address, please follow the following link to reset your password.</p><a href='http://getwhisky/password-reset.php?resetKey=$resetKey'>reset password</a>";
-			$message.= "<p>If you did not request this change <a href='http://getwhisky/password-reset.php?resetKey=$resetKey&cancel=1'>click here</a> to cancel";
-			$headers = "From: ".constant("noreply_email")."\r\n";
-			$headers .= "MIME-Version: 1.0\r\n";
-			$headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
-			mail($email, $subject, $message, $headers);
+			$emailer = new Emailer($email, constant("noreply_email"), "getwhisky password reset");
+			$emailer->sendPasswordResetEmail($resetKey);
+
 			return 1;
 		} else {
 			return 0;

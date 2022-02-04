@@ -30,7 +30,7 @@ class Emailer {
     public function getEmailMarkup() { return $this->emailMarkup; }
 
     private function sendConstructedEmail() {
-        mail($this->getRecipient(), $this->getSubject(), $this->getEmailMarkup(), $this->getHeaders());
+        return mail($this->getRecipient(), $this->getSubject(), $this->getEmailMarkup(), $this->getHeaders());
     }
 
     public function sendOrderConfirmationEmail($orderid) {
@@ -124,9 +124,27 @@ class Emailer {
         $this->emailMarkup.="</body>";
         $this->emailMarkup.="</html>";
 
-        $this->sendConstructedEmail();
+        return $this->sendConstructedEmail();
     }
 
+
+    /********
+     * Takes a verification key and sends an email to the customer
+     * on registration with a link to verify their email address
+     **********/
+    public function sendRegistrationEmail($verificationKey) {
+        $this->emailMarkup = "<h1>Thank you for registering with getwhisky</h1><p>Please click on the link below to verify your account!</p><a href='http://getwhisky/verify.php?vkey=$verificationKey'>Verify account</a>";
+
+        return $this->sendConstructedEmail();
+    }
+
+    public function sendPasswordResetEmail($resetKey) {
+        $this->emailMarkup = "";
+        $this->emailMarkup.= "<p>A password reset has been requested to this email address, please follow the following link to reset your password.</p><a href='http://getwhisky/password-reset.php?resetKey=$resetKey'>reset password</a>";
+        $this->emailMarkup.="<p>If you did not request this change <a href='http://getwhisky/password-reset.php?resetKey=$resetKey&cancel=1'>click here</a> to cancel</p>";
+
+        return $this->sendConstructedEmail();
+    }
     public function sendOrderDispatchedEmail($orderid) {
         $orderCRUD = new OrderCRUD();
 		$addressCRUD = new UserAddressCRUD();

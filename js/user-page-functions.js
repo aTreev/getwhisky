@@ -22,6 +22,7 @@ function resendValidationEmail() {
           }
     }).done(function(result){
         // parse to allow property access
+        console.log(result);
         result = JSON.parse(result);
         sendConfirmationNotification(result.sent, result.address);
         $('.verification-container').remove();

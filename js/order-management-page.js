@@ -107,7 +107,7 @@ function addOrderEventListeners() {
             if (isNaN(amountToRefund)) return new Alert(false, "Please provide a numerical value for the refund");
             if(amountToRefund == null) return;
             if (amountToRefund > orderTotal) return new Alert(false, "Refund amount cannot be higher than total");
-            if (amountToRefund < orderTotal && orderStatus == "payment-received") return new Alert(false, "Please dispatch the order prior to issuing a partial refund");
+            if (amountToRefund < orderTotal && amountToRefund != 0 && orderStatus == "payment-received") return new Alert(false, "Please dispatch the order prior to issuing a partial refund");
             if (!confirm(`Are you sure you want to issue the refund for order #${orderid}? This action is irreversible`)) return;
             
             // issue refund
