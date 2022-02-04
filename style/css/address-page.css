@@ -171,4 +171,7 @@ form > p {
     .address-options-container {
         margin-top: 10px;
     }
+    .address-btn-container button {
+        font-size: 24px;
+    }
 }

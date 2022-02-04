@@ -10,7 +10,7 @@ function prepareUserPage() {
 
 function resendValidationEmail() {
     $(document).ajaxStart(function () {
-        $('#resend-validation').html("<img style='width: 32px;'src='/assets/loader-button.gif'>");
+        $('#resend-validation').html("Please wait...");
     })
     $.ajax({
         url: "../php/ajax-handlers/resend-validation-email.php",
@@ -24,7 +24,7 @@ function resendValidationEmail() {
         // parse to allow property access
         result = JSON.parse(result);
         sendConfirmationNotification(result.sent, result.address);
-        $('#resend-validation').html("resend validation email");
+        $('.verification-container').remove();
     });
 }
 

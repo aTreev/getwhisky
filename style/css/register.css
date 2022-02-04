@@ -20,10 +20,11 @@
     display: block;
     text-decoration: none;
     color: white;
-    background-color: var(--bg-secondary);
+    background-color: var(--btn-action-blue);
     border-radius: 8px;
     padding: 5px;
-    width: 80%;
+    width: 100%;
+    max-width: 250px;
     margin: auto;
 }
 

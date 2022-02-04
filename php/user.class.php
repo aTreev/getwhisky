@@ -339,7 +339,12 @@ class User {
 					$html.="<p>Welcome to your account page, select from one of the options below to manage your account.</p>";
 				$html.="</div>";
 				if ($this->getVerifiedStatus() == 0) {
-					$html.= "<button id='resend-validation'>Resend validation email</button>";
+					$html.="<div class='verification-container'>";
+						$html.="<div class='verification-content'>";
+							$html.="<p>Your account has not yet been verified</p>";
+							$html.= "<button id='resend-validation'>Resend validation email</button>";
+						$html.="</div>";
+					$html.="</div>";
 				}
 				// Links to account options
 				$html.="<div class='account-options'>";

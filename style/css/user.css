@@ -79,6 +79,35 @@ body {
 .account-main-content-header h3 {
     font-weight: 400;
 }
+
+.verification-container {
+    margin-top: 10px;
+    width: 100%;
+    background-color:lightgreen;
+    border-radius: 6px;
+}
+.verification-content {
+    padding: 20px;
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.verification-content p {
+    color: darkgreen
+}
+#resend-validation {
+    padding: 10px 10px;
+    border: none;
+    background-color: var(--btn-proceed-green-light);
+    border-radius: 6px;
+    color: white;
+    font-size: 1.4rem;
+    font-weight: 300;
+    cursor: pointer;
+}
+#resend-validation:hover {
+    background-color: var(--btn-hover-colour);
+}
 .account-options {
     display: flex;
     justify-content: space-between;
@@ -86,7 +115,6 @@ body {
     gap: 40px;
     margin-top: 20px;
 }
-
 .account-option {
     position: relative;
     background-color: white;
